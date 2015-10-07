@@ -1,4 +1,3 @@
-
 # Chechinput: returns false is the inputed text 
 # has any numeric character
 
@@ -10,6 +9,9 @@ def checkInput(userInput):
 
 def checkNumber(userInput):
 	return userInput.isdigit()
+
+# Reads a valid message from the user
+# and returns to the user.
 
 def readMessage():
 	message = '';
@@ -37,7 +39,8 @@ def readNumber():
 
 	return number;
 
-# Returns and object with a message and a number.
+# Reads a message and a number from the user
+# and returns and object composed of a message and a number.
 
 def userInput(): 
 	message = readMessage();
@@ -48,10 +51,12 @@ def userInput():
 		'message': message, 
 		'number': number
 	};
+
 	return userInput;
 
 # Character to Number: Converts a given integer to 
 # corresponding character on ASCII code.
+
 def characterToNumber(char):
 	number = -1;
   
@@ -76,11 +81,12 @@ def simpleEncription(message, shiftNumber):
 	shiftNumber = shiftNumber % 26; # English alfhabet has 26 elements. when user shifs more than 26, then make the modulus! if not, an error will crash lines below.
 	tmpNum = 0;
 
-	# Convert each character of the array into a
-	# number, then sum the shif and finally convert this
-	# number into the alfabhet letter corresponding.
-	 
 	for char in message:
+
+		# Convert each character of the array into a
+		# number, then sum the shif and finally convert this
+		# number into the alfabhet letter corresponding.
+		 
 		tmpNum = characterToNumber(char);
 		tmpNum += shiftNumber; # Add shift number to the character number on Ascii
 		
@@ -101,4 +107,4 @@ outputMsg = '';
 for index, char in enumerate(encriptedMsgList):
 	outputMsg += char;
 
-print outputMsg	
+print outputMsg
