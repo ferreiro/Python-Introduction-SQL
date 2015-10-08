@@ -50,7 +50,6 @@ def createUser(user):
 		print "User created on the agenda \n"
 		
 	else:
-		print agenda['contacts']
 		if(doesContactExists(user)):
 			print ">This user exits on Database"
 			print ">>We're updating this user data... :-)"
@@ -104,6 +103,7 @@ newUser3 = {
 createUser(newUser)
 createUser(newUser2)
 createUser(newUser3)
-print agenda
+
+
 saveUsers()
 #print contacts[1]['name']
