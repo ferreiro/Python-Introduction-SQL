@@ -47,21 +47,39 @@ def createUser(user):
 		contacts = []; # Array of "user" objects
 		contacts.append(user);
 		agenda['contacts'] = contacts;
+		print "User created on the agenda \n"
 		
 	else:
-		if(doesUserExists(user)):
-			print "This user exits on Database"
+		print agenda['contacts']
+		if(doesContactExists(user)):
+			print ">This user exits on Database"
+			print ">>We're updating this user data... :-)"
+			updateUser(user);
 		else:
-			print "Your exist is not on the Data base. We're adding it ;-)"
+			print ">Your exist is not on the Data base. We're adding it ;-)"
 			agenda['contacts'].append(user)
+			print "\tUser added"
 
-	print "\tUser added"
+def doesContactExists(user):
+	global agenda
+	contacts = agenda['contacts']
+	found = False;
+	i = 0
 
-def doesUserExists(user):
-	print "Sorry. But user exits"
-	return True
+	while not found and i < len(contacts):
+		# phone is going to be my primary key (Two users can't have the same phone)
+		
+		if(contacts[i]['phone'] == user['phone'] and contacts[i]['name'] == user['name']):
+			found = True
+		# else: "phone not matching"
 
-#loadUsers()
+		i += 1;
+	return found
+
+def updateUser(user):
+	print "Updating user"
+
+loadUsers()
 #saveUsers()
 
 newUser = {
@@ -70,8 +88,22 @@ newUser = {
 	"surname2" : "Ferreiro",
 	"phone" : "699600388"
 }
+newUser2 = {
+	"name" : "Paco",
+	"surname1" : "Gracia",
+	"surname2" : "Jimenez",
+	"phone" : "20202"
+}
+newUser3 = {
+	"name" : "Alvaro",
+	"surname1" : "Gonzale",
+	"surname2" : "Jimenez",
+	"phone" : "30303030"
+}
 
 createUser(newUser)
-createUser(newUser)
+createUser(newUser2)
+createUser(newUser3)
 print agenda
+saveUsers()
 #print contacts[1]['name']
