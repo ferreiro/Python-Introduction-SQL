@@ -33,8 +33,45 @@ def saveUsers():
 	fileManager = open(filename, 'w');
 	fileManager.write(str(json_array));
 
-loadUsers()
-saveUsers()
+def createUser(user):
+	global agenda
 
+	name = str(user['name'])
+	phone = int(user['phone'])
+	surname1 = str(user['surname1'])
+	surname2 = str(user['surname2'])
+
+	if (agenda == None):
+		# Agenda is empty, so create a new field
+		agenda = {}
+		contacts = []; # Array of "user" objects
+		contacts.append(user);
+		agenda['contacts'] = contacts;
+		
+	else:
+		if(doesUserExists(user)):
+			print "This user exits on Database"
+		else:
+			print "Your exist is not on the Data base. We're adding it ;-)"
+			agenda['contacts'].append(user)
+
+	print "\tUser added"
+
+def doesUserExists(user):
+	print "Sorry. But user exits"
+	return True
+
+#loadUsers()
+#saveUsers()
+
+newUser = {
+	"name" : "Jorge",
+	"surname1" : "Garcia",
+	"surname2" : "Ferreiro",
+	"phone" : "699600388"
+}
+
+createUser(newUser)
+createUser(newUser)
 print agenda
 #print contacts[1]['name']
