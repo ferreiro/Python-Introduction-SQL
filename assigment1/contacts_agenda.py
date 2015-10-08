@@ -102,14 +102,20 @@ loadUsers()
 borja = {
 	"name" : "Borja",
 	"surname1" : "Bermejo",
-	"surname2" : "de los palotes",
+	"surname2" : "minecraft",
 	"phone" : "606060606"
 }
 
+while True:
+	print "Do you want to update? "
+	answer = raw_input();
+	if(answer == "yes"):
+		exist = doesContactExists(borja);
+		if (exist == True):
+			index = userIndexInArray(borja, agenda['contacts']);
+			updateUser(borja, index, agenda['contacts'])
+		else:
+			print "Dude. This user is not in the ist"
+		break;
 
-createUser(borja);
-saveUsers()
- 
-
- 
-#print contacts[1]['name']
+saveUsers();
