@@ -1,6 +1,6 @@
 import json
 
-filename = "test3.json"
+filename = "agenda.json"
 agenda = None #dictionary for saving all agenda (contacts, whatever)
 
 # Load users from JSON into a dictionary
@@ -13,7 +13,7 @@ def loadUsers():
 		jsonData = json.load(data) # parse json object
 		agenda = jsonData # save agenda object into global variable "agenda"
 	except:
-		print "File not found! No problem dude. We're creating and empty list"
+		print "Problems... File not exist or BAD FORMAT!"
 		agenda = {"contacts" : []} # set empty dictionary
 
 def saveUsers():
@@ -33,9 +33,8 @@ def saveUsers():
 	fileManager = open(filename, 'w');
 	fileManager.write(str(json_array));
 
-
-# loadUsers()
-
+loadUsers()
 saveUsers()
+
 print agenda
 #print contacts[1]['name']

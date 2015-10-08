@@ -1,14 +1,16 @@
 {
-	"0": {
-		"name" : "Jorge",
-		"surn1" : "apellido",
-		"surn2" : "second appelido",
-		"phone" : "600XXXXXX"
-	},
-	"1": {
-		"name" : "Jorge",
-		"surn1" : "apellido",
-		"surn2" : "second appelido",
-		"phone" : "600XXXXXX"
-	}
+	"contacts": [
+		{
+			"name" : "Jorge",
+			"surn1" : "apellido",
+			"surn2" : "second appelido",
+			"phone" : "600XXXXXX"
+		},
+		{
+			"name" : "Jorge",
+			"surn1" : "apellido",
+			"surn2" : "second appelido",
+			"phone" : "600XXXXXX"
+		}
+	]
 }
