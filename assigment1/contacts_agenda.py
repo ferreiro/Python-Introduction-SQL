@@ -23,15 +23,14 @@ def saveUsers():
 	json_array = ''; # empty json object
 
 	if (agenda == None):
-		json_array = {"contacts" : []} # empty agenda object
+		json_array = json.dumps({"contacts" : []}) # empty agenda object
 		print "No object is created.\nWe're going to save and empty object\n"
 	else:
 		# format contacts dictionaty into json string
 		json_array = json.dumps(agenda);
-		print json_array
 		print "Saving contacts in agenda"
 
-	fileManager = open(filename, 'a');
+	fileManager = open(filename, 'w');
 	fileManager.write(str(json_array));
 
 
