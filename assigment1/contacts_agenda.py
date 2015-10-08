@@ -33,13 +33,11 @@ def saveUsers():
 	fileManager = open(filename, 'w');
 	fileManager.write(str(json_array));
 
+def validUser(user):
+	return False;
+
 def createUser(user):
 	global agenda
-
-	name = str(user['name'])
-	phone = int(user['phone'])
-	surname1 = str(user['surname1'])
-	surname2 = str(user['surname2'])
 
 	if (agenda == None):
 		# Agenda is empty, so create a new field
@@ -50,60 +48,68 @@ def createUser(user):
 		print "User created on the agenda \n"
 		
 	else:
+		contacts = agenda['contacts']
 		if(doesContactExists(user)):
 			print ">This user exits on Database"
 			print ">>We're updating this user data... :-)"
-			updateUser(user);
+			index = userIndexInArray(user, contacts)
+			updateUser(user, index, contacts);
 		else:
 			print ">Your exist is not on the Data base. We're adding it ;-)"
 			agenda['contacts'].append(user)
 			print "\tUser added"
 
-def doesContactExists(user):
-	global agenda
-	contacts = agenda['contacts']
-	found = False;
+def deleteUser(user):
+	print "Coming soon"
+
+def userIndexInArray(user, contacts):
+	index = -1 # Not found
 	i = 0
+	found = False
 
 	while not found and i < len(contacts):
 		# phone is going to be my primary key (Two users can't have the same phone)
 		
 		if(contacts[i]['phone'] == user['phone'] and contacts[i]['name'] == user['name']):
 			found = True
-		# else: "phone not matching"
-
+			index = i
 		i += 1;
-	return found
 
-def updateUser(user):
-	print "Updating user"
+	return index
+
+def doesContactExists(user):
+	global agenda
+	contacts = agenda['contacts']
+
+	index = userIndexInArray(user, contacts);
+	
+	if (index == -1):
+		return False
+	else:
+		return True
+
+def updateUser(user, index, contacts):
+	if (index == -1):
+		return
+
+	contacts[index]['name'] = user['name']
+	contacts[index]['phone'] = user['phone']
+	contacts[index]['surname1'] = user['surname1']
+	contacts[index]['surname2'] = user['surname2']
 
 loadUsers()
-#saveUsers()
 
-newUser = {
-	"name" : "Jorge",
-	"surname1" : "Garcia",
-	"surname2" : "Ferreiro",
-	"phone" : "699600388"
-}
-newUser2 = {
-	"name" : "Paco",
-	"surname1" : "Gracia",
-	"surname2" : "Jimenez",
-	"phone" : "20202"
-}
-newUser3 = {
-	"name" : "Alvaro",
-	"surname1" : "Gonzale",
-	"surname2" : "Jimenez",
-	"phone" : "30303030"
+borja = {
+	"name" : "Borja",
+	"surname1" : "Bermejo",
+	"surname2" : "de los palotes",
+	"phone" : "606060606"
 }
 
-createUser(newUser)
-createUser(newUser2)
-createUser(newUser3)
 
-
+createUser(borja);
 saveUsers()
+ 
+
+ 
 #print contacts[1]['name']
