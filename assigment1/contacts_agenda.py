@@ -62,6 +62,10 @@ def createUser(user):
 def deleteUser(user):
 	print "Coming soon"
 
+def deleteLastUser():
+	global agenda
+	agenda['contacts'].pop();
+
 def userIndexInArray(user, contacts):
 	index = -1 # Not found
 	i = 0
@@ -97,25 +101,75 @@ def updateUser(user, index, contacts):
 	contacts[index]['surname1'] = user['surname1']
 	contacts[index]['surname2'] = user['surname2']
 
-loadUsers()
+def menu():
+	exit = False;
 
-borja = {
-	"name" : "Borja",
-	"surname1" : "Bermejo",
-	"surname2" : "minecraft",
-	"phone" : "606060606"
-}
+	print "create (create entry)"
+	print "delete (delete the last one entry)"
+	print "search (search entry)"
+	print "load entry (load entry)"
+	print "exit (close program)"
 
-while True:
-	print "Do you want to update? "
-	answer = raw_input();
-	if(answer == "yes"):
-		exist = doesContactExists(borja);
-		if (exist == True):
-			index = userIndexInArray(borja, agenda['contacts']);
-			updateUser(borja, index, agenda['contacts'])
-		else:
-			print "Dude. This user is not in the ist"
-		break;
+	input = str(raw_input());
+	# to lower
+
+	if(input == "create"):
+		name = raw_input("name: ");
+		phone = raw_input("phone: ");
+		surname1 = raw_input("surname1: ");
+		surname2 = raw_input("surname2: ");
+
+		newUser = {
+			"name" : name,
+			"surname1" : surname1,
+			"surname2" : surname2,
+			"phone": phone
+		}
+		createUser(newUser);
+	elif(input == "delete"):
+		deleteLastUser();
+		print "deleted"
+	elif(input == "search"):
+		name = '';
+		surname1 = '';
+		surname2 = '';
+		phone = '';
+
+		the_name = raw_input("Search by name?: [yes/no]")
+		if (the_name == "yes"): name = raw_input("Name: ");
+		
+		the_phone = raw_input("Search also by phone?: [yes/no]")
+		if (the_phone == "yes"): phone = raw_input("phone: ");
+
+		surname = raw_input("Search also by surname 1?: [yes/no]")
+		if (surname == "yes"): surname1 = raw_input("surname 1: ");
+
+		surname = raw_input("Search also by surname 2?: [yes/no]")
+		if (surname == "yes"): surname2 = raw_input("surname 2: ");
+
+		newUser = {
+			"name" : name,
+			"surname1" : surname1,
+			"surname2" : surname2,
+			"phone": phone
+		}
+		i = 0;
+		while i < len(agenda['contacts']):
+			index = userIndexInArray(newUser, agenda['contacts'])
+			if (index != -1): print agenda['contacts'][index]
+			i += 1;
+
+	elif input=="exit":
+		exit = True;
+
+	return exit;
+
+
+
+loadUsers();
+exit = False
+
+while not exit:
+	exit = menu();
 
 saveUsers();
