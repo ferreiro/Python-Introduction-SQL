@@ -154,6 +154,60 @@ def introduceUser():
 
 	return newUser
 
+def printUser(user):
+	for data in user:
+		print data
+
+def search():
+	global agenda
+
+	contacts = agenda['contacts']
+
+	print "What do you want to Search?"
+	print "Valid answers: all, name, phone, surname1, surname2"
+
+	valid = False
+	toSearch = ""
+	user = {
+		"name" : "",
+		"surname1" : "",
+		"surname2" : "",
+		"phone" : ""
+	}
+
+	while not valid:
+		toSearch = str(raw_input()).lower
+		valid = True
+
+		if (toSearch == "all"):
+			user = introduceUser()
+		
+		elif (toSearch == "name"):
+			user['name'] = str(raw_input("What is the name? "));
+		
+		elif (toSearch == "phone"):
+			user['phone'] = str(raw_input("What is the phone? "));
+			
+		elif (toSearch == "surname1"):
+			user['surname1'] = str(raw_input("What is the surname1? "));
+
+		elif (toSearch == "surname2"):
+			user['surname2'] = str(raw_input("What is the surname2? "));
+		
+		else:
+			valid = False
+
+	index = userIndex(user, contacts)
+	
+	if (index != -1):
+		print "User found!"
+		printUser(user)
+	else:
+		print "User is not found"
+
+
+
+
 """ Returns a user created by the user """
 def introduceSearch():
 	user = {}
@@ -161,7 +215,6 @@ def introduceSearch():
 	surname1 = "";
 	surname2 = "";
 	phone = "";
-
 
 	the_name = raw_input("Search by name?: [yes/no]")
 	if (the_name == "yes"): name = raw_input("Name: ");
@@ -185,18 +238,25 @@ def introduceSearch():
 	return user
 
 def menu():
-	global agenda
-	exit = False;
+	option = ""
 
 	print "----------- MENU -----------" 
 	print "create (create entry)"
 	print "delete (delete the last one entry)"
 	print "deleteUser (delete one user)"
 	print "search (search entry)"
-	print "load (load contacts from file)"
-	print "load entry (load entry)"
 	print "exit (close program)"
 	print "----------------------------" 
+
+	return str(raw_input("Your option? ")).lower()
+
+
+def menu2():
+	global agenda
+
+	contacts = agenda['contacts']
+	exit = False;
+
 
 	input = str(raw_input("Your option? "));
 	input.lower()
@@ -239,11 +299,46 @@ def menu():
 	return exit;
 
 
+def main():
+	global agenda
+	global filename
 
-loadUsers(filename)
-exit = False
-while not exit:
-	print agenda
-	exit = menu();
+	cls() # clear the screen
+	exit = False
+	loadUsers(filename) # load users
 
-saveUsers(filename);
+	while not exit:
+
+		print agenda['contacts']
+		option = menu()
+		cls() # clear the screen 
+
+		if (option == "exit"):
+			exit = True
+
+		elif (option == "create"):
+			newUser = introduceUser()
+			createUser(newUser)
+
+		elif (option == "delete"):
+			if (deleteLastUser()):
+				print messages['success'] + " user deleted!"
+			else:
+				print messages['warning'] + " user not deleted because there are not any user on the DB!"
+
+		elif (option == "deleteuser"):
+			print "delete an user"
+		elif (option == "search"):
+			search()
+		elif (option == "deleteuser"):
+			print "update"
+		elif (option == "deleteuser"):
+			print "delete User"
+		else:
+			print "Error. Command not found"
+
+	saveUsers(filename) # load users
+
+
+
+main()
