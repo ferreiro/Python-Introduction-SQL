@@ -317,7 +317,7 @@ def main():
 
 	while not exit:
 
-		print agenda['contacts']
+		# print agenda['contacts']
 		option = menu()
 		cls() # clear the screen 
 
@@ -338,7 +338,7 @@ def main():
 
 			user = introduceUser()
 			deleted = deleteUser(user)
-			
+
 			if (deleted):
 				print messages['success'] + " user deleted!"
 			else:
@@ -347,10 +347,6 @@ def main():
 		elif (option == "search"):
 			search()
 
-		elif (option == "deleteuser"):
-			print "update"
-		elif (option == "deleteuser"):
-			print "delete User"
 		else:
 			print "Error. Command not found"
 
