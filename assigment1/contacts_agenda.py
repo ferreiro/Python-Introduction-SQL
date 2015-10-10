@@ -22,7 +22,7 @@ def loadUsers(filename):
 		data = open(filename, 'r'); # try to open JSON file
 		jsonData = json.load(data) # parse json object into python dictionary
 		agenda = jsonData # save agenda object into global variable "agenda"
-		print messages['system'] + " Contacts loaded"
+		# print messages['system'] + " Contacts loaded"
 	except:
 		agenda['contacts'] = [] # set empty dictionary
 		print messages['warning'] + " Problems... File not exist or BAD FORMAT!"
@@ -51,24 +51,26 @@ def createUser(user):
 	created = True
 
 	if agenda == None or agenda == {}:
+
 		# Creating a new contacts field on dictionary agenda and add the user
 		agenda = {} # Agenda is empty, so create a new contacts field
 		tmpContacts = []
 		tmpContacts.append(user);
 		agenda['contacts'] = tmpContacts # saving on dictionary
-		print messages['success'] + " User added to the agenda \n"
-
+		print "\n" + messages['success'] + " User added to the agenda \n"
+	
 	else:
+
 		contacts = agenda['contacts']
 
 		if not existContact(user):
 			contacts.append(user)
-			print messages['success'] + " This user is not on our database. We're adding it ;-)"
+			print "\n" + messages['success'] + " This user is not on our database. We're adding it ;-)"
 		else:
 			created = False
-			print messages['warning'] + " Not added! This user is already on the Database"
+			print "\n" + messages['warning'] + " Not added! This user is already on the Database"
 
-def userIndex(user, contacts):
+def userIndex(user, contacts, allFieldsRequired):
 	index = -1 # Not found
 
 	found = False
@@ -76,18 +78,25 @@ def userIndex(user, contacts):
 
 	while not found and i < len(contacts):
 		# phone is going to be my primary key (Two users can't have the same phone)
-		if(contacts[i]['name'] == user['name'] or contacts[i]['surname1'] == user['surname1'] or contacts[i]['surname2'] == user['surname2'] or contacts[i]['phone'] == user['phone']):
-			found = True
-			index = i
+		
+		if (allFieldsRequired):
+			if(contacts[i]['name'] == user['name'] and contacts[i]['surname1'] == user['surname1'] and contacts[i]['surname2'] == user['surname2'] and contacts[i]['phone'] == user['phone']):
+				found = True
+				index = i
+		else:
+			if(contacts[i]['name'] == user['name'] or contacts[i]['surname1'] == user['surname1'] or contacts[i]['surname2'] == user['surname2'] or contacts[i]['phone'] == user['phone']):
+				found = True
+				index = i
+
 		i += 1;
 
 	return index
-
+ 
 def existContact(user):
 	global agenda
 
 	contacts = agenda['contacts']
-	index = userIndex(user, contacts);
+	index = userIndex(user, contacts, True);
 	
 	if (index == -1):
 		return False
@@ -100,7 +109,7 @@ def updateUser(user):
 	updated = True
 	contacts = agenda['contacts']
 
-	index = userIndex(user, contacts)
+	index = userIndex(user, contacts, True)
 
 	if (index != -1): 
 		contacts[index]['name'] = user['name']
@@ -117,7 +126,7 @@ def deleteUser(user):
 
 	deleted = False
 	contacts = agenda['contacts']
-	index = userIndex(user, contacts);
+	index = userIndex(user, contacts, True);
 
 	if index >= 0:
 		contacts.pop(index)
@@ -185,10 +194,12 @@ def search():
 		toSearch.lower()
 		valid = True
 
-		# if (toSearch == "all"):
-		#	user = introduceUser()
-		
-		if (toSearch == "name"):
+		if (toSearch == "all"):
+			valid = True
+			user = introduceUser()
+			index = userIndex(user, contacts, True)
+
+		elif (toSearch == "name"):
 			user['name'] = raw_input("What is the name? ");
 		
 		elif (toSearch == "phone"):
@@ -199,21 +210,18 @@ def search():
 
 		elif (toSearch == "surname2"):
 			user['surname2'] = raw_input("What is the surname2? ");
-		
 		else:
 			valid = False
 
-	index = userIndex(user, contacts)
+	if (toSearch != "all"): 
+		index = userIndex(user, contacts, False)
 	
 	if (index != -1):
 		print messages['success'] + " User found!"
 		printUser(contacts[index])
 	else:
 		print messages['fail'] + " User is not found"
-
-
-
-
+ 
 """ Returns a user created by the user """
 def introduceSearch():
 	user = {}
@@ -255,57 +263,6 @@ def menu():
 	print "----------------------------" 
 
 	return str(raw_input("Your option? ")).lower()
-
-
-def menu2():
-	global agenda
-
-	contacts = agenda['contacts']
-	exit = False;
-
-
-	input = str(raw_input("Your option? "));
-	input.lower()
-
-	# to lower
-	cls()
-
-	if(input == "create"):
-		newUser = introduceUser();
-		createUser(newUser);
-	
-	elif(input == "delete"):
-		deleted = deleteLastUser();
-		if(deleted):
-			print "deleted"
-		else:
-			print "[0] contacts you can't delete"
-	
-	elif(input == "deleteuser"):
-		user = introduceUser()
-		deleted = deleteUser(user)
-		if (deleted):
-			print "User deleted"
-		else:
-			print "User not deleted"
-
-	elif(input == "search"):
-
-		user = introduceSearch()
-		index = userIndex(user, contacts)
-
-		if (index == -1):
-			print "This user doesn't exist on our database"
-		else:
-			print "Info for your user"
-			for line in user:
-				print line
-
-	elif input=="exit":
-		exit = True;
-
-	return exit;
-
 
 def main():
 	global agenda
