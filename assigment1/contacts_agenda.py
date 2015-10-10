@@ -9,7 +9,8 @@ messages = {
 	"system" : "[ System ]",
 	"warning" : "[ Warning ]",
 	"problem" : "[ Problem ]",
-	"success" : "[ OK ]"
+	"success" : "[ OK ]",
+	"fail" : "[ ERROR ]"
 }
 
 # Load users from JSON into a dictionary
@@ -75,7 +76,7 @@ def userIndex(user, contacts):
 
 	while not found and i < len(contacts):
 		# phone is going to be my primary key (Two users can't have the same phone)
-		if(contacts[i]['name'] == user['name'] and contacts[i]['surname1'] == user['surname1'] and contacts[i]['surname2'] == user['surname2'] and contacts[i]['phone'] == user['phone']):
+		if(contacts[i]['name'] == user['name'] or contacts[i]['surname1'] == user['surname1'] or contacts[i]['surname2'] == user['surname2'] or contacts[i]['phone'] == user['phone']):
 			found = True
 			index = i
 		i += 1;
@@ -155,8 +156,11 @@ def introduceUser():
 	return newUser
 
 def printUser(user):
-	for data in user:
-		print data
+	print 'Name: ' + str(user['name'])
+	print 'Phone: ' + str(user['phone'])
+	print 'Surname1: ' + str(user['surname1'])
+	print 'Surname2: ' + str(user['surname2']) 
+	
 
 def search():
 	global agenda
@@ -164,7 +168,7 @@ def search():
 	contacts = agenda['contacts']
 
 	print "What do you want to Search?"
-	print "Valid answers: all, name, phone, surname1, surname2"
+	print "Valid answers: name, phone, surname1, surname2"
 
 	valid = False
 	toSearch = ""
@@ -176,23 +180,25 @@ def search():
 	}
 
 	while not valid:
-		toSearch = str(raw_input()).lower
+		
+		toSearch = raw_input("Search by : ")
+		toSearch.lower()
 		valid = True
 
-		if (toSearch == "all"):
-			user = introduceUser()
+		# if (toSearch == "all"):
+		#	user = introduceUser()
 		
-		elif (toSearch == "name"):
-			user['name'] = str(raw_input("What is the name? "));
+		if (toSearch == "name"):
+			user['name'] = raw_input("What is the name? ");
 		
 		elif (toSearch == "phone"):
-			user['phone'] = str(raw_input("What is the phone? "));
+			user['phone'] = raw_input("What is the phone? ");
 			
 		elif (toSearch == "surname1"):
-			user['surname1'] = str(raw_input("What is the surname1? "));
+			user['surname1'] = raw_input("What is the surname1? ");
 
 		elif (toSearch == "surname2"):
-			user['surname2'] = str(raw_input("What is the surname2? "));
+			user['surname2'] = raw_input("What is the surname2? ");
 		
 		else:
 			valid = False
@@ -200,10 +206,10 @@ def search():
 	index = userIndex(user, contacts)
 	
 	if (index != -1):
-		print "User found!"
-		printUser(user)
+		print messages['success'] + " User found!"
+		printUser(contacts[index])
 	else:
-		print "User is not found"
+		print messages['fail'] + " User is not found"
 
 
 
@@ -267,12 +273,14 @@ def menu2():
 	if(input == "create"):
 		newUser = introduceUser();
 		createUser(newUser);
+	
 	elif(input == "delete"):
 		deleted = deleteLastUser();
 		if(deleted):
 			print "deleted"
 		else:
 			print "[0] contacts you can't delete"
+	
 	elif(input == "deleteuser"):
 		user = introduceUser()
 		deleted = deleteUser(user)
@@ -327,9 +335,18 @@ def main():
 				print messages['warning'] + " user not deleted because there are not any user on the DB!"
 
 		elif (option == "deleteuser"):
-			print "delete an user"
+
+			user = introduceUser()
+			deleted = deleteUser(user)
+			
+			if (deleted):
+				print messages['success'] + " user deleted!"
+			else:
+				print messages['warning'] + " user not deleted because there are not any user on the DB!"
+
 		elif (option == "search"):
 			search()
+
 		elif (option == "deleteuser"):
 			print "update"
 		elif (option == "deleteuser"):
