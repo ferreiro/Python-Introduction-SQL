@@ -22,7 +22,6 @@ def loadUsers(filename):
 
 	try:
 		fileURL = path + filename
-		print fileURL
 		data = open(fileURL, 'r'); # try to open JSON file
 		jsonData = json.load(data) # parse json object into python dictionary
 		agenda = jsonData # save agenda object into global variable "agenda"
@@ -38,31 +37,35 @@ def saveUsers(filename):
 	global path
 
 	if agenda == None or agenda == {}:
+		# When the agenda is empty or None. We create an empty contacts array
+		# print messages['warning'] + " No object is created.\nWe're going to save and empty object\n"
 		agenda['contacts'] = [] # empty array for contacts
-		print messages['warning'] + " No object is created.\nWe're going to save and empty object\n"
-	else:
-		# format contacts dictionaty into json string
-		print messages['system'] + " Saving contacts in agenda..."
 
-	json_array = json.dumps(agenda) # empty agenda object
+	json_array = json.dumps(agenda) # Converts agenda dictionary into JSON format.
+	
 	try:
+		
+		# Save agenda into json file. First we check if the folder exists. And then save the file in that destination
 		if not os.path.exists(path): os.makedirs(path) # create a new "folder" called files if not exists.
 		fileURL = path + filename
 		fileManager = open(fileURL, 'w');
 		fileManager.write(json_array);
+		
+		# print messages['success'] + " Contacts saved in agenda..."
+	
 	except:
-		print messages['warning'] + " Problems saving that file"
 
-""" Create user: add an user to the databse only if the user is not already created in our system. In other case, will return false """
+		print messages['warning'] + " Problems saving the file"
+
+""" Create user: add an user to the database only if the user is not already created in our system. In other case, will return false """
 def createUser(user):
 	global messages
 	global agenda
 
 	created = True
-
+	
 	if agenda == None or agenda == {}:
-
-		# Creating a new contacts field on dictionary agenda and add the user
+		# If agenda empty or doesn't exit. Creating a new contacts field on dictionary agenda and add the user
 		agenda = {} # Agenda is empty, so create a new contacts field
 		tmpContacts = []
 		tmpContacts.append(user);
@@ -80,9 +83,15 @@ def createUser(user):
 			created = False
 			print "\n" + messages['warning'] + " Not added! This user is already on the Database"
 
+""" 
+	User index returns -1 if the user is not found on the database. In other cases, returns the index on the array.
+	We use an extra bool parameter called 'allFieldsRequired', this is use When
+	we want to know if all the fields for a user (name, surname and phone) is on our database.
+	When this field is false, means that we only want to check if some of the values of the user is on our database.
+"""
 def userIndex(user, contacts, allFieldsRequired):
-	index = -1 # Not found
-
+	
+	index = -1 # Return variable. -1 == Not found
 	found = False
 	i = 0
 
@@ -118,7 +127,6 @@ def updateUser(user):
 
 	updated = True
 	contacts = agenda['contacts']
-
 	index = userIndex(user, contacts, True)
 
 	if (index != -1): 
@@ -156,9 +164,11 @@ def deleteLastUser():
 
 	return deleted;
 
+""" Clear the command line """
 def cls():
     os.system(['clear','cls'][os.name == 'nt'])
 
+""" Returns a dictionary with a readed user """
 def introduceUser():
 	name = raw_input("name: ");
 	surname1 = raw_input("surname1: ");
@@ -318,7 +328,6 @@ def main():
 			print "Error. Command not found"
 
 	saveUsers(filename) # load users
-
 
 
 main()
