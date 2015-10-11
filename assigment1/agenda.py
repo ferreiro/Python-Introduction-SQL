@@ -3,7 +3,7 @@ import json
 
 # Global variables
 
-filename = "agenda.json"
+filename = "./files/agenda.json"
 agenda   = {} #dictionary for saving all agenda (contacts, whatever)
 messages = {
 	"system" : "[ System ]",
@@ -40,8 +40,13 @@ def saveUsers(filename):
 		print messages['system'] + " Saving contacts in agenda..."
 
 	json_array = json.dumps(agenda) # empty agenda object
-	fileManager = open(filename, 'w');
-	fileManager.write(json_array);
+	try:
+		newpath = r'./files' 
+		if not os.path.exists(newpath): os.makedirs(newpath) # create a new "folder" called files if not exists.
+		fileManager = open(filename, 'w');
+		fileManager.write(json_array);
+	except:
+		print messages['warning'] + " Problems saving that file"
 
 """ Create user: add an user to the databse only if the user is not already created in our system. In other case, will return false """
 def createUser(user):
