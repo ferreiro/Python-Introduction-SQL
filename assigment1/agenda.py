@@ -3,7 +3,8 @@ import json
 
 # Global variables
 
-filename = "./files/agenda.json"
+path = "./files/"
+filename = "agenda.json"
 agenda   = {} #dictionary for saving all agenda (contacts, whatever)
 messages = {
 	"system" : "[ System ]",
@@ -15,11 +16,14 @@ messages = {
 
 # Load users from JSON into a dictionary
 def loadUsers(filename):
-	global agenda
 	global messages
+	global agenda
+	global path
 
 	try:
-		data = open(filename, 'r'); # try to open JSON file
+		fileURL = path + filename
+		print fileURL
+		data = open(fileURL, 'r'); # try to open JSON file
 		jsonData = json.load(data) # parse json object into python dictionary
 		agenda = jsonData # save agenda object into global variable "agenda"
 		# print messages['system'] + " Contacts loaded"
@@ -31,6 +35,7 @@ def loadUsers(filename):
 def saveUsers(filename):
 	global messages
 	global agenda
+	global path
 
 	if agenda == None or agenda == {}:
 		agenda['contacts'] = [] # empty array for contacts
@@ -41,9 +46,9 @@ def saveUsers(filename):
 
 	json_array = json.dumps(agenda) # empty agenda object
 	try:
-		newpath = r'./files' 
-		if not os.path.exists(newpath): os.makedirs(newpath) # create a new "folder" called files if not exists.
-		fileManager = open(filename, 'w');
+		if not os.path.exists(path): os.makedirs(path) # create a new "folder" called files if not exists.
+		fileURL = path + filename
+		fileManager = open(fileURL, 'w');
 		fileManager.write(json_array);
 	except:
 		print messages['warning'] + " Problems saving that file"
