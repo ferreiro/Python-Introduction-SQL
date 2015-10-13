@@ -65,6 +65,7 @@ def createUser(user):
 	created = True
 	
 	if agenda == None or agenda == {}:
+		
 		# If agenda empty or doesn't exit. Creating a new contacts field on dictionary agenda and add the user
 		agenda = {} # Agenda is empty, so create a new contacts field
 		tmpContacts = []
@@ -190,7 +191,6 @@ def printUser(user):
 	print 'Surname1: ' + str(user['surname1'])
 	print 'Surname2: ' + str(user['surname2']) 
 	
-
 def search():
 	global agenda
 
@@ -271,6 +271,14 @@ def introduceSearch():
 
 	return user
 
+def displayContacts():
+	global agenda
+
+	print "Agenda:"
+	for c in agenda['contacts']:
+		print "------"
+		printUser(c)
+
 def menu():
 	option = ""
 
@@ -278,6 +286,7 @@ def menu():
 	print "create (create entry)"
 	print "delete (delete the last one entry)"
 	print "deleteUser (delete one user)"
+	print "display (delete one user)"
 	print "search (search entry)"
 	print "exit (close program)"
 	print "----------------------------" 
@@ -320,6 +329,9 @@ def main():
 				print messages['success'] + " user deleted!"
 			else:
 				print messages['warning'] + " user not deleted because there are not any user on the DB!"
+
+		elif (option == "display"):
+			displayContacts()
 
 		elif (option == "search"):
 			search()
