@@ -68,9 +68,8 @@ def writeFile(headerList, data, outputFile):
 	 	csvWriter.writerow(headerList); # write the header to the csv file
 
 	 	for hashtag in data:
-	 		csvWriter.writerow(hashtag[0]);
+	 		csvWriter.writerow(hashtag);
 	 	
-
 		outputFile.close();
 
 	except:
