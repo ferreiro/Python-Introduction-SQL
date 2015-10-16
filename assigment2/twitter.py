@@ -56,11 +56,6 @@ def orderHashtagTable(dictionary):
 def writeFile(headerList, data, outputFile):
 	valid = 0; # 0 means success | -1 = fails writing the file
 
-	print data
-	print type(data)
-	print enumerate(data)
-
-
 	#TODO: Check if the file has .csv format. If not. Will return false
 	try:
 		outputFile = open(outputFile, 'w')
@@ -88,20 +83,5 @@ for hashtag in orderedHashtagTable[:10]:
 	print str(hashtag[0]) + ", " + str(hashtag[1])
 
 
-print orderedHashtagTable
 headerList = ["hashtag", "frecuency"]
 writeFile(headerList, orderedHashtagTable[:10], outputFile);
-
-
-print "---------"
-print "---------"
-print "---------"
-print 
-
-# sprint len(tweetsList)
-
-# for twett in tweetsList:
-#	print twett['entities']['hashtags']
-
-# print type(tweetsList[0])
-

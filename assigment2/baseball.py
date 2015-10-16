@@ -73,7 +73,11 @@ def obtainYearFrecuency(filename, outputFilename):
 
 	writtenFile = writeFile(headerList, yearFrecuncyList, filenameAcummYears); # export the list to 
 	
-	if (writtenFile == -1): print "Error writing a file"
+	if (writtenFile == -1): 
+		return -1
+		print "Error writing a file"
+
+	return 0; # Success
 
 
 def obtainPlayerFrecuency(filename, outputFilename):
@@ -100,6 +104,8 @@ def obtainPlayerFrecuency(filename, outputFilename):
 	
 	if (writtenFile == -1):
 		print "Error writing a file"
+
+	return 0;
 
 def orderPlayers(filename, outputFilename):
 
