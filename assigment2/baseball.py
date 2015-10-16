@@ -2,9 +2,9 @@
 import csv
 
 filename 			 = "PitchingPost.csv"
-filenameAcummYears 	 = "AcumAnnos.cvs"
-filenameAcummPlayers = "AcumJugadores.cvs"
-filenameOrdered 	 = "Ordenado.cvs"
+filenameAcummYears 	 = "AcumAnnos.csv"
+filenameAcummPlayers = "AcumJugadores.csv"
+filenameOrdered 	 = "Ordenado.csv"
 
 # Write the csv to a file.
 def writeFile(headerList, data, filename):
