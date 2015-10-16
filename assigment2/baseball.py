@@ -13,8 +13,7 @@ def writeFile(headerList, data, filename):
 	#TODO: Check if the file has .csv format. If not. Will return false
 	try:
 		outputFile = open(filename, 'w')
-		csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file
-	 	
+		csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file	 	
 	 	csvWriter.writerow(headerList); # write the header to the csv file
 
 	 	for index, player in enumerate(data):
@@ -56,11 +55,12 @@ def obtainYearFrecuency():
 		#else:
 			# skip the header
 
+	print type(frecuency)
 	headerList = ["year, frecuency"]
-	writtenFile = writeFile(headerList, frecuency, filenameAcummYears); # export the list to 
+	# writtenFile = writeFile(headerList, frecuency, filenameAcummYears); # export the list to 
 	
-	if (writtenFile == -1):
-		print "Error writing a file"
+	# if (writtenFile == -1):
+	# 	print "Error writing a file"
 
 def orderPlayers():
 	global filename
