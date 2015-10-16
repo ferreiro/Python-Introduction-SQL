@@ -36,8 +36,21 @@ def readCSV(filename):
 
 	return contacts;
 
-# TODO: return -1 or 0 if the function fails
 
+def convertDictToList(inputDictionary):
+	if (not isinstance(inputDictionary, dict)): 
+		return None; #is not a Dictionary
+
+	# it's a Dictionary
+	newList = []
+
+	for key, value in inputDictionary.iteritems():
+		aux = [key, value]
+		newList.append(aux);
+
+	return newList; # correct conversion
+
+# TODO: return -1 or 0 if the function fails
 def obtainYearFrecuency():
 	global filename
 	global filenameAcummYears
@@ -55,12 +68,12 @@ def obtainYearFrecuency():
 		#else:
 			# skip the header
 
-	print type(frecuency)
-	headerList = ["year, frecuency"]
-	# writtenFile = writeFile(headerList, frecuency, filenameAcummYears); # export the list to 
+	headerList = ["year", "frecuency"]
+	yearFrecuncyList = convertDictToList(frecuency);
+
+	writtenFile = writeFile(headerList, yearFrecuncyList, filenameAcummYears); # export the list to 
 	
-	# if (writtenFile == -1):
-	# 	print "Error writing a file"
+	if (writtenFile == -1): print "Error writing a file"
 
 def orderPlayers():
 	global filename
@@ -69,8 +82,7 @@ def orderPlayers():
 	csvFile = readCSV(filename); # loads player list from .csv file
 	headerList = csvFile[0]; # loading header from the list
 	playerList  = sorted(csvFile[1:]); # sorted player list (without header)
-		
-	print type(playerList)
+
 	writeFile(headerList, playerList, filenameOrdered);
 
 def orderPlayers2():
@@ -89,5 +101,8 @@ def orderPlayers2():
 		csvWriter.writerow(player);
 
 
-# obtainYearFrecuency();
+test = [1, 2, 3]
+test1 = {"name": "Test"}
+print convertDictToList(test1);
+obtainYearFrecuency();
 orderPlayers();
