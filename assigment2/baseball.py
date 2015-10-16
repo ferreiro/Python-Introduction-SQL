@@ -6,13 +6,14 @@ filenameAcummYears 	 = "AcumAnnos.csv"
 filenameAcummPlayers = "AcumJugadores.csv"
 filenameOrdered 	 = "Ordenado.csv"
 
-# Write the csv to a file.
-def writeFile(headerList, data, filename):
-	valid = 0; # 0 means success | -1 = fails writing the file
+""" Create a .csv file given a header, content of the csv and outputf filename """
+
+def writeFile(headerList, data, outputFile):
+	success = True; # 0 means success | -1 = fails writing the file
 
 	#TODO: Check if the file has .csv format. If not. Will return false
 	try:
-		outputFile = open(filename, 'w')
+		outputFile = open(outputFile, 'w')
 		csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file	 	
 	 	csvWriter.writerow(headerList); # write the header to the csv file
 	 	
@@ -22,27 +23,32 @@ def writeFile(headerList, data, filename):
 		outputFile.close();
 
 	except:
-		valid = -1;
+		return False; # We couldn't write on the file
 
-	return valid;
+	return success;
 
-def readCSV(filename):
+def readCSV(inputFilename):
 
-	#TODO: Check if the file has .csv format. If not. Will return false
-	# Read csv contacts
-	fs = open(filename)
+	if not inputFilename.endswith(".csv"): # Check if the file has .csv format. If not. Will return false
+		
+		print "Outpufile extension %s not valid" % (outputFile[-4:]) # Notify file output extension doesn't exist
+		print successMsg + "[ERROR]"
+		return None; # return a null object
+	
+	fs = open(inputFilename) 
 	reader = csv.reader(fs)
-	contacts = list(reader)
+	contacts = list(reader) # Load all the contacts from the .csv to a contacts array.
+
 	fs.close();
 
 	return contacts;
 
 def convertDictToList(inputDictionary):
+
 	if (not isinstance(inputDictionary, dict)): 
 		return None; #is not a Dictionary
 
-	# it's a Dictionary
-	newList = []
+	newList = [] # it's a Dictionary
 
 	for key, value in inputDictionary.iteritems():
 		aux = [key, value]
@@ -50,71 +56,107 @@ def convertDictToList(inputDictionary):
 
 	return newList; # correct conversion
 
-# TODO: return -1 or 0 if the function fails
-def obtainYearFrecuency(filename, outputFilename):
+""" Returns False if wasn't possible to create a year frecuency table
+	When success, returns True """
 
-	frecuency = {} # dictionary to save the frecuncy for each year
-	playerList = readCSV(filename); # loads player list from .csv file
+def createYearFrecuencyFile(inputFilename, outputFilename):
 
-	for index, player in enumerate(playerList):
-		if(index >= 1):		
-			year = str(player[1]) # index = 1, is the year field on csv
-			if year in frecuency:
-				frecuency[year] += 1;
-			else:
-				frecuency[year] = 1;
-		#else:
-			# skip the header
+	succes 	   = True;	
+	frecuency  = {} # dictionary to save the frecuncy for each year
+	successMsg = "Creating a year frecuency table..."
 
-	headerList = ["year", "frecuency"]
-	yearFrecuncyList = convertDictToList(frecuency);
+	try:
+		playersList = readCSV(inputFilename); # Loads player list from .csv file
 
-	if (yearFrecuncyList == None): return -1
+		for index, player in enumerate(playersList):
 
-	writtenFile = writeFile(headerList, yearFrecuncyList, filenameAcummYears); # export the list to 
-	
-	if (writtenFile == -1): 
-		return -1
-		print "Error writing a file"
+			if index >= 1: # starts on 1 to skip the csv header
+				year = str(player[1]) # index = 1, is the year field on csv
 
-	return 0; # Success
+				if year in frecuency:
+					frecuency[year] += 1; # Player was previously added to the dictionary. Increase value by one
+				else:
+					frecuency[year] = 1; # Hashtag wasn't in the directionary. Add it with 1 value				
 
+			headerList = ["year", "frecuency"] # header to write on the .csv file
 
-def obtainPlayerFrecuency(filename, outputFilename):
+			yearFrecuencyList = convertDictToList(frecuency);
 
+			if (yearFrecuencyList == None): return False
+
+			if not writeFile(headerList, yearFrecuencyList, outputFilename): # export list to output file 
+				print "Error writing a file"
+				return False; # problems writing to a file
+	except:
+		print successMsg + "[ERROR]"
+		return False
+
+	return succes; # Success
+
+""" Returns False if we coudn't create the output file.
+	And success when creates a player frecuency table 
+	in a given output filename """
+
+def createPlayerFrecuencyFile(inputFilename, outputFilename):
+
+	success = True; # returned value
 	playerFrecuency = {} # dictionary to save the frecuency for each Player
-	playerList = readCSV(filename); # loads player list from .csv file
 
-	for index, player in enumerate(playerList):
-		if(index >= 1):		
-			Player = str(player[0]) # index = 0, is the PlayerId field on csv
-			if Player in playerFrecuency:
-				playerFrecuency[Player] += 1;
-			else:
-				playerFrecuency[Player] = 1;
-		# else
-			# skip first elem
+	try:
+		playerList = readCSV(inputFilename); # loads player list from .csv file
 
-	headerList = ["player", "frecuency"]
+		for index, player in enumerate(playerList):
+			
+			if(index >= 1): # starts on 1 to skip the csv header	
+				PlayerID = str(player[0]) # index = 0, is the PlayerId field on csv
+				
+				if PlayerID in playerFrecuency:
+					playerFrecuency[PlayerID] += 1; # Player was previously added to the dictionary. Increase value by one
+				else:
+					playerFrecuency[PlayerID] = 1; # Hashtag wasn't in the directionary. Add it with 1 value				
+
+	except:
+		print "%s file with bad format or not existing" % (inputFilename)
+		return False; # Coudn't read the input file
+
+	headerList 			= ["player", "frecuency"] # header to write on the .csv file
 	playerFrecuencyList = convertDictToList(playerFrecuency);
-
-	if (playerFrecuencyList == None): return -1
 	
-	writtenFile = writeFile(headerList, playerFrecuencyList, filenameAcummPlayers); # export the list to 
+	if (playerFrecuencyList == None): return False
 	
-	if (writtenFile == -1):
+	if not writeFile(headerList, playerFrecuencyList, outputFilename): # export list to output file 
 		print "Error writing a file"
+		return False; # problems writing to a file
 
-	return 0;
+	return success;
 
-def orderPlayers(filename, outputFilename):
+""" Order a list of player loaded from a .csv file 
+	and then create a new file with this ordered player list """
 
-	csvFile = readCSV(filename); # loads player list from .csv file
-	headerList = csvFile[0]; # loading header from the list
-	playerList  = sorted(csvFile[1:]); # sorted player list (without header)
+def createOrderPlayerFile(inputFilename, outputFilename):
 
-	writeFile(headerList, playerList, filenameOrdered);
+	success = True
 
-orderPlayers(filename, filenameOrdered);
-obtainYearFrecuency(filename, filenameAcummYears);
-obtainPlayerFrecuency(filename, filenameAcummPlayers);
+	try:
+		csvFile 	= readCSV(inputFilename); # loads player list from .csv file
+		headerList 	= csvFile[0]; # Header like Name,ID... to write the .csv
+		playerList  = sorted(csvFile[1:]); # sorted player list (without header)
+		writeFile(headerList, playerList, filenameOrdered); # Write the heade
+	except:
+		return False; # Read from CSV or write to output file fails
+
+	return success;
+
+
+if (createOrderPlayerFile(filename, filenameOrdered)): print "Sorted player's list created...[OK]"
+else: "Sorted player's list created...[ERROR]"
+
+if (createYearFrecuencyFile(filename, filenameAcummYears)): print "Year frecuency list created...[OK]"
+else: "Year frecuency list create[ERROR]"
+
+if (createPlayerFrecuencyFile(filename, filenameAcummPlayers)): print "Player frecuency list created...[OK]"
+else: "Player frecuency list create[ERROR]"
+
+
+ 
+
