@@ -7,19 +7,19 @@ filenameAcummPlayers = "AcumJugadores.cvs"
 filenameOrdered 	 = "Ordenado.cvs"
 
 # Write the csv to a file.
-def writeFile(data,filename):
+def writeFile(data,filename, headerStr):
 	valid = 0; # 0 means success | -1 = fails writing the file
-	i = 0;
 
 	#TODO: Check if the file has .csv format. If not. Will return false
 	try:
 		outputFilename = filename; 
 		outputFile = open(outputFilename, 'w')
-		ofWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file
-	 
+		csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file
+	 	
+	 	csvWriter.writerow(headerStr); # write the header to the csv file
+
 	 	for key, value in data.iteritems():
-			ofWriter.writerow([key, value]) 
-			i += 1 
+			csvWriter.writerow([key, value]);
 
 		outputFile.close();
 
@@ -38,9 +38,11 @@ def readCSV(filename):
 
 	return contacts;
 
+# TODO: return -1 or 0 if the function fails
+
 def obtainYearFrecuency():
 	global filename
-	global filenameYearFrecuency
+	global filenameAcummYears
 
 	frecuency = {} # dictionary to save the frecuncy for each year
 	playerList = readCSV(filename); # loads player list from .csv file
@@ -55,9 +57,27 @@ def obtainYearFrecuency():
 		# else
 			# skip first elem
 
-	writtenFile = writeFile(frecuency, filenameAcummYears); # export the list to 
+	headerStr = "year, frecuency"
+	writtenFile = writeFile(frecuency, filenameAcummYears, headerStr); # export the list to 
 	
 	if (writtenFile == -1):
 		print "Error writing a file"
 
+def orderPlayers():
+	global filename
+	global filenameOrdered
+
+	playerList = readCSV(filename); # loads player list from .csv file
+
+	outputFile = open(filenameOrdered, "w");
+	csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file
+
+	csvWriter.writerow(playerList[0]); # Write the header
+	playerList  = sorted(playerList[1:]); # sorted player list (without header)
+
+	for index, player in enumerate(playerList):
+		csvWriter.writerow(player);
+
+
 obtainYearFrecuency();
+orderPlayers();
