@@ -7,19 +7,18 @@ filenameAcummPlayers = "AcumJugadores.cvs"
 filenameOrdered 	 = "Ordenado.cvs"
 
 # Write the csv to a file.
-def writeFile(data,filename, headerStr):
+def writeFile(headerList, data, filename):
 	valid = 0; # 0 means success | -1 = fails writing the file
 
 	#TODO: Check if the file has .csv format. If not. Will return false
 	try:
-		outputFilename = filename; 
-		outputFile = open(outputFilename, 'w')
+		outputFile = open(filename, 'w')
 		csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file
 	 	
-	 	csvWriter.writerow(headerStr); # write the header to the csv file
+	 	csvWriter.writerow(headerList); # write the header to the csv file
 
-	 	for key, value in data.iteritems():
-			csvWriter.writerow([key, value]);
+	 	for index, player in enumerate(data):
+			csvWriter.writerow(player);
 
 		outputFile.close();
 
@@ -54,16 +53,27 @@ def obtainYearFrecuency():
 				frecuency[year] += 1;
 			else:
 				frecuency[year] = 1;
-		# else
-			# skip first elem
+		#else:
+			# skip the header
 
-	headerStr = "year, frecuency"
-	writtenFile = writeFile(frecuency, filenameAcummYears, headerStr); # export the list to 
+	headerList = ["year, frecuency"]
+	writtenFile = writeFile(headerList, frecuency, filenameAcummYears); # export the list to 
 	
 	if (writtenFile == -1):
 		print "Error writing a file"
 
 def orderPlayers():
+	global filename
+	global filenameOrdered
+
+	csvFile = readCSV(filename); # loads player list from .csv file
+	headerList = csvFile[0]; # loading header from the list
+	playerList  = sorted(csvFile[1:]); # sorted player list (without header)
+		
+	print type(playerList)
+	writeFile(headerList, playerList, filenameOrdered);
+
+def orderPlayers2():
 	global filename
 	global filenameOrdered
 
@@ -79,5 +89,5 @@ def orderPlayers():
 		csvWriter.writerow(player);
 
 
-obtainYearFrecuency();
+# obtainYearFrecuency();
 orderPlayers();
