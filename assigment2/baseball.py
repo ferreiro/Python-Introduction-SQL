@@ -89,7 +89,6 @@ def createYearFrecuencyFile(inputFilename, outputFilename):
 				print "Error writing a file"
 				return False; # problems writing to a file
 	except:
-		print successMsg + "[ERROR]"
 		return False
 
 	return succes; # Success
@@ -157,7 +156,4 @@ else: "Year frecuency list create[ERROR]"
 
 if (createPlayerFrecuencyFile(filename, filenameAcummPlayers)): print "Player frecuency list created...[OK]"
 else: "Player frecuency list create[ERROR]"
-
-
- 
 
