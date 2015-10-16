@@ -36,7 +36,6 @@ def readCSV(filename):
 
 	return contacts;
 
-
 def convertDictToList(inputDictionary):
 	if (not isinstance(inputDictionary, dict)): 
 		return None; #is not a Dictionary
@@ -75,6 +74,32 @@ def obtainYearFrecuency():
 	
 	if (writtenFile == -1): print "Error writing a file"
 
+
+def obtainPlayerFrecuency():
+	global filename
+	global filenameAcummPlayers
+
+	playerFrecuency = {} # dictionary to save the frecuency for each Player
+	playerList = readCSV(filename); # loads player list from .csv file
+
+	for index, player in enumerate(playerList):
+		if(index >= 1):		
+			Player = str(player[0]) # index = 0, is the PlayerId field on csv
+			if Player in playerFrecuency:
+				playerFrecuency[Player] += 1;
+			else:
+				playerFrecuency[Player] = 1;
+		# else
+			# skip first elem
+
+	headerList = ["player", "frecuency"]
+	playerFrecuencyList = convertDictToList(playerFrecuency);
+
+	writtenFile = writeFile(headerList, playerFrecuencyList, filenameAcummPlayers); # export the list to 
+	
+	if (writtenFile == -1):
+		print "Error writing a file"
+
 def orderPlayers():
 	global filename
 	global filenameOrdered
@@ -85,24 +110,6 @@ def orderPlayers():
 
 	writeFile(headerList, playerList, filenameOrdered);
 
-def orderPlayers2():
-	global filename
-	global filenameOrdered
-
-	playerList = readCSV(filename); # loads player list from .csv file
-
-	outputFile = open(filenameOrdered, "w");
-	csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file
-
-	csvWriter.writerow(playerList[0]); # Write the header
-	playerList  = sorted(playerList[1:]); # sorted player list (without header)
-
-	for index, player in enumerate(playerList):
-		csvWriter.writerow(player);
-
-
-test = [1, 2, 3]
-test1 = {"name": "Test"}
-print convertDictToList(test1);
-obtainYearFrecuency();
 orderPlayers();
+obtainYearFrecuency();
+obtainPlayerFrecuency();
