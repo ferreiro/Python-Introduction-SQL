@@ -15,7 +15,7 @@ def writeFile(headerList, data, filename):
 		outputFile = open(filename, 'w')
 		csvWriter = csv.writer(outputFile, delimiter=',', dialect='excel'); # http://stackoverflow.com/questions/29335614/python-csv-writer-leave-a-empty-line-at-the-end-of-the-file	 	
 	 	csvWriter.writerow(headerList); # write the header to the csv file
-
+	 	
 	 	for index, player in enumerate(data):
 			csvWriter.writerow(player);
 
@@ -33,6 +33,7 @@ def readCSV(filename):
 	fs = open(filename)
 	reader = csv.reader(fs)
 	contacts = list(reader)
+	fs.close();
 
 	return contacts;
 
@@ -68,6 +69,8 @@ def obtainYearFrecuency(filename, outputFilename):
 	headerList = ["year", "frecuency"]
 	yearFrecuncyList = convertDictToList(frecuency);
 
+	if (yearFrecuncyList == None): return -1
+
 	writtenFile = writeFile(headerList, yearFrecuncyList, filenameAcummYears); # export the list to 
 	
 	if (writtenFile == -1): print "Error writing a file"
@@ -91,6 +94,8 @@ def obtainPlayerFrecuency(filename, outputFilename):
 	headerList = ["player", "frecuency"]
 	playerFrecuencyList = convertDictToList(playerFrecuency);
 
+	if (playerFrecuencyList == None): return -1
+	
 	writtenFile = writeFile(headerList, playerFrecuencyList, filenameAcummPlayers); # export the list to 
 	
 	if (writtenFile == -1):
