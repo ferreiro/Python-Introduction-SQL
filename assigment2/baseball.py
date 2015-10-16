@@ -50,9 +50,7 @@ def convertDictToList(inputDictionary):
 	return newList; # correct conversion
 
 # TODO: return -1 or 0 if the function fails
-def obtainYearFrecuency():
-	global filename
-	global filenameAcummYears
+def obtainYearFrecuency(filename, outputFilename):
 
 	frecuency = {} # dictionary to save the frecuncy for each year
 	playerList = readCSV(filename); # loads player list from .csv file
@@ -75,9 +73,7 @@ def obtainYearFrecuency():
 	if (writtenFile == -1): print "Error writing a file"
 
 
-def obtainPlayerFrecuency():
-	global filename
-	global filenameAcummPlayers
+def obtainPlayerFrecuency(filename, outputFilename):
 
 	playerFrecuency = {} # dictionary to save the frecuency for each Player
 	playerList = readCSV(filename); # loads player list from .csv file
@@ -100,9 +96,7 @@ def obtainPlayerFrecuency():
 	if (writtenFile == -1):
 		print "Error writing a file"
 
-def orderPlayers():
-	global filename
-	global filenameOrdered
+def orderPlayers(filename, outputFilename):
 
 	csvFile = readCSV(filename); # loads player list from .csv file
 	headerList = csvFile[0]; # loading header from the list
@@ -110,6 +104,6 @@ def orderPlayers():
 
 	writeFile(headerList, playerList, filenameOrdered);
 
-orderPlayers();
-obtainYearFrecuency();
-obtainPlayerFrecuency();
+orderPlayers(filename, filenameOrdered);
+obtainYearFrecuency(filename, filenameAcummYears);
+obtainPlayerFrecuency(filename, filenameAcummPlayers);
