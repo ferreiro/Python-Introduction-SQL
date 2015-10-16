@@ -30,16 +30,17 @@ def writeFile(headerList, data, outputFile):
 def readCSV(inputFilename):
 
 	if not inputFilename.endswith(".csv"): # Check if the file has .csv format. If not. Will return false
-		
 		print "Outpufile extension %s not valid" % (outputFile[-4:]) # Notify file output extension doesn't exist
 		print successMsg + "[ERROR]"
 		return None; # return a null object
 	
-	fs = open(inputFilename) 
-	reader = csv.reader(fs)
-	contacts = list(reader) # Load all the contacts from the .csv to a contacts array.
-
-	fs.close();
+	try:
+		fs = open(inputFilename) 
+		reader = csv.reader(fs)
+		contacts = list(reader) # Load all the contacts from the .csv to a contacts array.
+		fs.close(); # close the file manager
+	except:
+		return None;
 
 	return contacts;
 
