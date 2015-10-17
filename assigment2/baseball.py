@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import csv
+import time
 
 filename 			 = "PitchingPost.csv"
 filenameAcummYears 	 = "AcumAnnos.csv"
@@ -69,6 +70,8 @@ def createYearFrecuencyFile(inputFilename, outputFilename):
 	try:
 		playersList = readCSV(inputFilename); # Loads player list from .csv file
 
+		# start_time = time.time()
+
 		for index, player in enumerate(playersList):
 
 			if index >= 1: # starts on 1 to skip the csv header
@@ -79,17 +82,23 @@ def createYearFrecuencyFile(inputFilename, outputFilename):
 				else:
 					frecuency[year] = 1; # Hashtag wasn't in the directionary. Add it with 1 value				
 
-			headerList = ["year", "frecuency"] # header to write on the .csv file
+		# print("Inner year loop duration %s seconds ---" % (time.time() - start_time))
 
-			yearFrecuencyList = convertDictToList(frecuency);
-
-			if (yearFrecuencyList == None): return False
-
-			if not writeFile(headerList, yearFrecuencyList, outputFilename): # export list to output file 
-				print "Error writing a file"
-				return False; # problems writing to a file
 	except:
 		return False
+
+	headerList = ["year", "frecuency"] # header to write on the .csv file
+	yearFrecuencyList = convertDictToList(frecuency);
+
+	# start_time = time.time()
+
+	if (yearFrecuencyList == None): return False
+
+	if not writeFile(headerList, yearFrecuencyList, outputFilename): # export list to output file 
+		print "Error writing a file"
+		return False; # problems writing to a file
+	
+	# print("Inner year loop duration %s seconds ---" % (time.time() - start_time))
 
 	return succes; # Success
 
@@ -147,13 +156,18 @@ def createOrderPlayerFile(inputFilename, outputFilename):
 
 	return success;
 
-
+start_time = time.time()
 if (createOrderPlayerFile(filename, filenameOrdered)): print "Sorted player's list created...[OK]"
 else: "Sorted player's list created...[ERROR]"
+print("--- %s seconds ---" % (time.time() - start_time))
 
-if (createYearFrecuencyFile(filename, filenameAcummYears)): print "Year frecuency list created...[OK]"
-else: "Year frecuency list create[ERROR]"
-
+start_time = time.time()
 if (createPlayerFrecuencyFile(filename, filenameAcummPlayers)): print "Player frecuency list created...[OK]"
 else: "Player frecuency list create[ERROR]"
+print("--- %s seconds ---" % (time.time() - start_time))
+
+start_time = time.time()
+if (createYearFrecuencyFile(filename, filenameAcummYears)): print "Year frecuency list created...[OK]"
+else: "Year frecuency list create[ERROR]"
+print("--- %s seconds ---" % (time.time() - start_time))
 
