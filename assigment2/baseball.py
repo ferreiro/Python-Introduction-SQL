@@ -63,14 +63,11 @@ def convertDictToList(inputDictionary):
 
 def createYearFrecuencyFile(inputFilename, outputFilename):
 
-	succes 	   = True;	
+	success 	   = True;	
 	frecuency  = {} # dictionary to save the frecuncy for each year
-	successMsg = "Creating a year frecuency table..."
 
 	try:
 		playersList = readCSV(inputFilename); # Loads player list from .csv file
-
-		# start_time = time.time()
 
 		for index, player in enumerate(playersList):
 
@@ -81,16 +78,11 @@ def createYearFrecuencyFile(inputFilename, outputFilename):
 					frecuency[year] += 1; # Player was previously added to the dictionary. Increase value by one
 				else:
 					frecuency[year] = 1; # Hashtag wasn't in the directionary. Add it with 1 value				
-
-		# print("Inner year loop duration %s seconds ---" % (time.time() - start_time))
-
 	except:
 		return False
 
 	headerList = ["year", "frecuency"] # header to write on the .csv file
 	yearFrecuencyList = convertDictToList(frecuency);
-
-	# start_time = time.time()
 
 	if (yearFrecuencyList == None): return False
 
@@ -98,9 +90,7 @@ def createYearFrecuencyFile(inputFilename, outputFilename):
 		print "Error writing a file"
 		return False; # problems writing to a file
 	
-	# print("Inner year loop duration %s seconds ---" % (time.time() - start_time))
-
-	return succes; # Success
+	return success; # Success
 
 """ Returns False if we coudn't create the output file.
 	And success when creates a player frecuency table 
@@ -156,18 +146,18 @@ def createOrderPlayerFile(inputFilename, outputFilename):
 
 	return success;
 
-start_time = time.time()
+# start_time = time.time()
 if (createOrderPlayerFile(filename, filenameOrdered)): print "Sorted player's list created...[OK]"
 else: "Sorted player's list created...[ERROR]"
-print("--- %s seconds ---" % (time.time() - start_time))
+# print("--- %s seconds ---" % (time.time() - start_time))
 
-start_time = time.time()
-if (createPlayerFrecuencyFile(filename, filenameAcummPlayers)): print "Player frecuency list created...[OK]"
-else: "Player frecuency list create[ERROR]"
-print("--- %s seconds ---" % (time.time() - start_time))
-
-start_time = time.time()
+# start_time = time.time()
 if (createYearFrecuencyFile(filename, filenameAcummYears)): print "Year frecuency list created...[OK]"
 else: "Year frecuency list create[ERROR]"
-print("--- %s seconds ---" % (time.time() - start_time))
+# print("--- %s seconds ---" % (time.time() - start_time))
+
+# start_time = time.time()
+if (createPlayerFrecuencyFile(filename, filenameAcummPlayers)): print "Player frecuency list created...[OK]"
+else: "Player frecuency list create[ERROR]"
+# print("--- %s seconds ---" % (time.time() - start_time))
 
