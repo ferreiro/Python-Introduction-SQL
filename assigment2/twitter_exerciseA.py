@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 20 00:57:32 2015
-
-@author: LUISFELIPE
-"""
-
 import json
-
 
 def freq_termino():
     data=[]
@@ -25,6 +18,7 @@ def freq_termino():
             count+=1
         except:
             pass
+
     #Separating words    
     new_occurence="" 
     for items in occurencesTotal:
