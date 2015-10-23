@@ -2,7 +2,15 @@
 # has any numeric character
 
 def checkInput(userInput):
-	return userInput.isalpha()
+	valid = True
+
+	for char in userInput:
+		if (char == "" or char == " "):
+			continue
+		else:
+			valid &= char.isalpha()
+
+	return valid
  
 # CheckNumber: returns false is the inputed text 
 # has any numeric character
@@ -59,7 +67,7 @@ def userInput():
 
 def characterToNumber(char):
 	number = -1;
-  
+  	
 	if (char == 'z' or char == 'Z'):
 		if (char == 'z'):
 			number = ord('a');
@@ -81,14 +89,17 @@ def simpleEncription(message, shiftNumber):
 	shiftNumber = shiftNumber % 26; # English alfhabet has 26 elements. when user shifs more than 26, then make the modulus! if not, an error will crash lines below.
 	tmpNum = 0;
 
+	# Convert each character of the array into a
+	# number, then sum the shif and finally convert this
+	# number into the alfabhet letter corresponding.
+	
 	for char in message:
 
-		# Convert each character of the array into a
-		# number, then sum the shif and finally convert this
-		# number into the alfabhet letter corresponding.
-		 
 		tmpNum = characterToNumber(char);
-		tmpNum += shiftNumber; # Add shift number to the character number on Ascii
+
+		if char != "" and char != " ":
+			tmpNum += shiftNumber; # Add shift number to the character number on Ascii
+		# else: It's an space. Don't do anything"			
 		
 		encriptedChar = chr(tmpNum); # Convert from number to char.
 		encriptedMsg.append(encriptedChar); # Add encripted message to the list
