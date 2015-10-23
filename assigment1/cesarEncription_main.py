@@ -8,7 +8,8 @@ def checkInput(userInput):
 		if (char == "" or char == " "):
 			continue
 		else:
-			valid &= char.isalpha()
+			isNumber = checkNumber(char)
+			valid &= not isNumber
 
 	return valid
  
@@ -16,7 +17,19 @@ def checkInput(userInput):
 # has any numeric character
 
 def checkNumber(userInput):
-	return userInput.isdigit()
+	if "0" <= userInput <= "9":
+			return True
+	else:
+		return False
+	
+''' Returns 1 if its a letter and is on the alfhabet (a, b, c ... z)'''
+def checkSymbol(letter):
+	
+	auxLetter = letter.lower() 
+	if "a" <= auxLetter <= "z":
+		return True
+	else:
+		return False
 
 # Reads a valid message from the user
 # and returns to the user.
@@ -97,7 +110,7 @@ def simpleEncription(message, shiftNumber):
 
 		tmpNum = characterToNumber(char);
 
-		if char != "" and char != " ":
+		if checkSymbol(char):
 			tmpNum += shiftNumber; # Add shift number to the character number on Ascii
 		# else: It's an space. Don't do anything"			
 		
