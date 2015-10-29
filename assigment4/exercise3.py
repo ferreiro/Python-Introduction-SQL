@@ -28,8 +28,17 @@ def firstQuery(cursor):
 		print line[0] + ", " + str(line[1]) + ", " + line[2]
 
 def thirdQuery(cursor):
-	cursor.execute('');
+	apliedStudents = []
 
+	# cursor.execute('Select * from Students where not in (Select Students.ID FROM Students, Aplications WHERE Students.ID=Aplications.ID)');
+	for line in cursor: apliedStudents.append(line)
+
+	cursor.execute('Select Students.ID FROM Students');
+
+	for line in cursor:
+		print line
+ 
+	# JOIN Aplications ON Students.ID=Aplications.ID
 firstQuery(cursor);
 thirdQuery(cursor);
 
