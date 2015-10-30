@@ -2,7 +2,7 @@ import sqlite3
 
 dbfile = "managmentSystem.sqlite3"
 
-# t = table's name | f = filename
+#t = table's name | f = filename
 t_university    = "University"
 f_university    = "./dbFiles/universities.txt"
 t_students      = "Students"
@@ -37,15 +37,26 @@ def thirdQuery(cursor):
 	
 	for line in cursor:
 		lineList = []
-		lineList.append(line[0]);
-		lineList.append(line[1]);
-		lineList.append(line[2]); 
+		lineList.append(line[0]); #ID
+		lineList.append("Universidad de Arizona"); #Name
+		lineList.append("Informatica"); #Carrera
+		lineList.append("Si"); #Insert also the decition for the aplications 
+		#lineList.append(line[2]); #nota media
 		noApliedStudents.append(tuple(lineList));
 
-	cursor.execute("INSERT INTO Aplications " + str(noApliedStudents[0]) );
-	print noApliedStudents
+	for entry in noApliedStudents:
+		#print str(entry)
+		cursor.execute("INSERT INTO Aplications values (?, ?,?,?) ", (entry[0], entry[1], entry[2], entry[3]) );
+		#insertQuery = "INSERT INTO Aplications values " + str(tuple(entry))
+		#cursor.execute(insertQuery);
+	
+	print "thirdQuery complete successfully"
+	conn.commit()
 
-	# JOIN Aplications ON Students.ID=Aplications.ID
+	#JOIN Aplications ON Students.ID=Aplications.ID
 #firstQuery(cursor);
 thirdQuery(cursor);
+
+conn.commit()
+cursor.close()
 
