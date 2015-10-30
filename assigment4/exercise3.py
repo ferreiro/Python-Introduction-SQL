@@ -28,6 +28,15 @@ def firstQuery(cursor):
 	for line in cursor:
 		print line[0] + ", " + str(line[1]) + ", " + line[2]
 
+def secondQuery(cursor):
+	# Idea: usar fetchall para coger todas las aplicaciones con un mismo ID (de un solo usuario)
+	# despues, si tiene mas de 1 aplicacion, sabemso que tenemos que borrar esa 
+	try:
+		print "Second query completed successfully...[OK]"
+
+	except:
+		print "Second query: database was previously updated with this data... [NOT INSERTED]"
+
 def thirdQuery(cursor):
 	noApliedStudents = []
 
