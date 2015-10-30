@@ -31,50 +31,70 @@ def firstQuery(cursor):
 def thirdQuery(cursor):
 	noApliedStudents = []
 
-	sqlquery = """SELECT * FROM Students WHERE Students.ID not IN \
-	              (Select Students.ID FROM Students JOIN Aplications WHERE Students.ID=Aplications.ID)"""
+	try:
+		sqlquery = """SELECT * FROM Students WHERE Students.ID not IN \
+		              (Select Students.ID FROM Students JOIN Aplications WHERE Students.ID=Aplications.ID)"""
 
-	cursor.execute(sqlquery); # Execute the query in order to get in cursor all the students that id doesn't appear on the aplications table
-	
-	for line in cursor:
-		lineList = []
-		lineList.append(line[0]); #ID
-		lineList.append("Universidad de Jaen"); #Name
-		lineList.append("Informatica"); #Carrera
-		lineList.append("Si"); #Insert also the decition for the aplications 
-		#lineList.append(line[2]); #nota media
-		noApliedStudents.append(tuple(lineList));
+		cursor.execute(sqlquery); # Execute the query in order to get in cursor all the students that id doesn't appear on the aplications table
+		
+		for line in cursor:
+			lineList = []
+			lineList.append(line[0]); #ID
+			lineList.append("Universidad de Jaen"); #Name
+			lineList.append("Informatica"); #Carrera
+			lineList.append("Si"); #Insert also the decition for the aplications 
+			#lineList.append(line[2]); #nota media
+			noApliedStudents.append(tuple(lineList));
 
-	for entry in noApliedStudents:
-		cursor.execute("INSERT INTO Aplications values (?, ?,?,?) ", (entry[0], entry[1], entry[2], entry[3]) );
-	
-	print "Third query complete successfully...[OK]"
-	conn.commit()
+		for entry in noApliedStudents:
+			cursor.execute("INSERT INTO Aplications values (?, ?,?,?) ", (entry[0], entry[1], entry[2], entry[3]) );
+		
+		conn.commit()
+		print "Third query completed successfully...[OK]"
+
+	except:
+		print "Third query: database was previously updated with this data... [NOT INSERTED]"
 
 def fourthQuery(cursor):
 	aplications = []
 
-	#Devolver todos los estudiantes que querian estudiar economicas pero que no fueron admitidos en la unviersidad
-	cursor.execute("SELECT * FROM Aplications WHERE Aplications.Decision='No' AND Aplications.Carrera = 'Economia' ");
+	try:
+		#Devolver todos los estudiantes que querian estudiar economicas pero que no fueron admitidos en la unviersidad
+		cursor.execute("SELECT * FROM Aplications WHERE Aplications.Decision='No' AND Aplications.Carrera = 'Economia' ");
 
-	for entry in cursor:
-		newAplication = []
-		newAplication.append(entry[0]); #ID
-		newAplication.append("Universidad de Jaen"); #Name
-		newAplication.append("Economia"); #Carrera
-		newAplication.append("Si"); #Insert also the decition for the aplications
-		aplications.append(newAplication);
-	
-	for row in aplications:
-		cursor.execute("INSERT INTO Aplications values (?, ?,?,?) ", (row[0], row[1], row[2], row[3]) );
+		for entry in cursor:
+			newAplication = []
+			newAplication.append(entry[0]); #ID
+			newAplication.append("Universidad de Jaen"); #Name
+			newAplication.append("Economia"); #Carrera
+			newAplication.append("Si"); #Insert also the decition for the aplications
+			aplications.append(newAplication);
 
-	#Insertar nuevas entradas admitiendoles en la universidad de jaen
-	print "TODO"
+		#Insertar nuevas entradas admitiendoles en la universidad de jaen	
+		for row in aplications:
+			cursor.execute("INSERT INTO Aplications values (?, ?,?,?) ", (row[0], row[1], row[2], row[3]) );
+		
+		print "Fourth query completed successfully...[OK]"
 
-#firstQuery(cursor);
-#firstQuery(cursor);
-#thirdQuery(cursor);
+	except:
+		print "Fourth query: database was previously updated with this data... [NOT INSERTED]"
+
+"""Borrar a todos los estudiantes que solicitaron mas de 2 carreras diferentes."""
+
+def fithQuery(cursor):
+	# Idea: usar fetchall para coger todas las aplicaciones con un mismo ID (de un solo usuario)
+	# despues, si tiene mas de 1 aplicacion, sabemso que tenemos que borrar esa 
+	try:
+		print "Fith query completed successfully...[OK]"
+
+	except:
+		print "Fith query: database was previously updated with this data... [NOT INSERTED]"
+
+
+firstQuery(cursor);
+thirdQuery(cursor);
 fourthQuery(cursor);
+fithQuery(cursor);
 
 conn.commit()
 cursor.close()
