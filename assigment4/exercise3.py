@@ -29,9 +29,14 @@ def firstQuery(cursor):
 		print line[0] + ", " + str(line[1]) + ", " + line[2]
 
 def secondQuery(cursor):
-	# Idea: usar fetchall para coger todas las aplicaciones con un mismo ID (de un solo usuario)
-	# despues, si tiene mas de 1 aplicacion, sabemso que tenemos que borrar esa 
 	try:
+		cursor.execute('Select Nombre_Est, Nota, Valor FROM Students')
+		lineList = [] #List of student that have (nota-(nota*valor/1000))>1 
+
+		for line in cursor:
+			if (abs(line[1]-(line[1]*line[2])/1000)>1):
+				#print line[0]+ str(line[1])+ str(line[2])
+				lineList.append(line[0])
 		print "Second query completed successfully...[OK]"
 
 	except:
