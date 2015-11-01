@@ -21,26 +21,49 @@ conn   = config[0]
 cursor = config[1]
 
 def firstQuery(cursor):
-	#cursor.execute('Select * From Students JOIN Aplications ON Students.ID=Aplications.ID WHERE Students.Valor<1000 AND Aplications.Nombre_Univ="Universidad Complutense de Madrid" AND Aplications.Carrera="Informatica" AND Aplications.Decision="Si"')
-	cursor.execute('Select Nombre_Est, Nota, Decision FROM Students JOIN Aplications ON Students.ID=Aplications.ID WHERE Students.Valor<1000 AND Aplications.Nombre_Univ="Universidad Complutense de Madrid" AND Aplications.Carrera="Informatica"')
 
-	print "First query result:"
-	for line in cursor:
-		print line[0] + ", " + str(line[1]) + ", " + line[2]
-
-def secondQuery(cursor):
+	print "\nQuery 1: Correction value less than 1000 and Computers science at the Complutense University of Madrid\n"
+	
 	try:
-		cursor.execute('Select Nombre_Est, Nota, Valor FROM Students')
-		lineList = [] #List of student that have (nota-(nota*valor/1000))>1 
-
+		cursor.execute('Select Nombre_Est, Nota, Decision FROM Students JOIN Aplications ON Students.ID=Aplications.ID WHERE Students.Valor<1000 AND Aplications.Nombre_Univ="Universidad Complutense de Madrid" AND Aplications.Carrera="Informatica"')
+		
 		for line in cursor:
-			if (abs(line[1]-(line[1]*line[2])/1000)>1):
-				#print line[0]+ str(line[1])+ str(line[2])
-				lineList.append(line[0])
-		print "Second query completed successfully...[OK]"
+			print "\t" + line[0] + ", " + str(line[1]) + ", " + line[2]
+	
+		print "\n\tFirst query completed successfully...[OK]\n"
 
 	except:
-		print "Second query: database was previously updated with this data... [NOT INSERTED]"
+		print "\tFirst query wasn't completed successfully...[ERROR]\n"
+
+def secondQuery(cursor):
+
+	print "Query 2: Students whose weighted rating changes 1 or more the original\n"
+	try:
+		cursor.execute('Select Nombre_Est, Nota, Valor FROM Students')
+		#Not necessary: lineList = [] #List of student that have (nota-(nota*valor/1000))>1 
+
+		for line in cursor:
+
+			mark 			= line[1]
+			correctionValue = line[2]
+			weightedMark 	= (mark * correctionValue) / 1000;
+
+			#print "---"
+			#print "Mark is " + str(mark)
+			#print "Correction value is " + str(correctionValue)
+			#print "weighted mark is " + str(weightedMark)
+			total 			= mark - weightedMark #Nota-ponderada=Nota*Valor de correccion/1000 
+			#print "total is " + str(total)
+
+			if (total > 1):
+				print "\t" + line[0] + " weighted mark differs in " + str(total)
+				#lineList.append(line[0])
+		
+		print "\n\tSecond query completed successfully...[OK]\n"
+
+	except IOError:
+		print IOError
+		print "\n\tProblems calculating weighted mark...[ERROR]\n"
 
 def thirdQuery(cursor):
 	noApliedStudents = []
@@ -106,6 +129,7 @@ def fithQuery(cursor):
 
 
 firstQuery(cursor);
+secondQuery(cursor);
 thirdQuery(cursor);
 fourthQuery(cursor);
 fithQuery(cursor);
