@@ -52,7 +52,7 @@ def secondQuery(cursor):
 			#print "Mark is " + str(mark)
 			#print "Correction value is " + str(correctionValue)
 			#print "weighted mark is " + str(weightedMark)
-			total 			= mark - weightedMark #Nota-ponderada=Nota*Valor de correccion/1000 
+			total 		= abs(mark - weightedMark) #Nota-ponderada=Nota*Valor de correccion/1000 
 			#print "total is " + str(total)
 
 			if (total > 1):
