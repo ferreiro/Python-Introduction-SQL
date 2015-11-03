@@ -138,6 +138,12 @@ def fithQuery(cursor):
 		duplications += (str(l[0]) + ", ")
 		duplicatedAplicationsID.append(l[0]);
 
+	for d in duplicatedAplicationsID:
+		print d
+		print type(str(d))
+		statement = "DELETE FROM Aplications WHERE ID IN (" + str(d) + ")"
+		print statement
+		cursor.execute(statement);
 	# cursor.execute("DELETE FROM Aplications WHERE ID IN " + duplications + "")
 
 def fithQuery2(cursor):
