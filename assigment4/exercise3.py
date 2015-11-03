@@ -131,20 +131,28 @@ def fithQuery(cursor):
 	    COUNT(*) > 1
 	"""
 
-	cursor.execute(sqlquery);
+	try:
 
-	# Iterate on the query with cursor and save the value on a list
-	for l in cursor: 
-		duplications += (str(l[0]) + ", ")
-		duplicatedAplicationsID.append(l[0]);
+		cursor.execute(sqlquery);
 
-	for d in duplicatedAplicationsID:
-		print d
-		print type(str(d))
-		statement = "DELETE FROM Aplications WHERE ID IN (" + str(d) + ")"
-		print statement
-		cursor.execute(statement);
-	# cursor.execute("DELETE FROM Aplications WHERE ID IN " + duplications + "")
+		# Iterate on the query with cursor and save the value on a list
+		for l in cursor: 
+			duplications += (str(l[0]) + ", ")
+			duplicatedAplicationsID.append(l[0]);
+
+		for d in duplicatedAplicationsID:
+			#print d
+			#print type(str(d))
+			statement = "DELETE FROM Aplications WHERE ID IN (" + str(d) + ")"
+			#print statement
+			cursor.execute(statement);
+		# cursor.execute("DELETE FROM Aplications WHERE ID IN " + duplications + "")
+
+		print "Fith query completed successfully...[OK]"
+
+	except:
+		print "Fith query: problems deleting database entries... [NOT DELETED]"
+
 
 def fithQuery2(cursor):
 	#idea find all id of student and for all student search on the aplication tabla and obtain only the carrera
