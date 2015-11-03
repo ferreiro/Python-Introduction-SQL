@@ -23,13 +23,17 @@ cursor = config[1]
 # Inserting data into the database
 
 def insertFromFile(filename, table, cursor, conn):
-	fileManger = open(filename)
-	rows = [line.rstrip().split(',') for line in fileManger]
-	rows = [str(tuple(rec)) for rec in rows]
 
-	for row in rows:
-		cursor.execute('insert into ' + table + ' values ' + row)
+	try:
+		fileManger = open(filename)
+		rows = [line.rstrip().split(',') for line in fileManger]
+		rows = [str(tuple(rec)) for rec in rows]
 
+		for row in rows:
+			cursor.execute('insert into ' + table + ' values ' + row)
+	except:
+		print "We couldn't insert information into the database"
+		
 	if (conn): conn.commit()
 
 insertFromFile(f_university, t_university, cursor, conn)

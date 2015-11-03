@@ -21,5 +21,5 @@ def createDatabase(cursor):
 	createApplicationsTable(cursor)
 
 createDatabase(cursor)
-cursor.close()
 conn.commit()
+cursor.close()
