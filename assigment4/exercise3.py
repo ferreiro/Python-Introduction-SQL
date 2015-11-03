@@ -119,6 +119,28 @@ def fourthQuery(cursor):
 """Borrar a todos los estudiantes que solicitaron mas de 2 carreras diferentes."""
 
 def fithQuery(cursor):
+	duplicatedAplicationsID =  []
+	duplications = ""
+
+	sqlquery = """
+	SELECT ID, COUNT(*)
+	FROM Aplications
+	GROUP BY
+	    ID
+	HAVING 
+	    COUNT(*) > 1
+	"""
+
+	cursor.execute(sqlquery);
+
+	# Iterate on the query with cursor and save the value on a list
+	for l in cursor: 
+		duplications += (str(l[0]) + ", ")
+		duplicatedAplicationsID.append(l[0]);
+
+	# cursor.execute("DELETE FROM Aplications WHERE ID IN " + duplications + "")
+
+def fithQuery2(cursor):
 	#idea find all id of student and for all student search on the aplication tabla and obtain only the carrera
 	#if the Distincs carrera for each student is more than 2 borra ello
 	aplications = []
