@@ -47,17 +47,10 @@ def secondQuery(cursor):
 			mark 			= line[1]
 			correctionValue = line[2]
 			weightedMark 	= (mark * correctionValue) / 1000;
-
-			#print "---"
-			#print "Mark is " + str(mark)
-			#print "Correction value is " + str(correctionValue)
-			#print "weighted mark is " + str(weightedMark)
 			total 		= abs(mark - weightedMark) #Nota-ponderada=Nota*Valor de correccion/1000 
-			#print "total is " + str(total)
 
 			if (total > 1):
 				print "\t" + line[0] + " weighted mark differs in " + str(total)
-				#lineList.append(line[0])
 		
 		print "\n\tSecond query completed successfully...[OK]\n"
 
@@ -80,13 +73,11 @@ def thirdQuery(cursor):
 			lineList.append("Universidad de Jaen"); #Name
 			lineList.append("Informatica"); #Carrera
 			lineList.append("Si"); #Insert also the decition for the aplications 
-			#lineList.append(line[2]); #nota media
 			noApliedStudents.append(tuple(lineList));
 
 		for entry in noApliedStudents:
 			cursor.execute("INSERT INTO Aplications values (?, ?,?,?) ", (entry[0], entry[1], entry[2], entry[3]) );
 		
-		conn.commit()
 		print "Third query completed successfully...[OK]"
 
 	except:
@@ -111,7 +102,7 @@ def fourthQuery(cursor):
 		for row in aplications:
 			cursor.execute("INSERT INTO Aplications values (?, ?,?,?) ", (row[0], row[1], row[2], row[3]) );
 		
-		cursor.execute("insert into University values (?, ?, ?) ", ("Universidad de Jaen", "Jaen", 1000));
+		#cursor.execute("insert into University values (?, ?, ?) ", ("Universidad de Jaen", "Jaen", 1000));
 
 		print "Fourth query completed successfully...[OK]"
 
