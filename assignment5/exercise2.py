@@ -7,13 +7,14 @@ html = urllib.request.urlopen(url).read()
 sopa = BeautifulSoup(html, "html.parser")
 
 keywords = []
-breaker= "0"
+
 while True:
     keywords.append(input("Enter the keywords you're searching for.\
      Enter 0 when you already entered all the search keywords\n"))
     if (keywords[-1]=="0"):
         del keywords[-1]
         break
+    
 #getting all the content urls
 enlaces =sopa.find_all(href=re.compile("/201"),class_="post-count-link")
 enlaceList= []
