@@ -1,4 +1,4 @@
 
-% for i in notes:
-% print i
+% for i in user:
+<p> {{i}}</p>
 % end

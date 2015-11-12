@@ -13,11 +13,6 @@ config = config(dbfile);
 conn   = config[0]
 cursor = config[1]
 
-def closeDB(conn, cursor):
-	conn.commit() # Update changes to database
-	cursor.close()
-
-
 @route('/')
 def login():
 	return template('login')
@@ -25,19 +20,37 @@ def login():
 # Check if the user exists on the database if not. Returns a false error to the view.
 @route('/login', method='POST')
 def checkUser():
-	
+	global dbfile
+	conn   = sqlite3.connect(dbfile)
+	cursor = conn.cursor()
+
 	email = request.forms.get('email');
 	password = request.forms.get('password');
 
-	#cursor.execute("Select DISTINCT Email from Tag join User on Tag.TagNameID='Hello' ");
+	query = "Select * from User where User.Email='"+str(email)+"' And User.Password='"+str(password) + "'";
+	print query;
+	
+	cursor.execute(query);
 
-	#for t in cursor:
-	#	print t;
+	user = cursor.fetchone();
 
-	# if success create a cookie an redirect to notes/
-	# else show an error on the login view.
-	return template('login', loginError=True);
-	return template();
+	cursor.close()
+
+	if (user is None):
+		# if success create a cookie an redirect to notes/
+		print "Is none"
+		return "<h1>User wasn't found</h1>"
+		return template('login', loginError=True);
+	else:
+		# else show an error on the login view.
+		print "The user is found"
+		print user
+		print type(user)
+		return template('notes', user=user);
+		return "yeahs"
+		
+	
+
 
 @route('/<userID>/notes')
 def showNotes(userID):
@@ -60,7 +73,18 @@ def showNotes(id):
 
 	return template('notes', note=note);
 
-closeDB(conn, cursor)
+@route('notes')
+def showNotes():
+	# TODO: check if the user exists
+	# Get all notes for that user. 
+	# pass list of Notes to the view.
+	print "hola"
+
+
+def closeDB(conn, cursor):
+	conn.commit() # Update changes to database
+	cursor.close()
+
 run(host='127.0.0.1', port=3000);
 
 
