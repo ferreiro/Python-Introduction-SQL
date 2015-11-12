@@ -45,7 +45,7 @@ def createTableList(cursor):
 			Name text,
 			Surname text,
 			Dateofbirthday text,
-			City text,
+			City text
 		)
 	"""
 	SQLtables.append(UserTable);
