@@ -30,8 +30,14 @@ def createTableList(cursor):
 	SQLtables.append(notesTable);
 	
 	UserTable = """
-		create table Tags(
-			
+		create table User(
+			UserID integer PRIMARY KEY AUTOINCREMENT,
+			Email text,
+			Password text,
+			Name text,
+			Surname text,
+			Dateofbirthday text,
+			City text,
 		)
 	"""
 	SQLtables.append(UserTable);
