@@ -1,5 +1,3 @@
-
-
 <form action="/login" method="post">
     <div>
         <label for="mail">

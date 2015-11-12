@@ -13,6 +13,12 @@ config = config(dbfile);
 conn   = config[0]
 cursor = config[1]
 
+# DB configuration
+def connectDB():
+	global cursor
+	return cursor
+
+
 @route('/')
 def login():
 	return template('login')
@@ -21,45 +27,50 @@ def login():
 @route('/login', method='POST')
 def checkUser():
 	global dbfile
-	conn   = sqlite3.connect(dbfile)
-	cursor = conn.cursor()
+	conn   	 = sqlite3.connect(dbfile)
+	cursor 	 = conn.cursor()
 
-	email = request.forms.get('email');
+	email 	 = request.forms.get('email');
 	password = request.forms.get('password');
-
-	query = "Select * from User where User.Email='"+str(email)+"' And User.Password='"+str(password) + "'";
-	print query;
+	query 	 = "Select * from User where User.Email='"+str(email)+"' And User.Password='"+str(password) + "'";
 	
 	cursor.execute(query);
-
 	user = cursor.fetchone();
 
-	cursor.close()
+	cursor.close(); 
 
 	if (user is None):
 		# if success create a cookie an redirect to notes/
-		print "Is none"
 		return "<h1>User wasn't found</h1>"
 		return template('login', loginError=True);
 	else:
 		# else show an error on the login view.
 		print "The user is found"
-		print user
-		print type(user)
 		return template('notes', user=user);
-		return "yeahs"
 		
-	
-
-
 @route('/<userID>/notes')
 def showNotes(userID):
-	userID = request.forms.get('userID');
 	
+	query  = "Select * from Notes where Notes.UserID='" + userID + "'"; 
+	cursor.execute(query);
+
+	notes = []
+	
+	for c in cursor.fetchall():
+		singleNote = {}
+		singleNote['Title'] = c[2]
+		singleNote['Content'] = c[3]
+		singleNote['CreatedAt'] = c[4]
+		singleNote['EditedAt'] = c[5]
+		singleNote['Published'] = c[6]
+		singleNote['Private'] = c[7]
+		
+		notes.append(singleNote);
+
 	# FetchAll notes for a given user id
 	# Add all the notes returned by the query into a list
 	# return notes to the template.
-	return "<h1>Hola</h1>";
+	return template('notes', notes=notes, user= {'Hola'});
 
 @route('/notes/<id>')
 def showNotes(id):

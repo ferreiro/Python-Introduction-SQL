@@ -27,8 +27,8 @@ def createTableList(cursor):
 			Content text,
 			CreatedAt date,
 			EditedAt date,
-			published boolean,
-			private boolean,
+			Published boolean,
+			Private boolean,
 
 			foreign key (UserID) references User
 		)
