@@ -6,15 +6,14 @@ cursor = conn.cursor()
 def createTableList(cursor):
 	SQLtables = []
 
-	newTable = """
+	tagTable = """
 		create table User(
 			
 		)
 	"""
-	SQLtables.append(newTable);
+	SQLtables.append(tagTable);
 
-
-	newTable = """
+	notesTable = """
 		create table Notes(
 			NoteID integer PRIMARY KEY AUTOINCREMENT,
 			UserID integer,
@@ -28,15 +27,14 @@ def createTableList(cursor):
 			foreign key (UserID) references
 		)
 	"""
-	SQLtables.append(newTable);
-
-	newTable = """
+	SQLtables.append(notesTable);
+	
+	UserTable = """
 		create table Tags(
 			
 		)
 	"""
-
-	SQLtables.append(newTable);
+	SQLtables.append(UserTable);
 
 	return SQLtables;
 	#cursor.execute("DROP TABLE IF EXISTS Notes")
