@@ -145,8 +145,8 @@ def fithQuery(cursor):
 firstQuery(cursor);
 secondQuery(cursor);
 thirdQuery(cursor);
-fourthQuery(cursor);
-fithQuery(cursor);
+#fourthQuery(cursor);
+#fithQuery(cursor);
 
 conn.commit() # Update changes to database
 cursor.close()

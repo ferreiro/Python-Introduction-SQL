@@ -1,1 +1,4 @@
-notes.tpl
+
+% for i in notes:
+% print i
+% end
