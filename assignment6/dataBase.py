@@ -1,6 +1,6 @@
 import sqlite3
 
-conn   = sqlite3.connect('noteProject.sqlite3')
+conn   = sqlite3.connect('notes.sqlite3')
 cursor = conn.cursor()
 
 def createTableList(cursor):
@@ -81,13 +81,8 @@ cursor.execute("insert into Tag values ('Hello', 2, 2, '000000')");
 #cursor.execute("Select DISTINCT Email from Tag join User on Tag.TagNameID='Hello' ");
 #cursor.execute("Select DISTINCT Email from Tag join User on Tag.TagNameID='Hello' ");
 
-for t in cursor:
-	print t;
-
-
-
-for t in cursor:
-	print t;
+#for t in cursor:
+#	print t;
 
 conn.commit()
 cursor.close()
