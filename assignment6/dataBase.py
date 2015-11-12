@@ -72,7 +72,7 @@ cursor.execute("insert into User values (NULL,'jgfe@hola.es', '123', 'Jorge', 'G
 cursor.execute("insert into Notes values (NULL, 1, 'How to make pizza', 'So. We have to call Luigi.', '16/03/1995', '16/03/1995', 1, 0)");
 cursor.execute("insert into Tag values ('Hello', 1, 1, '000000')");
 
-cursor.execute("insert into User values (NULL,'tomasso@hola.es', '321', 'Tommaso', 'Innocenti', '30/09/1991', 'Arezzo')");
+cursor.execute("insert into User values (NULL,'test@example.com', '123', 'Tommaso', 'Innocenti', '30/09/1991', 'Arezzo')");
 cursor.execute("insert into Notes values (NULL, 2, 'How to make pasta', 'So. We have to call Luigi.', '16/03/2015', '16/03/2020', 1, 0)");
 cursor.execute("insert into Tag values ('Hello', 2, 2, '000000')");
 
