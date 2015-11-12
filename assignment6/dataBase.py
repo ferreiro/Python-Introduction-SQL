@@ -7,8 +7,16 @@ def createTableList(cursor):
 	SQLtables = []
 
 	tagTable = """
-		create table User(
-			
+		create table Tag(
+			TagID integer AUTOINCREMENT,
+			NoteID integer,
+			UserID integer,
+			Color text,
+			Title text,
+
+			constraint Tag_user primary key(TagID, UserID), 
+			foreign key(NoteID) references Notes,
+			foreign key(UserID) references User
 		)
 	"""
 	SQLtables.append(tagTable);
@@ -24,7 +32,7 @@ def createTableList(cursor):
 			EditedAt text,
 			status text,
 
-			foreign key (UserID) references
+			foreign key (UserID) references User
 		)
 	"""
 	SQLtables.append(notesTable);
