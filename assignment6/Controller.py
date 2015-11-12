@@ -1,5 +1,5 @@
 import sqlite3
-from bottle import request, route, run, template;
+from bottle import request, route, run, template, response;
 
 dbfile = "notes.sqlite3"
 
@@ -20,15 +20,13 @@ def connectDB():
 
 
 @route('/')
+@route('/login')
 def login():
 	return template('login')
 
 # Check if the user exists on the database if not. Returns a false error to the view.
 @route('/login', method='POST')
 def checkUser():
-	global dbfile
-	conn   	 = sqlite3.connect(dbfile)
-	cursor 	 = conn.cursor()
 
 	email 	 = request.forms.get('email');
 	password = request.forms.get('password');
@@ -37,59 +35,56 @@ def checkUser():
 	cursor.execute(query);
 	user = cursor.fetchone();
 
-	cursor.close(); 
-
 	if (user is None):
 		# if success create a cookie an redirect to notes/
 		return "<h1>User wasn't found</h1>"
 		return template('login', loginError=True);
 	else:
+		userID = user[0];
+		getNotes(userID);
 		# else show an error on the login view.
 		print "The user is found"
-		return template('notes', user=user);
+		
+		
+
+		response.status = 303
+		response.set_header('Location', '/notes')
+
+		#return getNotes(userID):
+		#return template('notes', user=user);
 		
 @route('/<userID>/notes')
-def showNotes(userID):
-	
-	query  = "Select * from Notes where Notes.UserID='" + userID + "'"; 
-	cursor.execute(query);
-
-	notes = []
-	
-	for c in cursor.fetchall():
-		singleNote = {}
-		singleNote['Title'] = c[2]
-		singleNote['Content'] = c[3]
-		singleNote['CreatedAt'] = c[4]
-		singleNote['EditedAt'] = c[5]
-		singleNote['Published'] = c[6]
-		singleNote['Private'] = c[7]
-		
-		notes.append(singleNote);
+def getNotes(userID):
 
 	# FetchAll notes for a given user id
 	# Add all the notes returned by the query into a list
-	# return notes to the template.
-	return template('notes', notes=notes, user= {'Hola'});
 
-@route('/notes/<id>')
-def showNotes(id):
+	try:
+		query  = "Select * from Notes where Notes.UserID='" + str(userID) + "'"; 
+		cursor.execute(query);
 
-	note = {} # dictionary with information for a given note
-	noteId = id; # id is passed by parameter on the url
-	
-	#Search note ID on the database.
-	#if exits. Make a dictionary with the data: 
+		notes = [] # list of nodes for a given user ID
 
+		for c in cursor.fetchall():
+			singleNote = {}
+			singleNote['Title'] = c[2]
+			singleNote['Content'] = c[3]
+			singleNote['CreatedAt'] = c[4]
+			singleNote['EditedAt'] = c[5]
+			singleNote['Published'] = c[6]
+			singleNote['Private'] = c[7]
+			
+			notes.append(singleNote); # Add the note to the Notes.
 
-	return template('notes', note=note);
+		return template('notes', notes=notes, user= {'Hola'});# return notes to the template.
 
-@route('notes')
+	except:
+		return template('error')
+
+@route('/notes')
 def showNotes():
-	# TODO: check if the user exists
-	# Get all notes for that user. 
-	# pass list of Notes to the view.
-	print "hola"
+	# pass the logged user ID
+	return getNotes(1);
 
 
 def closeDB(conn, cursor):
