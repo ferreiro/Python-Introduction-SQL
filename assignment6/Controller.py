@@ -18,15 +18,42 @@ def connectDB():
 	global cursor
 	return cursor
 
+currentUserID = None; # change this to COOOKIES
 
 @route('/')
 @route('/login')
 def login():
 	return template('login')
 
+@route('/register')
+def displayRegisterPage():
+	return template('register');
+
+@route('/register', method='POST')
+def registerUser():
+
+	print request.forms.get('namesignup');
+	user = {
+		"email" : request.forms.get('emailsignup'),
+		"password" : request.forms.get('passwordsignup'),
+		"name": request.forms.get('namesignup'),
+		"surname": request.forms.get('surnamesignup'),
+		"birthday": request.forms.get('birthdaysignup'),
+		"city": request.forms.get('citysignup')
+	}
+
+	print user;
+
+	query 	 = "Select * from User where User.Email='"+str(user['email'])+"' And User.Password='"+str(user['password']) + "'";
+	
+
+
+	return "Your're now registered";
+
 # Check if the user exists on the database if not. Returns a false error to the view.
 @route('/login', method='POST')
 def checkUser():
+	global currentUserID;
 
 	email 	 = request.forms.get('email');
 	password = request.forms.get('password');
@@ -41,12 +68,15 @@ def checkUser():
 		return template('login', loginError=True);
 	else:
 		userID = user[0];
+
+
+		currentUserID = userID; # delete when cookies are added
+
+
 		getNotes(userID);
 		# else show an error on the login view.
 		print "The user is found"
 		
-		
-
 		response.status = 303
 		response.set_header('Location', '/notes')
 
@@ -67,12 +97,14 @@ def getNotes(userID):
 
 		for c in cursor.fetchall():
 			singleNote = {}
-			singleNote['Title'] = c[2]
-			singleNote['Content'] = c[3]
+			singleNote['NoteID'] 	= c[0]
+			singleNote['UserID'] 	= c[1]
+			singleNote['Title'] 	= c[2]
+			singleNote['Content'] 	= c[3]
 			singleNote['CreatedAt'] = c[4]
-			singleNote['EditedAt'] = c[5]
+			singleNote['EditedAt'] 	= c[5]
 			singleNote['Published'] = c[6]
-			singleNote['Private'] = c[7]
+			singleNote['Private'] 	= c[7]
 			
 			notes.append(singleNote); # Add the note to the Notes.
 
@@ -83,9 +115,13 @@ def getNotes(userID):
 
 @route('/notes')
 def showNotes():
-	# pass the logged user ID
-	return getNotes(1);
+	global currentUserID  # delete when cookies are added
+	return getNotes(currentUserID); # pass the logged user ID
 
+
+def checkSession():
+	# if user is not register. Redirect to Home
+	print "Hola"
 
 def closeDB(conn, cursor):
 	conn.commit() # Update changes to database

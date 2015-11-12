@@ -13,7 +13,7 @@ def createTableList(cursor):
 			Password text,
 			Name text,
 			Surname text,
-			Dateofbirthday date,
+			Birthday date,
 			City text
 		)
 	"""
