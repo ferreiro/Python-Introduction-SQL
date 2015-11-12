@@ -29,7 +29,7 @@ for enlace in enlaces:
     #scraping all the imgs urls in every enlace
     img = urllib.request.urlopen(enlace['href']).read()
     sopa = BeautifulSoup(img, "html.parser")
-    all_images = sopa.find_all("img", src="0")
+    all_images = sopa.find_all("img", border="0")
     #creating the image file in the current Directory 
     countImg = 0
     for imgs in all_images:
