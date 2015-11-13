@@ -353,14 +353,8 @@ def searchNote(Keyword,UserID):
 	return return_arr;
  
 def iscontain(note,Keyword):
-	print note['Title'];
-	print note['Content']
-
-	findKey = note['Title'].find(str(Keyword))
-	findContent = str(note['Content']).find(str(Keyword))
-
-	print findKey
-	print findContent
+	findKey = (note['Title'].lower()).find(str(Keyword))
+	findContent = (str(note['Content']).lower()).find(str(Keyword))
 
 	if (note == None):
 		return 	False;

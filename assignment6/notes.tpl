@@ -19,12 +19,6 @@
 
 			<p>if the user is logged (check the cookies) Show the notes</p>
 
-			<form action="/search" method="POST">
-				<p> 
-					<label for="searchText" class="uname" data-icon="u">Search title or content</label>
-					<input id="searchText" name="query" required="required" type="text" placeholder="Search by title or content..." /> 
-				</p>
-			</form>
 
 
 			% if len(notes) == 0:
@@ -39,33 +33,40 @@
 							<a href="/{{user['Username']}}/{{note['Permalink']}}">
 						</div>
 
-							<h1 class="Note-Title">
-								{{note['Title']}}	
-							</h1>
-							<p class="Note-Content">
-								{{note['Content']}}
-							</p>
+						<h1 class="Note-Title">
+							{{note['Title']}}	
+						</h1>
+						<p class="Note-Content">
+							<%
+								data = note['Content'];
+								data = data[:120] + '...'
+								print data
+							%>
+							{{data}} 
+						</p>
+						<h3 class="Note-Date">
+							<% 
+								date = note['CreatedAt']
+								date = date.split(' ');
+								date = date[0]
+							%>
+							{{date}}
+						</h3>
+
+						% if (note['Private']):
+							<span class="Note-Private">
+								<b>Private Note</b>
+							</span>
+						% end
+
+						<p>
+							<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a>
+						</p>
+						<p><a href="/delete/{{note['NoteID']}}">Delete note</a></p>
 
 
-							<h3 class="Note-Title">
-								{{note['CreatedAt']}}
-							</h3>
-
-
-							% if (note['Private']):
-								<span class="Note-Private">
-									<b>Private Note</b>
-								</span>
-							% end
-
-							<p>
-								<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a>
-							</p>
-							<p><a href="/delete/{{note['NoteID']}}">Delete note</a></p>
-
-
-							<p> {{note['Published']}}</p>
-							<p> {{note['Private']}}</p>
+						<p> {{note['Published']}}</p>
+						<p> {{note['Private']}}</p>
 					</div>
 				</div>
 				

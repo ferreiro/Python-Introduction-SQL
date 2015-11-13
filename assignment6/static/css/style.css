@@ -51,7 +51,28 @@ ul, li {
 .Header-options {
 	display: inline-block;
 	float: right;
+	vertical-align: top;
 } 
+.Header-options-search {
+	width: 600px;
+	height: 50px;
+	display: block; 
+	float: left; 
+}
+.Header-options-search:hover {
+	background: #303F9F;
+}
+.Header-options-search input {
+	width: 600px;
+	height: 50px;
+	display: inline-block;
+	background: transparent;
+	outline: 0;
+	padding: 0;
+	margin: 0; 
+	border:0;
+	font-size: 14px;
+}
 .Header-options-createNote {
 	width: 160px;
 	height: 40px;
@@ -145,6 +166,13 @@ ul, li {
 	height: 100%;
 	display: block;
 }
+.Note-Date {
+	font-size: 20px;
+	line-height: 20px;
+	color: #222;
+	font-weight: 300;
+	margin-bottom: 10px;
+}
 .Note-Title {
 	color: #222;
 	margin-bottom: 10px;
@@ -152,4 +180,11 @@ ul, li {
 .Note-Title a {
 	color: #222;
 	font-size: 35px;
+}
+.Note-Content {
+	font-size: 16px;
+	line-height: 20px;
+	letter-spacing: 0.3px;
+	color: #494949;
+	margin-bottom: 10px;
 }

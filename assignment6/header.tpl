@@ -25,9 +25,19 @@
 				<a href="/">SuperNotes</a>
 			</div>
 			<div class="Header-options">
+
+				<div class="Header-options-search">
+					<form action="/search" method="POST">
+						<p> 
+							<input id="searchText" name="query" required="required" type="text" placeholder="Search by title or content..." /> 
+						</p>
+					</form>
+				</div>
+
 				<div class="Header-options-createNote">
 					<a href="/create"><p>Create new note</p></a>
 				</div>
+
 				<div class="Header-options-profileLink" style="display:none;">
 					<a href="/"><p>Jorge Ferreiro</p></a>
 				</div>
