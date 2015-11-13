@@ -298,23 +298,36 @@ def updateUser(user):
 	return True;
 
 def searchNote(Keyword,UserID):
+
+	print Keyword;
+	print UserID
+
 	notes_arr = [];
 	return_arr = [];
-	notes_arr=getUserNotes(UserID);
+	notes_arr=getUserNotes(UserID); 
+
 	for n in notes_arr:
-		if(iscontain(n,Keyword)):
+		print n
+		if(iscontain(n, Keyword)):
+			print "is contain"
 			return_arr.append(n);
+
+	print return_arr
 	return return_arr;
-
-
-
+ 
 def iscontain(note,Keyword):
-	findKey = note['Title'].find(Keyword)
-	findContent = str(note['Content']).find(Keyword)
+	print note['Title'];
+	print note['Content']
+
+	findKey = note['Title'].find(str(Keyword))
+	findContent = str(note['Content']).find(str(Keyword))
+
+	print findKey
+	print findContent
 
 	if (note == None):
 		return 	False;
-	if int(findKey)>0 or int(findContent)>0: 
+	if int(findKey)>=0 or int(findContent)>=0: 
 		return True;
 	else:
 		return False; 
@@ -422,6 +435,23 @@ def registerUserDatabase():
 	print "Problems inserting a user on the database. Sorry..."
 	return "Problems on the database"
 
+#####SEARCH
+
+@route('/search', method='POST')
+#@route('/search/<name>', method='GET')
+#@route('/search?q=<Keyword>', method="GET")
+def searchOnNotes():
+	global sessionUser
+	if (sessionUser == None):
+		return template('login')
+
+	user = getUserbyID(sessionUser['UserID'])
+
+	Keyword = request.forms.get('query');
+	notes = searchNote(Keyword, sessionUser['UserID']);
+	print notes
+
+	return template('notes', notes=notes, user=user);
 
 #####Create a note
 
@@ -555,7 +585,6 @@ def deleteNoteID(NoteID):
 		redirectHome();
 		return "You're not allowed to be here";
 
-
 #####Show a single 
 
 @route('/<Username>/<Permalink>')
@@ -594,8 +623,7 @@ def updateNote(Username, Permalink):
 		return template('createNote', note=note, user=sessionUser, editNote=True)
 	else:
 		# note no existe
-		return template('loginWindow')
-
+		return template('loginWindow');
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
