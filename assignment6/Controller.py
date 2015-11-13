@@ -288,8 +288,6 @@ def updateUser(user):
 	closeCursor(cursor);
 	return True;
 
-<<<<<<< HEAD
-=======
 def searchNote(Keyword,UserID):
 	notes_arr = [];
 	return_arr = [];
@@ -310,12 +308,8 @@ def iscontain(note,Keyword):
 	if int(findKey)>0 or int(findContent)>0: 
 		return True;
 	else:
-		return False;
+		return False; 
 
-
-
-
->>>>>>> 79e989db4064224041aeef5bd9c36a89f23948f7
 #################################
 ############ROUTES #############
 #################################
