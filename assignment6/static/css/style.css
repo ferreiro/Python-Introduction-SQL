@@ -8,7 +8,7 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-family: 'Raleway', sans-serif;
 }
-a,p {
+a,p, h1, h2, h3 {
 	margin: 0;
 	padding: 0;
 	text-decoration: none;
@@ -54,8 +54,10 @@ ul, li {
 } 
 .Header-options-createNote {
 	width: 160px;
-	height: 50px;
+	height: 40px;
 	background: #4CAF50;
+	border-top: 5px solid #283593;
+	border-bottom: 5px solid #283593;
 	display: inline-block;
 }
 .Header-options-createNote a {  
@@ -66,7 +68,9 @@ ul, li {
 .Header-options-createNote a p {
 	width: 100%;
 	text-align: center;
-	margin-top: 15px;
+	margin-top: 12px;
+	color: #fff;
+	font-weight: 500;
 } 
 
 .Header-options-profileLink {
@@ -98,4 +102,54 @@ ul, li {
 	height: 25px;
 	background: red;
 	padding-top: 17px;
+}
+
+/*******************************
+	containter-wrapper
+********************************/
+
+.containter-wrapper {
+	width: 100%;
+}
+.containter {
+	width: 1020px;
+	margin: 0 auto;
+}
+
+.Note-wrapper {
+	width: 33.333%;
+	margin-right: -4px;
+	display: inline-block;
+	vertical-align: top;
+}
+.Note {
+	min-height: 220px;
+	padding: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
+	background: rgba(255,255,255,0.9);
+	position: relative;
+}
+.Note-link {
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	z-index: 10;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.Note-link a {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+.Note-Title {
+	color: #222;
+	margin-bottom: 10px;
+}
+.Note-Title a {
+	color: #222;
+	font-size: 35px;
 }

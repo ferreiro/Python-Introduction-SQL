@@ -301,7 +301,8 @@ def updatedBD(updatedNote):
 	cursor = openCursor();
 	query  = "Update Notes SET "
 	query += "Title ='" + str(updatedNote['Title']) + "',  ";
-	query += "Content ='" + str(updatedNote['Content']) + "'";
+	query += "Content ='" + str(updatedNote['Content']) + "', ";
+	query += "EditedAt ='" + str(updatedNote['EditedAt']) + "'";
 	query += " where Notes.NoteID=" + str(updatedNote['NoteID']);
 	query += " and Notes.UserID=" + str(updatedNote['UserID']);
 

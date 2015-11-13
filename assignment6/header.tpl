@@ -26,12 +26,12 @@
 			</div>
 			<div class="Header-options">
 				<div class="Header-options-createNote">
-					<a href="/"><p>Create new note</p></a>
+					<a href="/create"><p>Create new note</p></a>
 				</div>
-				<div class="Header-options-profileLink">
+				<div class="Header-options-profileLink" style="display:none;">
 					<a href="/"><p>Jorge Ferreiro</p></a>
 				</div>
-				<ul class="Header-options-menu">
+				<ul class="Header-options-menu" style="display:none;">
 
 					% #if sessionUser != None:
 					<li class="Header-options-menu-button">
