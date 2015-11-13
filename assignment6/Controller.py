@@ -1,6 +1,7 @@
 import sqlite3
 from bottle import request, route, run, template, response;
 from datetime import datetime
+from passlib.hash import sha256_crypt
 
 dbfile = "notes.sqlite3";
 conn   = sqlite3.connect(dbfile);
@@ -21,6 +22,14 @@ sessionUser = None; # Empty Dictionary. Updated when login and erased when logou
 #################################
 ############AUXILIAR FUNCTIONS #############
 #################################
+
+def encriptpassword(Password):
+	hash = sha256_crypt.encrypt(password)
+	return hash
+
+def verifyPassword(Password):
+	return sha256_crypt.verify(Password,hash);
+
 
 def setSessionUser(user):
 	global sessionUser
