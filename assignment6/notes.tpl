@@ -7,6 +7,16 @@
 
 <p>if the user is logged (check the cookies) Show the notes</p>
 
+
+
+<form action="/search" method="POST">
+	<p> 
+		<label for="searchText" class="uname" data-icon="u">Search title or content</label>
+		<input id="searchText" name="query" required="required" type="text" placeholder="Search by title or content..." /> 
+	</p>
+</form>
+
+
 % if len(notes) == 0:
 	<h2>Empty. There's any Note here</h2>
 %else:
