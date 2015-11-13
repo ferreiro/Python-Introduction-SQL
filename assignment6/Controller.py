@@ -272,7 +272,6 @@ def updatedBD(updatedNote):
 	closeCursor(cursor);
 
 
-
 #################################
 ############ROUTES #############
 #################################
@@ -437,7 +436,6 @@ def displayNote(Username, Permalink):
 	else:
 		# note no existe
 		return template('loginWindow')
-
 
 @route('/<Username>/<Permalink>/edit')
 def updateNote(Username, Permalink):
