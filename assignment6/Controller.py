@@ -289,6 +289,10 @@ def redirectHome():
 	response.set_header('Location', '/');
 	return template('login'); #Show login screen
 
+def redirect(url):
+	response.status = 303
+	response.set_header('Location', '/'+ url);
+
 def redirectLogin():
 	response.status = 303
 	response.set_header('Location', '/login');
@@ -405,9 +409,47 @@ def createNote():
 
 	if createNoteDB(newNote):
 		print "Note created!";
-		return template('singleNote', note=newNote, user=sessionUser)
+		response.status = 303
+		response.set_header('Location', '/'+ sessionUser['Username'] + '/' + newNote['Permalink']);
+		#return template('singleNote', note=newNote, user=sessionUser)
 	else:
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
+
+
+@route('/update/<NoteID>', method="POST")
+def saveUpdateDatabase(NoteID):
+	if (sessionUser == None):
+		return template('login')
+	
+	newTitle 		 = request.forms.get('titleNote');
+	newContent 		 = request.forms.get('contentNote');
+	updatedTime 	 = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
+
+	#Update fields for the note before inserting into database..
+	note 			 = getNotebyNoteID(NoteID); #get note object from the previous note.
+	note['Title'] 	 = newTitle;
+	note['Content']  = newContent;
+	note['EditedAt'] = updatedTime;
+
+	user   = getUserbyID(note['UserID']);
+
+	if updatedBD(note): #update the note into the database.
+		return template('singleNote', note=note, user=user);
+	else:
+		#problems updating note.
+		return template('error')
+
+@route('/delete/<NoteID>')
+def deleteNoteID(NoteID):
+	global sessionUser;
+	if (sessionUser == None):
+		return template('login')
+
+	if deleteNote(NoteID):
+		return template('notes-deleted');
+	else:
+		return "Problems deleting that note"
+		return template('error')
 
 #####Show a single 
 
@@ -448,41 +490,6 @@ def updateNote(Username, Permalink):
 	else:
 		# note no existe
 		return template('loginWindow')
-
-@route('/update/<NoteID>', method="POST")
-def saveUpdateDatabase(NoteID):
-	if (sessionUser == None):
-		return template('login')
-	
-	newTitle 		 = request.forms.get('titleNote');
-	newContent 		 = request.forms.get('contentNote');
-	updatedTime 	 = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
-
-	#Update fields for the note before inserting into database..
-	note 			 = getNotebyNoteID(NoteID); #get note object from the previous note.
-	note['Title'] 	 = newTitle;
-	note['Content']  = newContent;
-	note['EditedAt'] = updatedTime;
-
-	user   = getUserbyID(note['UserID']);
-
-	if updatedBD(note): #update the note into the database.
-		return template('singleNote', note=note, user=user);
-	else:
-		#problems updating note.
-		return template('error')
-
-@route('/delete/<NoteID>')
-def deleteNoteID():
-	global sessionUser;
-	if (sessionUser == None):
-		return template('login')
-
-	if deleteNote(NoteID):
-		return "Note deleted"
-	else:
-		return "Problems deleting that note"
-
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
