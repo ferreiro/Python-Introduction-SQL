@@ -46,7 +46,7 @@ def setSessionUser(user):
 def validUser(user):
 	return (user != None);
 
-def getUser(email, password):
+def getUserbyEmailPassword(email, password):
 	user   = None;
 	cursor = openCursor();
 	try:
@@ -59,38 +59,46 @@ def getUser(email, password):
 
 	return user;
 
+def getUserbyUsername(username):
+	user   = None;
+	cursor = openCursor();
+	try:
+		query = "Select * from User where User.Username='"+str(username)+"'";
+		cursor.execute(query); # Check if the email and password exists on our database
+		user_tuple = cursor.fetchone(); # Get the returned object for the database
+		user = usertupleToDictionary(user_tuple);
+		closeCursor(cursor);
+	except:
+		print "Can't retrieve a user"
+
+	return user;
+
 # FetchAll notes for a given user id
 # Add all the notes returned by the query into a list
 
 def validNotes(notes):
 	return (notes != None);
 
-def getUserNotes(UserID):
-	notes_arr = []; # Array of dictionary (with notes)
-	cursor = openCursor();
-	print UserID
-	try:
-		query = "Select * from Notes where Notes.UserID='" + str(UserID) + "'";
-		print query
-		cursor.execute(query); # Check if the email and password exists on our database
-		notes_tuples = cursor.fetchall(); # Get tuples returned by database
-		
-		# notes are tuples. So convert to dict and add to Notes array
-		for n in notes_tuples:
-			print n
-			convertedNote = tupleToDictionary(n); # tuple to dictionary
-			notes_arr.append(convertedNote); # Append dictionary
-		
-		closeCursor(cursor);
 
-	except:
-		print "Can't retrieve a notes"
+# Convert a note as a tuple into a Dictionary and return it
 
-	return notes_arr;
+def usertupleToDictionary(_tuple):
+	if (type(_tuple) != tuple):
+		return None;
 
-""" Convert a note as a tuple into a Dictionary and return it """
+	user = {}
+	user['UserID'] = _tuple[0]
+	user['Email'] = _tuple[1]
+	user['Password'] = _tuple[2]
+	user['Username'] = _tuple[3]
+	user['Name'] = _tuple[4]
+	user['Surname'] = _tuple[5]
+	user['Birthday'] = _tuple[6]
+	user['City'] = _tuple[7]
 
-def tupleToDictionary(_tuple):
+	return user;
+
+def notetupleToDictionary(_tuple):
 	if (type(_tuple) != tuple):
 		return None;
 	note = {}
@@ -105,6 +113,26 @@ def tupleToDictionary(_tuple):
 	note['Private'] 	= _tuple[8]
 
 	return note;
+
+def getUserNotes(UserID):
+	notes_arr = []; # Array of dictionary (with notes)
+	cursor = openCursor();
+	try:
+		query = "Select * from Notes where Notes.UserID=" + str(UserID);
+		cursor.execute(query); # Check if the email and password exists on our database
+		notes_tuples = cursor.fetchall(); # Get tuples returned by database
+		
+		# notes are tuples. So convert to dict and add to Notes array
+		for n in notes_tuples:
+			convertedNote = notetupleToDictionary(n); # tuple to dictionary
+			notes_arr.append(convertedNote); # Append dictionary
+
+		closeCursor(cursor);
+
+	except:
+		print "Can't retrieve a notes"
+
+	return notes_arr;
 
 #################################
 ############ROUTES #############
@@ -121,7 +149,7 @@ def login():
 	try:
 		email    = request.forms.get('email');
 		password = request.forms.get('password');
-		user = getUser(email, password);
+		user = getUserbyEmailPassword(email, password);
 
 		if validUser(user):
 			setSessionUser(user); # set User session object
@@ -132,6 +160,20 @@ def login():
 		print "Problems with your query. Sorry..."
 	
 	notes_arr = getUserNotes(sessionUser['UserID'])
+	response.status = 303
+	response.set_header('Location', '/'+str(sessionUser['Username']));
 	return template('notes', notes=notes_arr); # Show the notes for that user!
 
+#Show the profile for a given user. 
+#Dashboard with the Published notes, draft and more stuff... """
+
+@route('/<username>')
+def profile(username):
+	user = getUserbyUsername(username);
+	if user != None:
+		notes = getUserNotes(user['UserID']);
+		return template('notes', notes=notes); # Show the notes for that user!
+	else:
+		return "User not exist"
+	
 run(host='127.0.0.1', port=3000);
