@@ -180,7 +180,7 @@ def getUserNotes(UserID):
 	notes_arr = []; # Array of dictionary (with notes)
 	cursor = openCursor();
 	try:
-		query = "Select * from Notes where Notes.UserID=" + str(UserID);
+		query = "Select * from Notes where Notes.UserID=" + str(UserID) + " ORDER BY EditedAt DESC";
 		cursor.execute(query); # Check if the email and password exists on our database
 		notes_tuples = cursor.fetchall(); # Get tuples returned by database
 		
@@ -282,12 +282,11 @@ def deleteNote(NoteID):
 
 def updateUser(user):
 	cursor=openCursor();
-	query= "Update User SET Name="+str(user[Name])+","+"Surname="+str(user[Surname])+","+"Birthday="+str(user[Birthday])+","+"City="+str(user[City])+""
+	query= "Update User SET Name='"+str(user['Name'])+"', Surname='"+str(user['Surname'])+"', Birthday='"+str(user['Birthday'])+"', City='"+str(user['City'])+"'"
 	cursor.execute(query);
 	conn.commit();
 	closeCursor(cursor);
 	return True;
-
 
 #################################
 ############ROUTES #############
@@ -356,7 +355,7 @@ def login():
 def register():
 	global sessionUser
 	if (sessionUser == None):
-		return template('signup'); #Show login screen
+		return template('signup', editUser=False); #Show login screen
 	else:
 		return loginSuccessRedirect();
 
@@ -424,6 +423,49 @@ def createNote():
 	else:
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
 
+@route('/profile')
+def userProfile():
+	global sessionUser
+	if (sessionUser == None):
+		return template('login')
+
+	user = getUserbyID(sessionUser['UserID']);
+ 
+	if user != None:
+		return template("profile", user=user);
+	else:
+		return template("login");
+
+@route('/profile/edit')
+def showFormToEditUser():
+	global sessionUser
+	if (sessionUser == None):
+		return template('login')
+
+	user = getUserbyID(sessionUser['UserID']);
+
+	if updateUser(user):
+		return template("signup", user=user, editUser=True);
+	else:
+		return template("profile");
+
+@route('/profile/edit', method="POST")
+def editSessionUser():
+	global sessionUser
+	if (sessionUser == None):
+		return template('login')
+
+	user = getUserbyID(sessionUser['UserID']);
+
+	user['Name'] = request.forms.get('namesignup');
+	user['Surname'] = request.forms.get('surnamesignup');
+	user['Birthday'] = request.forms.get('birthdaysignup'); 
+	user['City'] = request.forms.get('citysignup'); 
+ 
+	if updateUser(user):
+		return template("profile", user=user);
+	else:
+		return template("profile");
 
 @route('/update/<NoteID>', method="POST")
 def saveUpdateDatabase(NoteID):
@@ -512,6 +554,7 @@ def updateNote(Username, Permalink):
 	else:
 		# note no existe
 		return template('loginWindow')
+
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
