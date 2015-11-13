@@ -293,16 +293,21 @@ def searchNote(Keyword,UserID):
 	return_arr = [];
 	notes_arr=getUserNotes(UserID);
 	for n in notes_arr:
-		if(iscontain(n,Keyword))
-		return_arr.append(n);
+		if(iscontain(n,Keyword)):
+			return_arr.append(n);
 	return return_arr;
 
 
 
 def iscontain(note,Keyword):
-	if(note['Title'].find(Keyword)>0||note['Content'].find(Keyword)>0)
+	findKey = note['Title'].find(Keyword)
+	findContent = str(note['Content']).find(Keyword)
+
+	if (note == None):
+		return 	False;
+	if int(findKey)>0 or int(findContent)>0: 
 		return True;
-	else
+	else:
 		return False;
 
 
