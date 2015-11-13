@@ -272,6 +272,20 @@ def updatedBD(updatedNote):
 	closeCursor(cursor);
 
 
+def deleteNote(NoteID):
+	
+	cursor =openCursor();
+#try:
+	query = "delete from Notes where notes.NoteID=" + str(NoteID) + ""
+    cursor.execute(query);
+    conn.commit();
+    closeCursor(cursor);
+    return 
+#except:
+	#print "somethings go wrong"
+	#return
+
+
 #################################
 ############ROUTES #############
 #################################
