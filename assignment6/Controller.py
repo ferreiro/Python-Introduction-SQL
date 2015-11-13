@@ -36,19 +36,21 @@ def setSessionUser(user):
 
 	try:
 		if (user != None):
+			print user
 			sessionUser = {
-				"UserID" : user[0],
-				"Email" : user[1],
-				"Username" : user[3],
-				"Name" : user[4],
-				"Surname" : user[5],
-				"Birthday" : user[6],
-				"City" : user[7],
-				"Premium" : user[8]
+				"UserID" : user['UserID'],
+				"Email" : user['Email'],
+				"Username" : user['Username'],
+				"Name" : user['Name'],
+				"Surname" : user['Surname'],
+				"Birthday" : user['Birthday'],
+				"City" : user['City'],
+				"Premium" : user['Premium']
 			}
 			#print user;
 			#print sessionUser;
 	except:
+		print sessionUser
 		print "Can't set the user session"
 		return False; # Coudln't set a session user
 
@@ -104,6 +106,21 @@ def getUserbyUsername(username):
 	cursor = openCursor();
 	try:
 		query = "Select * from User where User.Username='"+str(username)+"'";
+		cursor.execute(query); # Check if the email and password exists on our database
+		user_tuple = cursor.fetchone(); # Get the returned object for the database
+		user = usertupleToDictionary(user_tuple);
+		closeCursor(cursor);
+	except:
+		print "Can't retrieve a user"
+
+	return user;
+
+
+def getUserbyEmail(Email):
+	user   = None;
+	cursor = openCursor();
+	try:
+		query = "Select * from User where User.Email='"+str(Email)+"'";
 		cursor.execute(query); # Check if the email and password exists on our database
 		user_tuple = cursor.fetchone(); # Get the returned object for the database
 		user = usertupleToDictionary(user_tuple);
@@ -382,17 +399,25 @@ def loginWindow():
 def login():
 	global sessionUser
 
-	try:
-		email    = request.forms.get('email');
-		Password = request.forms.get('password');
-		user = getUserbyEmailPassword(email, password);
+#try:
+	email    = request.forms.get('email');
+	password = request.forms.get('password');
 
-		if validUser(user) and verifyPassword(Password, user['Password']):
-			setSessionUser(user); # set User session object
-		else:
-			return "The user is NOT valid!";
-	except:
-		print "Problems with your query. Sorry..."
+	user = getUserbyEmail(email);
+	
+	if (user == None):
+		print "user is None"
+		return template('login-fail');
+
+	print "Password is " + password
+	print "Hash is " + user['Password']
+
+	if verifyPassword(password, user['Password']):
+		setSessionUser(user); # set User session object
+	else:
+		return "The user is NOT valid!";
+#except:
+	#print "Problems with your query. Sorry..."
 
 	return loginSuccessRedirect();
 
