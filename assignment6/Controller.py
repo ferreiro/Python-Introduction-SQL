@@ -267,16 +267,14 @@ def updatedBD(updatedNote):
 
 	return True; # Updated.
 
-
 def deleteNote(NoteID):
-	
 	cursor =openCursor();
 #try:
 	query = "delete from Notes where notes.NoteID=" + str(NoteID) + ""
-    cursor.execute(query);
-    conn.commit();
-    closeCursor(cursor);
-    return 
+	cursor.execute(query);
+	conn.commit();
+	closeCursor(cursor);
+	return
 #except:
 	#print "somethings go wrong"
 	#return
@@ -341,12 +339,11 @@ def login():
 	return loginSuccessRedirect();
 
 ######### Register 
-
 @route('/register')
 def register():
 	global sessionUser
 	if (sessionUser == None):
-		return template('register'); #Show login screen
+		return template('signup'); #Show login screen
 	else:
 		return loginSuccessRedirect();
 
@@ -364,13 +361,16 @@ def registerUserDatabase():
 		"city": request.forms.get('citysignup'),
 		"premium": 0
 	}
-	if createUserDB(newUser):
-		return redirectLogin();
+	if createUserDB(newUser): # user created successfully
+		return template('signup-success');
 	else:
 		return "Problems creating user"
 
 	print "Problems inserting a user on the database. Sorry..."
 	return "Problems on the database"
+
+
+##### Create a note
 
 @route('/create')
 @route('/create/')
@@ -408,6 +408,8 @@ def createNote():
 		return template('singleNote', note=newNote, user=sessionUser)
 	else:
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
+
+##### Show a single 
 
 @route('/<Username>/<Permalink>')
 def displayNote(Username, Permalink):
