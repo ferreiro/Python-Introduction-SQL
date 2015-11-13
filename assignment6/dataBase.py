@@ -59,10 +59,10 @@ def createTableList(cursor):
 	#cursor.execute("CREATE TABLE University(Nombre_Univ TEXT, Comunidad TEXT, Plazas INTEGER, PRIMARY KEY(Nombre_Univ))")
 
 def deleteDatabase(cursor):
-	#cursor.execute("DROP TABLE IF EXISTS User");
-	#cursor.execute("DROP TABLE IF EXISTS Tag");
-	#cursor.execute("DROP TABLE IF EXISTS Notes");
-	print "hoLA"
+	cursor.execute("DROP TABLE IF EXISTS User ");
+	cursor.execute("DROP TABLE IF EXISTS Tag");
+	cursor.execute("DROP TABLE IF EXISTS Notes");
+
 def createDatabase(cursor, tables):
 	deleteDatabase(cursor);
 	for t in tables:

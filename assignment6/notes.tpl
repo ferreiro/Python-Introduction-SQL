@@ -1,7 +1,6 @@
 
-% for i in user:
-<p> {{i}}</p>
-% end
+
+<a href="">Create a new note</a>
 
 <p>if the user is logged (check the cookies) Show the notes</p>
 
@@ -11,6 +10,9 @@
 % for note in notes:
 
 	<div class="Note" id="{{note['NoteID']}}">
+
+		% #<p><a href="/{{note['Username']}}/">Edit note</a></p>
+
 		% if (note['Private']):
 			<span class="Note-Private">
 				<b>Private Note</b>
@@ -27,7 +29,6 @@
 		<p class="Note-Content">
 			{{note['Content']}}
 		</p>
-		<p> {{note['EditedAt']}}</p>
 		<p> {{note['Published']}}</p>
 		<p> {{note['Private']}}</p>
 	</div>
