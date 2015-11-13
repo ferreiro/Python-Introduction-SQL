@@ -1,4 +1,4 @@
-
+% include ('header.tpl', title='Hola')
 
 % if editUser == True:
 <h1>Edit your user information</h1>

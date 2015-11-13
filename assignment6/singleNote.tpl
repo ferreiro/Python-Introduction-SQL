@@ -1,3 +1,4 @@
+% include ('header.tpl', title='Hola')
 
 % #for i in user:
 <p> </p>

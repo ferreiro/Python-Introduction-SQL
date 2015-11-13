@@ -1,5 +1,5 @@
 import sqlite3
-from bottle import request, route, run, template, response;
+from bottle import request, route, run, template, response, static_file;
 from datetime import datetime
 from passlib.hash import sha256_crypt
 
@@ -17,6 +17,23 @@ def closeCursor(cursor):
 # Change for cookies
 sessionUser = None; # Empty Dictionary. Updated when login and erased when logout. 
 
+	
+# Static Routes
+@route('/static/<filename:re:.*\.js>')
+def javascripts(filename):
+    return static_file(filename, root='static/js')
+
+@route('/<filename:re:.*\.css>')
+def stylesheets(filename):
+    return static_file(filename, root='static/')
+
+@route('/<filename:re:.*\.(jpg|png|gif|ico)>')
+def images(filename):
+    return static_file(filename, root='static/img')
+
+@route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
+def fonts(filename):
+    return static_file(filename, root='static/fonts')
 
 
 #################################

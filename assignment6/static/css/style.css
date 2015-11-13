@@ -1,0 +1,101 @@
+body {
+	width: 100%;
+	height: 100%;
+	background: #f4f4f4;
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+	font-family: 'Roboto', sans-serif;
+	font-family: 'Raleway', sans-serif;
+}
+a,p {
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+}
+ul, li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.Header-wrapper {
+	width: 100%;
+	height: 50px;
+	background: #283593;
+}
+.Header {
+	width: 1000px;
+	margin: 0 auto;
+	vertical-align: top;
+	position: relative;
+}
+.Header-logo {
+	width: 160px;
+	height: 50px;
+	display: inline-block;
+}
+.Header-logo a {
+	width: 100%;
+	text-align: center;
+	padding-top: 10px;
+	height: 40px;
+	display: inline-block;
+	color: #fff;
+	font-weight: 500;
+	font-size: 22px;
+}
+.Header-logo:hover {
+	background: #3F51B5;
+}
+.Header-options {
+	display: inline-block;
+	float: right;
+} 
+.Header-options-createNote {
+	width: 160px;
+	height: 50px;
+	background: #4CAF50;
+	display: inline-block;
+}
+.Header-options-createNote a {  
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+} 
+.Header-options-createNote a p {
+	width: 100%;
+	text-align: center;
+	margin-top: 15px;
+} 
+
+.Header-options-profileLink {
+	width: 160px;
+	height: 50px;
+	background: red;
+	display: inline-block;
+}
+.Header-options-profileLink a {  
+	display: inline-block;
+	background: blue;
+} 
+.Header-options-menu {
+	width: 160px;
+	position: absolute;
+	top: 100%;
+	right: 0; 
+	list-style: none;
+	display: inline-block; 
+	background: #fff;
+}
+.Header-options-menu-button{
+	display: inline-block;
+	height: 50px;
+	background: red;
+}
+.Header-options-menu-button a{
+	display: inline-block;
+	height: 25px;
+	background: red;
+	padding-top: 17px;
+}

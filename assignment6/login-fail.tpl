@@ -1,3 +1,4 @@
+% include ('header.tpl', title='Hola')
 <p>Problems on login</p>
 
 <form action="/login" method="post">

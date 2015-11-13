@@ -1,22 +1,29 @@
-<form action="/login" method="post">
-    <div>
-        <label for="mail">
-        	E-mail:
-        </label>
-        <input name="email" type="email" id="mail" placeholder="Your email" />
-    </div>
-    <div>
-        <label for="password">
-        	Password:
-        </label>
-        <input name="password" type="password" />
-    </div>
-    
-    <div class="button">
-        <button type="submit">Send your message</button>
-    </div>
+% include ('header.tpl', title='Hola')
 
-    <p>
-        Don't you have an ccount? <a href="/register">Register!</a>
-    </p>
-</form>
+    <form action="/login" method="post">
+        <div>
+            <label for="mail">
+            	E-mail:
+            </label>
+            <input name="email" type="email" id="mail" placeholder="Your email" />
+        </div>
+        <div>
+            <label for="password">
+            	Password:
+            </label>
+            <input name="password" type="password" />
+        </div>
+        
+        <div class="button">
+            <button type="submit">Send your message</button>
+        </div>
+
+        <p>
+            Don't you have an ccount? <a href="/register">Register!</a>
+        </p>
+    </form>
+
+
+  <script src="js/scripts.js"></script>
+</body>
+</html>
