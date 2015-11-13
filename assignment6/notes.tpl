@@ -1,6 +1,7 @@
 
 
 <a href="/create">Create a new note</a>
+<a href="/logout">Log out</a>
 
 <p>if the user is logged (check the cookies) Show the notes</p>
 
@@ -20,7 +21,9 @@
 			{{note['CreatedAt']}}
 		</h3>
 
-		<p><a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a></p>
+		<p>
+			<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a>
+		</p>
 
 		<h1 class="Note-Title">
 			<a href="/{{user['Username']}}/{{note['Permalink']}}">

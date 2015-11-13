@@ -296,8 +296,12 @@ def loginSuccessRedirect():
 @route('/logout')
 def logout():
 	global sessionUser
+	sessionUser = sessionUser or None;
+
 	if (sessionUser != None):
-		del sessionUser; # delete cookies or session information (in this case sessionUser object)
+		copySession = sessionUser;
+		sessionUser = None; # delete cookies or session information (in this case sessionUser object)
+		del copySession
 	return redirectHome();
 
 @route('/')
