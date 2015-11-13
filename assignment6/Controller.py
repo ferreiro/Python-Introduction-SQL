@@ -74,6 +74,20 @@ def getNotebyUserID_NoteID(UserID, NoteID):
 
 	return note;
 
+
+def getNotebyNoteID(NoteID):
+	note   = None;
+	cursor = openCursor();
+	try:
+		query = "Select * from Notes where Notes.NoteID="+str(NoteID);
+		cursor.execute(query); # Check if the email and password exists on our database
+		note = cursor.fetchone(); # Get the returned object for the database
+		closeCursor(cursor);
+	except:
+		print "Can't get notes given a userID and NoteID"
+
+	return note;
+
 def getUserbyUsername(username):
 	user   = None;
 	cursor = openCursor();
@@ -236,6 +250,29 @@ def createNoteDB(newNote):
 #except:
 	return False;
 
+def updatedBD(updatedNote):
+
+	cursor = openCursor();
+	print "Oh tes"
+#try:
+	userString  = ("NULL,");
+	userString += str(newNote['UserID']) + ",";
+	userString += ("'" + str(newNote['Title']) + "',");
+	userString += ("'" + str(newNote['Permalink']) + "',");
+	userString += ("'" + str(newNote['Content']) + "',");
+	userString += ("'" + str(newNote['CreatedAt']) + "',");
+	userString += ("'" + str(newNote['EditedAt']) + "',");
+	userString += (str(newNote['Published']) + ",");
+	userString += str(newNote['Private']);
+
+	#query = "Update Notes SET Title = )';
+	print query
+	cursor.execute(query);
+	conn.commit();
+	closeCursor(cursor);
+
+
+
 #################################
 ############ROUTES #############
 #################################
@@ -358,6 +395,25 @@ def createNote():
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
 
 
+@route('/update/<NoteID>', method="POST")
+def saveUpdateDatabase(NoteID):
+	if (sessionUser == None):
+		return template('login')
+
+	note = getNotebyNoteID(NoteID);
+	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
+
+	note['Title'] = request.forms.get('titleNote');
+	note['Content'] = str(request.forms.get('contentNote'));
+	note['EditedAt'] = today;
+
+	if updatedBD(note):
+		print "Note created!";
+		return template('singleNote', note=newNote, user=sessionUser)
+	else:
+		return template('createNote', note=newNote, user=sessionUser, editNote=False)
+
+
 @route('/<Username>/<Permalink>')
 def displayNote(Username, Permalink):
 	global sessionUser
@@ -393,8 +449,7 @@ def updateNote(Username, Permalink):
 	if (NoteID != 0):
 		note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
 		note = notetupleToDictionary(note_tuple);
-		return "TODO: AcTUALIZAR NOTA EN LA BASE DE DATOS"
-		#return template('createNote', note=note, user=sessionUser, editNote=True)
+		return template('createNote', note=note, user=sessionUser, editNote=True)
 	else:
 		# note no existe
 		return template('loginWindow')
