@@ -288,6 +288,25 @@ def updateUser(user):
 	closeCursor(cursor);
 	return True;
 
+def searchNote(Keyword,UserID):
+	notes_arr = [];
+	return_arr = [];
+	notes_arr=getUserNotes(UserID);
+	for n in notes_arr:
+		if(iscontain(n,Keyword))
+		return_arr.append(n);
+	return return_arr;
+
+
+
+def iscontain(note,Keyword):
+	if(note['Title'].find(Keyword)>0||note['Content'].find(Keyword)>0)
+		return True;
+	else
+		return False;
+
+
+
 
 #################################
 ############ROUTES #############
