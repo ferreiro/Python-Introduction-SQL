@@ -24,10 +24,10 @@ sessionUser = None; # Empty Dictionary. Updated when login and erased when logou
 #################################
 
 def encriptpassword(Password):
-	hash = sha256_crypt.encrypt(password)
+	hash = sha256_crypt.encrypt(Password)
 	return hash
 
-def verifyPassword(Password):
+def verifyPassword(Password, hash):
 	return sha256_crypt.verify(Password,hash);
 
 
@@ -210,10 +210,12 @@ def getUserNotes(UserID):
 def createUserDB(newUser):
 	cursor = openCursor();
 
+	encriptedPassword = encriptpassword(newUser['password']);
+
 	try:
 		userString  = ("NULL,");
 		userString += ("'" + str(newUser['email']) + "',");
-		userString += ("'" + str(newUser['password']) + "',");
+		userString += ("'" + str(encriptedPassword) + "',");
 		userString += ("'" + str(newUser['username']) + "',");
 		userString += ("'" + str(newUser['name']) + "',");
 		userString += ("'" + str(newUser['surname']) + "',");
@@ -382,10 +384,10 @@ def login():
 
 	try:
 		email    = request.forms.get('email');
-		password = request.forms.get('password');
+		Password = request.forms.get('password');
 		user = getUserbyEmailPassword(email, password);
 
-		if validUser(user):
+		if validUser(user) and verifyPassword(Password, user['Password']):
 			setSessionUser(user); # set User session object
 		else:
 			return "The user is NOT valid!";
