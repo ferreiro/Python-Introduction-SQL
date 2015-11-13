@@ -1,5 +1,6 @@
 import sqlite3
 from bottle import request, route, run, template, response;
+from datetime import datetime
 
 dbfile = "notes.sqlite3";
 conn   = sqlite3.connect(dbfile);
@@ -74,6 +75,21 @@ def getUserbyUsername(username):
 
 	return user;
 
+
+def getUserbyID(id):
+	user   = None;
+	cursor = openCursor();
+	try:
+		query = "Select * from User where User.UserID='"+str(id)+"'";
+		cursor.execute(query); # Check if the email and password exists on our database
+		user_tuple = cursor.fetchone(); # Get the returned object for the database
+		user = usertupleToDictionary(user_tuple);
+		closeCursor(cursor);
+	except:
+		print "Can't retrieve a user"
+
+	return user;
+
 # FetchAll notes for a given user id
 # Add all the notes returned by the query into a list
 
@@ -136,6 +152,62 @@ def getUserNotes(UserID):
 
 	return notes_arr;
 
+""" Create a user in the database if the user doesn't exist """
+
+def createUserDB(newUser):
+	cursor = openCursor();
+
+	try:
+		userString  = ("NULL,");
+		userString += ("'" + str(newUser['email']) + "',");
+		userString += ("'" + str(newUser['password']) + "',");
+		userString += ("'" + str(newUser['username']) + "',");
+		userString += ("'" + str(newUser['name']) + "',");
+		userString += ("'" + str(newUser['surname']) + "',");
+		userString += ("'" + str(newUser['birthday']) + "',");
+		userString += ("'" + str(newUser['city'])     + "',");
+		userString += str(newUser['premium']);
+
+		print userString
+
+		query = "Insert into User values(" + userString + ')';
+		cursor.execute(query);
+		conn.commit();
+		closeCursor(cursor);
+
+		return True;
+
+	except:
+		return False;
+
+
+""" Create a user in the database if the user doesn't exist """
+
+def createNoteDB(newNote):
+	cursor = openCursor();
+	print "Oh tes"
+#try:
+	userString  = ("NULL,");
+	userString += str(newNote['UserID']) + ",";
+	userString += ("'" + str(newNote['Title']) + "',");
+	userString += ("'" + str(newNote['Permalink']) + "',");
+	userString += ("'" + str(newNote['Content']) + "',");
+	userString += ("'" + str(newNote['CreatedAt']) + "',");
+	userString += ("'" + str(newNote['EditedAt']) + "',");
+	userString += (str(newNote['Published']) + ",");
+	userString += str(newNote['Private']);
+
+	query = "Insert into Notes values(" + userString + ')';
+	print query
+	cursor.execute(query);
+	conn.commit();
+	closeCursor(cursor);
+
+	return True;
+
+#except:
+	return False;
+
 #################################
 ############ROUTES #############
 #################################
@@ -145,7 +217,13 @@ def redirectHome():
 	response.set_header('Location', '/');
 	return template('login'); #Show login screen
 
+def redirectLogin():
+	response.status = 303
+	response.set_header('Location', '/login');
+	return template('login'); #Show login screen
+
 def loginSuccessRedirect():
+	global sessionUser
 	response.status = 303
 	response.set_header('Location', '/'+str(sessionUser['Username']));
 	return profile(sessionUser['Username']);
@@ -178,13 +256,84 @@ def login():
 			setSessionUser(user); # set User session object
 		else:
 			return "The user is NOT valid!";
-
 	except:
 		print "Problems with your query. Sorry..."
 
 	return loginSuccessRedirect();
 
+######### Register 
 
+@route('/register')
+def register():
+	global sessionUser
+	if (sessionUser == None):
+		return template('register'); #Show login screen
+	else:
+		return loginSuccessRedirect();
+
+@route('/register', method='POST')
+def registerUserDatabase():
+	#Dictionary with information for new user (following database model)
+	newUser = {
+		"UserID": None,
+		"email" : request.forms.get('emailsignup'),
+		"password" : request.forms.get('passwordsignup'),
+		"name": request.forms.get('namesignup'),
+		"surname": request.forms.get('surnamesignup'),
+		"username": request.forms.get('usernamesignup'),
+		"birthday": request.forms.get('birthdaysignup'),
+		"city": request.forms.get('citysignup'),
+		"premium": 0
+	}
+	if createUserDB(newUser):
+		return redirectLogin();
+	else:
+		return "Problems creating user"
+
+	print "Problems inserting a user on the database. Sorry..."
+	return "Problems on the database"
+
+@route('/create')
+@route('/create/')
+def createNote():
+	note = {}
+	return template('editNote', note=note)
+
+@route('/<user_id>/<note_id>/edit')
+def createNote():
+	note = {}
+	return template('editNote', note=note)
+
+@route('/create', method="POST")
+def createNote():
+	global sessionUser
+
+	if (sessionUser == None):
+		return "You must create an account before creating a note"
+
+	title = request.forms.get('titleNote');
+	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
+	permalink = str(title) + str(today);
+
+	newNote = {
+		"NoteID" 	: None,
+		"UserID" 	: sessionUser['UserID'],
+		"Title" 	: str(title),
+		"Permalink" : str(permalink),
+		"Content" 	: str(request.forms.get('contentNote')),
+		"CreatedAt" : today,
+		"EditedAt" 	: today,
+		"Published" : 1,
+		"Private" 	: 1
+	}
+
+	user = getUserbyID(sessionUser['UserID']);
+
+	if createNoteDB(newNote):
+		print "Note created!";
+		return template('singleNote', note=newNote, user=user)
+	else:
+		return template('editNote', note=newNote, user=user)
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
