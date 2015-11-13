@@ -1,6 +1,8 @@
 
 
 <a href="/create">Create a new note</a>
+<a href="/profile">My profile</a>
+<a href="/profile/edit">Edit profile</a>
 <a href="/logout">Log out</a>
 
 <p>if the user is logged (check the cookies) Show the notes</p>
