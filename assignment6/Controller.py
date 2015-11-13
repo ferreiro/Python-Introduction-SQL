@@ -658,11 +658,16 @@ def updateNote(Username, Permalink):
 @route('/<username>')
 @route('/<username>/')
 def profile(username):
+	global sessionUser
+	if (sessionUser == None):
+		return template('login')
+
 	user = getUserbyUsername(username);
-	if user != None:
+
+	if user != None and user['UserID'] == sessionUser['UserID']: # if user and session is the same as the query user
 		notes = getUserNotes(user['UserID']);
 		return template('notes', notes=notes, user=user); # Show the notes for that user!
 	else:
-		return "User not exist"
+		return template('prohibited_place')
 	
 run(host='127.0.0.1', port=3000);
