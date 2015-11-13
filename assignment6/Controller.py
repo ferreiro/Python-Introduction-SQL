@@ -61,6 +61,19 @@ def getUserbyEmailPassword(email, password):
 
 	return user;
 
+def getNotebyUserID_NoteID(UserID, NoteID):
+	note   = None;
+	cursor = openCursor();
+	try:
+		query = "Select * from Notes join User where User.UserID="+str(UserID)+" And Notes.NoteID="+str(NoteID);
+		cursor.execute(query); # Check if the email and password exists on our database
+		note = cursor.fetchone(); # Get the returned object for the database
+		closeCursor(cursor);
+	except:
+		print "Can't get notes given a userID and NoteID"
+
+	return note;
+
 def getUserbyUsername(username):
 	user   = None;
 	cursor = openCursor();
@@ -89,6 +102,21 @@ def getUserbyID(id):
 		print "Can't retrieve a user"
 
 	return user;
+
+def getNoteIDFromPermalink(Permalink):
+	noteID = -1;
+	cursor = openCursor();
+	try:
+		query = "Select NoteID from Notes where Notes.Permalink='"+str(Permalink)+"'";
+		print query
+		cursor.execute(query); # Check if the email and password exists on our database
+		noteID = cursor.fetchone()[0]; # Get the returned object for the database
+		closeCursor(cursor);
+	except:
+		print "Can't retrieve a user"
+
+	return noteID;
+
 
 # FetchAll notes for a given user id
 # Add all the notes returned by the query into a list
@@ -235,6 +263,7 @@ def logout():
 		del sessionUser; # delete cookies or session information (in this case sessionUser object)
 	return redirectHome();
 
+@route('/')
 @route('/login')
 def loginWindow():
 	global sessionUser
@@ -295,25 +324,20 @@ def registerUserDatabase():
 
 @route('/create')
 @route('/create/')
-def createNote():
+def createNoteForm():
 	note = {}
-	return template('editNote', note=note)
-
-@route('/<user_id>/<note_id>/edit')
-def createNote():
-	note = {}
-	return template('editNote', note=note)
+	return template('createNote', note=note, editNote=False)
 
 @route('/create', method="POST")
 def createNote():
 	global sessionUser
 
 	if (sessionUser == None):
-		return "You must create an account before creating a note"
+		return template('login')
 
 	title = request.forms.get('titleNote');
 	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
-	permalink = str(title) + str(today);
+	permalink = str(title) + str("add-more-stuff-to-be-unique");
 
 	newNote = {
 		"NoteID" 	: None,
@@ -327,14 +351,33 @@ def createNote():
 		"Private" 	: 1
 	}
 
-	user = getUserbyID(sessionUser['UserID']);
-
 	if createNoteDB(newNote):
 		print "Note created!";
-		return template('singleNote', note=newNote, user=user)
+		return template('singleNote', note=newNote, user=sessionUser)
 	else:
-		return template('editNote', note=newNote, user=user)
+		return template('createNote', note=newNote, user=sessionUser, editNote=False)
 
+@route('/<Username>/<Permalink>/edit')
+def updateNote(Username, Permalink):
+	global sessionUser
+	note = {}
+
+	if (sessionUser == None):
+		return template('login')
+
+	user = getUserbyUsername(Username);
+	UserID = user['UserID'];
+
+	NoteID = getNoteIDFromPermalink(Permalink);
+
+	if (NoteID != 0):
+		note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
+		note = notetupleToDictionary(note_tuple);
+		return "TODO: AcTUALIZAR NOTA EN LA BASE DE DATOS"
+		#return template('createNote', note=note, user=sessionUser, editNote=True)
+	else:
+		# note no existe
+		return template('loginWindow')
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
 
