@@ -279,6 +279,14 @@ def deleteNote(NoteID):
 	#print "somethings go wrong"
 	#return False;
 
+def updateUser(user):
+	cursor=openCursor();
+	query= "Update User SET Name="+str(user[Name])+","+"Surname="+str(user[Surname])+","+"Birthday="+str(user[Birthday])+","+"City="+str(user[City])+""
+	cursor.execute(query);
+	conn.commit();
+	closeCursor(cursor);
+	return True;
+
 
 #################################
 ############ROUTES #############
