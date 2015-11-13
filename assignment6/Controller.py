@@ -301,7 +301,7 @@ def logout():
 	if (sessionUser != None):
 		copySession = sessionUser;
 		sessionUser = None; # delete cookies or session information (in this case sessionUser object)
-		del copySession
+		del copySession # delete the other variable for security reassongs
 	return redirectHome();
 
 @route('/')
@@ -378,7 +378,9 @@ def createNote():
 
 	title = request.forms.get('titleNote');
 	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
-	permalink = str(title) + str("add-more-stuff-to-be-unique");
+	formatedToday = today.replace(" ", "-")
+	formatedToday = formatedToday.replace(":", "-")
+	permalink = str(title) + str(formatedToday);
 
 	newNote = {
 		"NoteID" 	: None,
