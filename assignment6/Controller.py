@@ -230,27 +230,27 @@ def createUserDB(newUser):
 def createNoteDB(newNote):
 	cursor = openCursor();
 	print "Oh tes"
-#try:
-	userString  = ("NULL,");
-	userString += str(newNote['UserID']) + ",";
-	userString += ("'" + str(newNote['Title']) + "',");
-	userString += ("'" + str(newNote['Permalink']) + "',");
-	userString += ("'" + str(newNote['Content']) + "',");
-	userString += ("'" + str(newNote['CreatedAt']) + "',");
-	userString += ("'" + str(newNote['EditedAt']) + "',");
-	userString += (str(newNote['Published']) + ",");
-	userString += str(newNote['Private']);
+	try:
+		userString  = ("NULL,");
+		userString += str(newNote['UserID']) + ",";
+		userString += ("'" + str(newNote['Title']) + "',");
+		userString += ("'" + str(newNote['Permalink']) + "',");
+		userString += ("'" + str(newNote['Content']) + "',");
+		userString += ("'" + str(newNote['CreatedAt']) + "',");
+		userString += ("'" + str(newNote['EditedAt']) + "',");
+		userString += (str(newNote['Published']) + ",");
+		userString += str(newNote['Private']);
 
-	query = "Insert into Notes values(" + userString + ')';
-	print query
-	cursor.execute(query);
-	conn.commit();
-	closeCursor(cursor);
+		query = "Insert into Notes values(" + userString + ')';
+		print query
+		cursor.execute(query);
+		conn.commit();
+		closeCursor(cursor);
 
-	return True;
+		return True;
 
-#except:
-	return False;
+	except:
+		return False;
 
 def updatedBD(updatedNote):
 	cursor = openCursor();
@@ -374,6 +374,16 @@ def registerUserDatabase():
 		"premium": 0
 	}
 	if createUserDB(newUser): # user created successfully
+
+		newNote = {
+			"Title": "Welcome to ______",
+			"Content": "Welcome to our awesome project! You are on board!",
+			"Published": 1
+		}
+		if (createNoteDB(newNote)):
+			print "Default note created"
+		else:
+			print "Default note NOT created"
 		return template('signup-success');
 	else:
 		return "Problems creating user"
