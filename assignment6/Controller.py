@@ -33,7 +33,8 @@ def setSessionUser(user):
 				"Name" : user[4],
 				"Surname" : user[5],
 				"Birthday" : user[6],
-				"City" : user[7]
+				"City" : user[7],
+				"Premium" : user[8]
 			}
 			#print user;
 			#print sessionUser;
@@ -95,6 +96,7 @@ def usertupleToDictionary(_tuple):
 	user['Surname'] = _tuple[5]
 	user['Birthday'] = _tuple[6]
 	user['City'] = _tuple[7]
+	user['Premium'] = _tuple[8]
 
 	return user;
 
@@ -138,9 +140,30 @@ def getUserNotes(UserID):
 ############ROUTES #############
 #################################
 
+def redirectHome():
+	response.status = 303
+	response.set_header('Location', '/');
+	return template('login'); #Show login screen
+
+def loginSuccessRedirect():
+	response.status = 303
+	response.set_header('Location', '/'+str(sessionUser['Username']));
+	return profile(sessionUser['Username']);
+
+@route('/logout')
+def logout():
+	global sessionUser
+	if (sessionUser != None):
+		del sessionUser; # delete cookies or session information (in this case sessionUser object)
+	return redirectHome();
+
 @route('/login')
 def loginWindow():
-	return template('login');
+	global sessionUser
+	if (sessionUser == None):
+		return template('login'); #Show login screen
+	else:
+		return loginSuccessRedirect();
 
 @route('/login', method='POST')
 def login():
@@ -158,21 +181,21 @@ def login():
 
 	except:
 		print "Problems with your query. Sorry..."
-	
-	notes_arr = getUserNotes(sessionUser['UserID'])
-	response.status = 303
-	response.set_header('Location', '/'+str(sessionUser['Username']));
-	return template('notes', notes=notes_arr); # Show the notes for that user!
+
+	return loginSuccessRedirect();
+
+
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
 
 @route('/<username>')
+@route('/<username>/')
 def profile(username):
 	user = getUserbyUsername(username);
 	if user != None:
 		notes = getUserNotes(user['UserID']);
-		return template('notes', notes=notes); # Show the notes for that user!
+		return template('notes', notes=notes, user=user); # Show the notes for that user!
 	else:
 		return "User not exist"
 	

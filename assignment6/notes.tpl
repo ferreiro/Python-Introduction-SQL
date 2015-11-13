@@ -1,6 +1,6 @@
 
 
-<a href="">Create a new note</a>
+<a href="/create">Create a new note</a>
 
 <p>if the user is logged (check the cookies) Show the notes</p>
 
@@ -11,8 +11,6 @@
 
 	<div class="Note" id="{{note['NoteID']}}">
 
-		% #<p><a href="/{{note['Username']}}/">Edit note</a></p>
-
 		% if (note['Private']):
 			<span class="Note-Private">
 				<b>Private Note</b>
@@ -21,8 +19,11 @@
 		<h3 class="Note-Title">
 			{{note['CreatedAt']}}
 		</h3>
+
+		<p><a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a></p>
+
 		<h1 class="Note-Title">
-			<a href="{{note['Permalink']}}">
+			<a href="/{{user['Username']}}/{{note['Permalink']}}">
 				{{note['Title']}}
 			</a>
 		</h1>
