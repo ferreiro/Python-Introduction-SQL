@@ -24,6 +24,8 @@
 		<p>
 			<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a>
 		</p>
+		<p><a href="/delete/{{note['NoteID']}}">Delete note</a></p>
+
 
 		<h1 class="Note-Title">
 			<a href="/{{user['Username']}}/{{note['Permalink']}}">

@@ -268,16 +268,16 @@ def updatedBD(updatedNote):
 	return True; # Updated.
 
 def deleteNote(NoteID):
-	cursor =openCursor();
+	cursor = openCursor();
 #try:
 	query = "delete from Notes where notes.NoteID=" + str(NoteID) + ""
 	cursor.execute(query);
 	conn.commit();
 	closeCursor(cursor);
-	return
+	return True;
 #except:
 	#print "somethings go wrong"
-	#return
+	#return False;
 
 
 #################################
@@ -370,7 +370,7 @@ def registerUserDatabase():
 	return "Problems on the database"
 
 
-##### Create a note
+#####Create a note
 
 @route('/create')
 @route('/create/')
@@ -409,7 +409,7 @@ def createNote():
 	else:
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
 
-##### Show a single 
+#####Show a single 
 
 @route('/<Username>/<Permalink>')
 def displayNote(Username, Permalink):
@@ -471,6 +471,18 @@ def saveUpdateDatabase(NoteID):
 	else:
 		#problems updating note.
 		return template('error')
+
+@route('/delete/<NoteID>')
+def deleteNoteID():
+	global sessionUser;
+	if (sessionUser == None):
+		return template('login')
+
+	if deleteNote(NoteID):
+		return "Note deleted"
+	else:
+		return "Problems deleting that note"
+
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
