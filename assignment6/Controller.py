@@ -83,6 +83,7 @@ def getNotebyNoteID(NoteID):
 		cursor.execute(query); # Check if the email and password exists on our database
 		noteTuple = cursor.fetchone(); # Get the returned object for the database
 		note = notetupleToDictionary(noteTuple);
+		print note;
 		closeCursor(cursor);
 	except:
 		print "Can't get notes given a userID and NoteID"
@@ -445,11 +446,24 @@ def deleteNoteID(NoteID):
 	if (sessionUser == None):
 		return template('login')
 
-	if deleteNote(NoteID):
-		return template('notes-deleted');
+	note = getNotebyNoteID(NoteID);
+
+	if (note == None): 
+		return redirectHome(); # The note doesn't exist on our database 
+
+	userID_note    = note['UserID'];
+	userID_session = sessionUser['UserID'];
+
+	if (userID_note == userID_session):
+		if (deleteNote(NoteID)):
+			return template('notes-deleted');
+		else:
+			return "Problems deleting that note"
+			return template('error')
 	else:
-		return "Problems deleting that note"
-		return template('error')
+		redirectHome();
+		return "You're not allowed to be here";
+
 
 #####Show a single 
 
