@@ -357,6 +357,26 @@ def createNote():
 	else:
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
 
+
+@route('/<Username>/<Permalink>')
+def displayNote(Username, Permalink):
+	global sessionUser
+	if (sessionUser == None):
+		return template('login')
+
+	user = getUserbyUsername(Username);
+	UserID = user['UserID'];
+	NoteID = getNoteIDFromPermalink(Permalink);
+
+	if (NoteID != 0):
+		note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
+		note = notetupleToDictionary(note_tuple);
+		return template('singleNote', note=note, user=sessionUser)
+	else:
+		# note no existe
+		return template('loginWindow')
+
+
 @route('/<Username>/<Permalink>/edit')
 def updateNote(Username, Permalink):
 	global sessionUser
