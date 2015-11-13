@@ -81,7 +81,8 @@ def getNotebyNoteID(NoteID):
 	try:
 		query = "Select * from Notes where Notes.NoteID="+str(NoteID);
 		cursor.execute(query); # Check if the email and password exists on our database
-		note = cursor.fetchone(); # Get the returned object for the database
+		noteTuple = cursor.fetchone(); # Get the returned object for the database
+		note = notetupleToDictionary(noteTuple);
 		closeCursor(cursor);
 	except:
 		print "Can't get notes given a userID and NoteID"
@@ -251,25 +252,20 @@ def createNoteDB(newNote):
 	return False;
 
 def updatedBD(updatedNote):
-
 	cursor = openCursor();
-	print "Oh tes"
-#try:
-	userString  = ("NULL,");
-	userString += str(newNote['UserID']) + ",";
-	userString += ("'" + str(newNote['Title']) + "',");
-	userString += ("'" + str(newNote['Permalink']) + "',");
-	userString += ("'" + str(newNote['Content']) + "',");
-	userString += ("'" + str(newNote['CreatedAt']) + "',");
-	userString += ("'" + str(newNote['EditedAt']) + "',");
-	userString += (str(newNote['Published']) + ",");
-	userString += str(newNote['Private']);
+	query  = "Update Notes SET "
+	query += "Title ='" + str(updatedNote['Title']) + "',  ";
+	query += "Content ='" + str(updatedNote['Content']) + "'";
+	query += " where Notes.NoteID=" + str(updatedNote['NoteID']);
+	query += " and Notes.UserID=" + str(updatedNote['UserID']);
 
-	#query = "Update Notes SET Title = )';
 	print query
+
 	cursor.execute(query);
 	conn.commit();
 	closeCursor(cursor);
+
+	return True; # Updated.
 
 
 #################################
@@ -399,26 +395,6 @@ def createNote():
 	else:
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
 
-
-@route('/update/<NoteID>', method="POST")
-def saveUpdateDatabase(NoteID):
-	if (sessionUser == None):
-		return template('login')
-
-	note = getNotebyNoteID(NoteID);
-	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
-
-	note['Title'] = request.forms.get('titleNote');
-	note['Content'] = str(request.forms.get('contentNote'));
-	note['EditedAt'] = today;
-
-	if updatedBD(note):
-		print "Note created!";
-		return template('singleNote', note=newNote, user=sessionUser)
-	else:
-		return template('createNote', note=newNote, user=sessionUser, editNote=False)
-
-
 @route('/<Username>/<Permalink>')
 def displayNote(Username, Permalink):
 	global sessionUser
@@ -445,9 +421,8 @@ def updateNote(Username, Permalink):
 	if (sessionUser == None):
 		return template('login')
 
-	user = getUserbyUsername(Username);
+	user   = getUserbyUsername(Username);
 	UserID = user['UserID'];
-
 	NoteID = getNoteIDFromPermalink(Permalink);
 
 	if (NoteID != 0):
@@ -457,6 +432,30 @@ def updateNote(Username, Permalink):
 	else:
 		# note no existe
 		return template('loginWindow')
+
+@route('/update/<NoteID>', method="POST")
+def saveUpdateDatabase(NoteID):
+	if (sessionUser == None):
+		return template('login')
+	
+	newTitle 		 = request.forms.get('titleNote');
+	newContent 		 = request.forms.get('contentNote');
+	updatedTime 	 = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
+
+	#Update fields for the note before inserting into database..
+	note 			 = getNotebyNoteID(NoteID); #get note object from the previous note.
+	note['Title'] 	 = newTitle;
+	note['Content']  = newContent;
+	note['EditedAt'] = updatedTime;
+
+	user   = getUserbyID(note['UserID']);
+
+	if updatedBD(note): #update the note into the database.
+		return template('singleNote', note=note, user=user);
+	else:
+		#problems updating note.
+		return template('error')
+
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
 
