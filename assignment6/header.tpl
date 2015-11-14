@@ -67,5 +67,13 @@
 			</div>
 		</div>
 	</div>
-
 	 
+	<div class="reader-Wrapper">
+		<div class="reader">
+			<div class="reader-close">Close</div>
+			<h1 class="reader-Title">Title</h1>
+			<p  class="reader-Content">Content</p>
+
+			<div id="reader-loader"><img src="/images/loading.gif"></div>
+		</div>
+	</div>

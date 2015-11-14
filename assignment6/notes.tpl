@@ -1,21 +1,12 @@
 % include ('header.tpl', title='Hola')
 	
 	
-	<div class="Profile-Header-wrap" style="background-image: url(../images/supernotes.jpg);">
+	<div class="Profile-Header-wrap">
 		<div class="Profile-Header">
 			<h1 class="Profile-Header-Name">
 				MY
 				<strong>Notes</strong>
 			</h1>
-		</div>
-	</div>
-
-	<div class="previewNote-Wrapper">
-		<div class="previewNote">
-			<div class="previewNote-close">Close</div>
-			<h1 class="previewNote-Title">Title</h1>
-			<p  class="previewNote-Content">Content</p>
-
 		</div>
 	</div>
 
@@ -41,8 +32,8 @@
 			%else:
 			% for note in notes:
 
-				<div class="Note-wrapper" id="{{note['NoteID']}}">
-					<div class="Note">
+				<div class="Note-wrapper">
+					<div class="Note" id="{{note['NoteID']}}">
 
 						<div class="Note-Options">
 							<span class="Note-Options-link">

@@ -1,5 +1,6 @@
 import sqlite3
 import re
+import json
 import random
 from bottle import request, route, run, template, response, static_file;
 from datetime import datetime
@@ -687,6 +688,7 @@ def deleteNoteID(NoteID):
 
 #####Show a single 
 
+@route('/<Username>#/<Permalink>')
 @route('/<Username>/<Permalink>')
 def displayNote(Username, Permalink):
 	global sessionUser
@@ -732,6 +734,22 @@ def updateNote(Username, Permalink):
 	else:
 		# note no existe
 		return template('loginWindow', user=sessionUser);
+
+@route('/api/notes/<NoteID:int>', method='GET')
+@route('/api/notes/<NoteID:int>', method='POST')
+def getNodeByID_api(NoteID):
+	note = getNotebyNoteID(NoteID);
+	if (note == None):
+		note  = {
+			"NoteID" : NoteID,
+			"valid": "false",
+			"error": "notExist"
+		}
+		return json.dumps(note);
+	
+	note['valid'] = "true"
+	response.content_type = 'application/json'
+	return json.dumps(note);
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
