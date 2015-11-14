@@ -50,13 +50,12 @@ def encriptpassword(Password):
 def verifyPassword(Password, hash):
 	return sha256_crypt.verify(Password,hash);
 
-
 def setSessionUser(user):
 	global sessionUser
 
 	try:
 		if (user != None):
-			print user
+			#print user
 			sessionUser = {
 				"UserID" : user['UserID'],
 				"Email" : user['Email'],
@@ -70,7 +69,7 @@ def setSessionUser(user):
 			#print user;
 			#print sessionUser;
 	except:
-		print sessionUser
+		#print sessionUser
 		print "Can't set the user session"
 		return False; # Coudln't set a session user
 
@@ -114,7 +113,7 @@ def getNotebyNoteID(NoteID):
 		cursor.execute(query); # Check if the email and password exists on our database
 		noteTuple = cursor.fetchone(); # Get the returned object for the database
 		note = notetupleToDictionary(noteTuple);
-		print note;
+		#print note;
 		closeCursor(cursor);
 	except:
 		print "Can't get notes given a userID and NoteID"
@@ -170,7 +169,7 @@ def getNoteIDFromPermalink(Permalink):
 	cursor = openCursor();
 	try:
 		query = "Select NoteID from Notes where Notes.Permalink='"+str(Permalink)+"'";
-		print query
+		#print query
 		cursor.execute(query); # Check if the email and password exists on our database
 		noteID = cursor.fetchone()[0]; # Get the returned object for the database
 		closeCursor(cursor);
@@ -225,41 +224,48 @@ def getColorFromNote(NoteID):
 def validNotes(notes):
 	return (notes != None);
 
-
 # Convert a note as a tuple into a Dictionary and return it
 
 def usertupleToDictionary(_tuple):
 	if (type(_tuple) != tuple):
 		return None;
 
-	user = {}
-	user['UserID'] = _tuple[0]
-	user['Email'] = _tuple[1]
-	user['Password'] = _tuple[2]
-	user['Username'] = _tuple[3]
-	user['Name'] = _tuple[4]
-	user['Surname'] = _tuple[5]
-	user['Birthday'] = _tuple[6]
-	user['City'] = _tuple[7]
-	user['Premium'] = _tuple[8]
+	user = {} # Return a Dictionary with a NOTE
+
+	try:
+		user['UserID'] = _tuple[0]
+		user['Email'] = _tuple[1]
+		user['Password'] = _tuple[2]
+		user['Username'] = _tuple[3]
+		user['Name'] = _tuple[4]
+		user['Surname'] = _tuple[5]
+		user['Birthday'] = _tuple[6]
+		user['City'] = _tuple[7]
+		user['Premium'] = _tuple[8]
+	except:
+		user = None; # invalid. Return empty
 
 	return user;
 
 def notetupleToDictionary(_tuple):
 	if (type(_tuple) != tuple):
 		return None;
-	print _tuple
-	note = {}
-	note['NoteID'] 		= _tuple[0]
-	note['UserID'] 		= _tuple[1]
-	note['Title'] 		= _tuple[2]
-	note['Permalink'] 	= _tuple[3]
-	note['Content'] 	= _tuple[4]
-	note['CreatedAt'] 	= _tuple[5]
-	note['EditedAt'] 	= _tuple[6]
-	note['Published']	= _tuple[7]
-	note['Private'] 	= _tuple[8]
-	note['Color'] 		= _tuple[9]
+	
+	note = {} # Return a Dictionary with a NOTE
+
+	try:
+		note['NoteID'] 		= _tuple[0]
+		note['UserID'] 		= _tuple[1]
+		note['Title'] 		= _tuple[2]
+		note['Permalink'] 	= _tuple[3]
+		note['Content'] 	= _tuple[4]
+		note['CreatedAt'] 	= _tuple[5]
+		note['EditedAt'] 	= _tuple[6]
+		note['Published']	= _tuple[7]
+		note['Private'] 	= _tuple[8]
+		note['Color'] 		= _tuple[9]
+	except:
+		note = None;
 
 	return note;
 
@@ -268,16 +274,15 @@ def getNotesByUser(UserID):
 	cursor = openCursor();
 	try:
 		query = "Select * from Notes where Notes.UserID=" + str(UserID) + " ORDER BY CreatedAt DESC";
-		print query
+		#print query
 		cursor.execute(query); # Check if the email and password exists on our database
 		notes_tuples = cursor.fetchall(); # Get tuples returned by database
 		
 		# notes are tuples. So convert to dict and add to Notes array
 		for n in notes_tuples:
 			convertedNote = notetupleToDictionary(n); # tuple to dictionary
-
 			query = "Select * from Colors where Colors.Name='"+convertedNote['Color']+"'";
-			print query
+			#print query
 			cursor.execute(query);
 			convertedNote['ColorHEX'] = cursor.fetchone()[1]
 			notes_arr.append(convertedNote); # Append dictionary
@@ -307,7 +312,7 @@ def createUserDB(newUser):
 		userString += ("'" + str(newUser['city'])     + "',");
 		userString += str(newUser['premium']);
 
-		print userString
+		#print userString
 
 		query = "Insert into User values(" + userString + ')';
 		cursor.execute(query);
@@ -324,7 +329,7 @@ def createUserDB(newUser):
 
 def createNoteDB(newNote):
 	cursor = openCursor();
-	print "Oh tes"
+	#print "Oh tes"
 	try:
 		userString  = ("NULL,");
 		userString += str(newNote['UserID']) + ",";
@@ -338,7 +343,7 @@ def createNoteDB(newNote):
 		userString += ("'" + str(newNote['Color']) + "'");
 
 		query = "Insert into Notes values(" + userString + ')';
-		print query
+		#print query
 		cursor.execute(query);
 		conn.commit();
 		closeCursor(cursor);
@@ -358,7 +363,7 @@ def updatedBD(updatedNote):
 	query += " where Notes.NoteID=" + str(updatedNote['NoteID']);
 	query += " and Notes.UserID=" + str(updatedNote['UserID']);
 
-	print query
+	#print query
 
 	cursor.execute(query);
 	conn.commit();
@@ -367,50 +372,52 @@ def updatedBD(updatedNote):
 	return True; # Updated.
 
 def deleteNote(NoteID):
-	cursor = openCursor();
-#try:
-	query = "delete from Notes where notes.NoteID=" + str(NoteID) + ""
-	cursor.execute(query);
-	conn.commit();
-	closeCursor(cursor);
-	return True;
-#except:
-	#print "somethings go wrong"
-	#return False;
+	try:
+		cursor = openCursor();
+		query  = "delete from Notes where notes.NoteID=" + str(NoteID) + ""
+		cursor.execute(query);
+		conn.commit();
+		closeCursor(cursor);
+	except:
+		return False; #print "somethings go wrong"
+
+	return True; # We delete a note succesfully
 
 def updateUser(user):
-	cursor=openCursor();
-	query= "Update User SET Name='"+str(user['Name'])+"', Surname='"+str(user['Surname'])+"', Birthday='"+str(user['Birthday'])+"', City='"+str(user['City'])+"'"
-	cursor.execute(query);
-	conn.commit();
-	closeCursor(cursor);
+	try:
+		cursor = openCursor();
+		query  = "Update User SET Name='"+str(user['Name'])+"', Surname='"+str(user['Surname'])+"', Birthday='"+str(user['Birthday'])+"', City='"+str(user['City'])+"'"
+		cursor.execute(query);
+		conn.commit();
+		closeCursor(cursor);
+	except:
+		return False;
+
 	return True;
 
 def searchNote(Keyword,UserID):
 
 	Keyword = str(Keyword).lower();
-	UserID = str(UserID).lower();
+	UserID 	= str(UserID).lower();
 
-	notes_arr = [];
-	return_arr = [];
-	notes_arr=getNotesByUser(UserID); 
+	notes_arr  	= [];
+	return_arr 	= [];
+	notes_arr	=getNotesByUser(UserID); 
 
 	for n in notes_arr:
-		print n
+		#print n
 		if(iscontain(n, Keyword)):
-			print "is contain"
+			# print "is contain"
 			return_arr.append(n);
 
-	print return_arr
+	#print return_arr
 	return return_arr;
  
 def iscontain(note,Keyword):
-	findKey = str(note['Title']).find(str(Keyword))
+	findKey 	= str(note['Title']).find(str(Keyword))
 	findContent = str(note['Content'].lower()).find(str(Keyword))
 
-	if (note == None):
-		return 	False;
-	if int(findKey)>=0 or int(findContent)>=0: 
+	if (note != None) and (int(findKey)>=0 or int(findContent)>=0): 
 		return True;
 	else:
 		return False; 
@@ -521,19 +528,19 @@ def registerUserDatabase():
 #####SEARCH
 
 @route('/search', method='POST')
+@route('/search?q=<Keyword>', method="POST")
 #@route('/search/<name>', method='GET')
-#@route('/search?q=<Keyword>', method="GET")
 def searchOnNotes():
 	global sessionUser
 	if (sessionUser == None):
-		return template('login')
+		return template('login', user=None)
 
 	user = getUserbyID(sessionUser['UserID'])
 
 	if (user != None):
 		Keyword = request.forms.get('query');
 		notes = searchNote(Keyword, sessionUser['UserID']);
-		print notes
+		#print notes
 		return template('notes', notes=notes, user=user);
 	else:
 		return template('notes', notes=notes, user=sessionUser);
@@ -544,6 +551,10 @@ def searchOnNotes():
 @route('/create/')
 def createNoteForm():
 	global sessionUser
+
+	if (sessionUser == None):
+		return template('login', user=None)
+
 	note = {}
 	colors = getColorsAvailable();
 	return template('createNote', note=note, colors=colors, editNote=False, user=sessionUser)
@@ -610,14 +621,14 @@ def userProfile():
 def showFormToEditUser():
 	global sessionUser
 	if (sessionUser == None):
-		return template('login')
+		return template('login', user=None)
 
 	user = getUserbyID(sessionUser['UserID']);
 
 	if updateUser(user):
 		return template("signup", user=user, editUser=True);
 	else:
-		return template("profile", user=sessionUser);
+		return template("profile", notes=None, user=sessionUser);
 
 @route('/profile/edit', method="POST")
 def editSessionUser():
@@ -693,6 +704,10 @@ def deleteNoteID(NoteID):
 def displayNote(Username, Permalink):
 	global sessionUser
 
+	print Username
+	print Permalink
+	print "Is asking for #/"
+
 	user = getUserbyUsername(Username);
 	
 	if (user == None):
@@ -738,18 +753,40 @@ def updateNote(Username, Permalink):
 @route('/api/notes/<NoteID:int>', method='GET')
 @route('/api/notes/<NoteID:int>', method='POST')
 def getNodeByID_api(NoteID):
-	note = getNotebyNoteID(NoteID);
-	if (note == None):
-		note  = {
-			"NoteID" : NoteID,
-			"valid": "false",
-			"error": "notExist"
-		}
+	global sessionUser
+
+	errorNote  = { "NoteID" : NoteID, "valid": "false", "status": "notExist"}
+	note 	   = getNotebyNoteID(NoteID);
+
+	response.content_type = 'application/json';
+
+	if (note != None):
+		if  note['Private'] == 0 or (note['Private'] == 1 and sessionUser['UserID'] == note['UserID']):
+			# Is a public note or session user is the owner.
+			note['valid'] = "true";
+			note['status'] = "OK";
+			return json.dumps(note); # return a not empty note.
+		else:
+			errorNote['valid'] = "false";
+			errorNote['status'] = "You don't permissions to see this content. Sorry.";
+	else:
+		errorNote['valid'] = "false";
+		errorNote['status'] = "The note you're trying to read doesn't exist or was removed.";
+
+	return json.dumps(errorNote); # return error note.
+
+	if (sessionUser['UserID'] != note['UserID']):
+		errorNote['status'] = "You don't permissions to see this content. Sorry.";
+		return json.dumps(errorNote);
+	elif (note == None):
+		errorNote['status'] = "The note you're trying to read doesn't exist or was removed.";
+		return json.dumps(errorNote);
+	else:
+		# At this point the user is the correct one and the note is not None
+		note['valid'] = "true";
+		errorNote['status'] = "OK";
+		response.content_type = 'application/json'
 		return json.dumps(note);
-	
-	note['valid'] = "true"
-	response.content_type = 'application/json'
-	return json.dumps(note);
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """

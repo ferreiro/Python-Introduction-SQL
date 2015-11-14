@@ -21,10 +21,13 @@
 	<div class="Header-wrapper">
 		<div class="Header">
 			<div class="Header-logo">
-				<a href="/">SudoNotes</a>
+				<a href="/">
+					<p>SudoNotes</p>
+				</a>
 			</div>
 			<div class="Header-options">
 
+				% if user != None:
 				<div class="Header-options-search">
 					<form action="/search" method="POST">
 						<p> 
@@ -32,33 +35,70 @@
 						</p>
 					</form>
 				</div>
+				% end
 
 				<div class="Header-options-createNote">
 					<a href="/create"><p>Create note</p></a>
 				</div>
 
-				% if user != None:
-					<div class="Header-options-profileLink" id="dropdownMenu">
-						<a href="/"><p>{{user['Name']}} {{user['Surname']}} ▾</p></a>
-					
-						<ul class="Header-options-menu">
+				% if user == None:
 
-							% if user != None:
-								<li class="Header-options-menu-button">
-									<a href="/{{user['Username']}}">My notes</a>
-								</li>
-								<li class="Header-options-menu-button">
-									<a href="/profile">Profile</a>
-								</li>
-								<li class="Header-options-menu-button">
-									<a href="/profile/edit">Edit profile</a>
-								</li>
-								<li class="Header-options-menu-button">
-									<a href="/logout">Log out</a>
-								</li>
-							% else:	
-								Create an account | Login
-							% end
+				<div class="Header-options-createNote">
+					<a href="/create"><p>Login</p></a>
+				</div>
+				<div class="Header-options-createNote">
+					<a href="/register"><p>Register</p></a>
+				</div>
+				
+				% end
+
+				% if user != None:
+
+					<%
+
+						# import code for encoding urls and generating md5 hashes
+						import urllib, hashlib
+						
+						# Set your variables here
+						
+						email 	= user['Email'];
+						default = "images/default.png"
+						size 	= 80
+ 						 
+						# construct the url
+						gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+						gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+
+						print gravatar_url
+
+					%>
+
+					
+					<div class="Header-options-myprofile" id="dropdownMenu">
+						<a href="/profile" class="Header-options-myprofile-resume" >
+							<span class="Header-options-myprofile-resume-avatar">
+								<img src="{{gravatar_url}}"/>
+							</span>
+							<p class="Header-options-myprofile-resume-name">
+								{{user['Name']}} {{user['Surname']}}
+							</p>
+							<span>▾</span>
+						</a>
+					
+						<ul class="Header-options-myprofile-menu">
+
+							<li class="Header-options-myprofile-menu-list">
+								<a href="/{{user['Username']}}">My notes</a>
+							</li>
+							<li class="Header-options-myprofile-menu-list">
+								<a href="/profile">Profile</a>
+							</li>
+							<li class="Header-options-myprofile-menu-list">
+								<a href="/profile/edit">Edit profile</a>
+							</li>
+							<li class="Header-options-myprofile-menu-list">
+								<a href="/logout">Log out</a>
+							</li>
 
 						</ul>
 					</div>

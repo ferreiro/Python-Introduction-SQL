@@ -6,12 +6,12 @@
 
 <div class="login" style="background-image: url(../images/profile.jpg);">
     <div class="login-form" style="width:400px;">
-		<h1>Edit your user information</h1>
+		<h1>Edit your information</h1>
 		<form action="/profile/edit" method="POST">
 %else:
 <div class="login">
     <div class="login-form" style="width:400px;">
-		<h1>Sign up on our awesome webpage</h1>
+		<h1>Create your free account</h1>
 		<form action="/register" method="POST">
 %end 
 	<p> 

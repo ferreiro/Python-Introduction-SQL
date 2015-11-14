@@ -52,16 +52,23 @@ ul, li {
 	position: relative;
 }
 .Header-logo {
-	width: 160px;
 	height: 50px;
 	display: inline-block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding: 0 20px;
 }
 .Header-logo a {
 	width: 100%;
 	text-align: center;
-	padding-top: 10px;
-	height: 40px;
-	display: inline-block;
+	height: 50px;
+	display: inline-block; 
+}
+.Header-logo a p{
+	width: 100%;
+	text-align: center;
+	padding-top: 10px; 
 	color: #fff;
 	font-weight: 500;
 	font-size: 22px;
@@ -70,6 +77,7 @@ ul, li {
 	background: #3F51B5;
 }
 .Header-options {
+	height: 50px;
 	display: inline-block;
 	float: right;
 	vertical-align: top;
@@ -122,25 +130,53 @@ ul, li {
 } 
 
 
-.Header-options-profileLink:hover {
+.Header-options-myprofile:hover {
 	background: #3F51B5;
 }
-.Header-options-profileLink {
-	width: 160px;
+.Header-options-myprofile {
+	width: 180px;
 	height: 50px;
 	display: inline-block;
 	text-align: center;
+	vertical-align: middle;
+	position: relative;
+	margin-top: -4px;
 }
-.Header-options-profileLink a {  
-	display: inline-block; 
+.Header-options-myprofile-resume { 
+	width: 100%;
+	height: 50px;
+	display: block; 
 	color: #fff;
+	vertical-align: middle;
 } 
-#dropdownMenu:hover .Header-options-menu {
-	display: inline-block !important;
+.Header-options-myprofile-resume-avatar {  
+	width: 30px;
+	height: 30px;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 7px;
+	-webkit-border-radius: 100%;
+	-moz-border-radius: 100%;
+	border-radius: 100%;
+}  
+.Header-options-myprofile-resume-avatar img {
+	width: 30px;
 }
-.Header-options-menu {
-	width: 160px;
-	display: inline-block; 
+.Header-options-myprofile-resume-name {
+	width: 100px;
+	overflow: hidden;
+	margin-top: 7px; 
+	display: inline-block;
+	vertical-align: middle;
+	white-space: nowrap;
+} 
+#dropdownMenu:hover .Header-options-myprofile-menu {
+	display: block !important;
+	margin-top: -1px;
+}
+.Header-options-myprofile-menu {
+	width: 180px;
 	display: none;
 	position: absolute;
 	top: 100%;
@@ -149,12 +185,12 @@ ul, li {
 	background: #fff;
 	z-index: 100;
 }
-.Header-options-menu-button {
+.Header-options-myprofile-menu-list {
 	width: 100%;
 	display: inline-block;
 	text-align: right;
 }
-.Header-options-menu-button a{
+.Header-options-myprofile-menu-list a {
 	width: 100%;
 	display: inline-block;
 	padding: 10px 0;
@@ -301,41 +337,38 @@ ul, li {
 }
 
 .reader {
-	width: 0;
-	height: 0;
-	padding: 0;
+	width: 500px;
+	max-height: 300px;
+	overflow-y: scroll;
+	height: auto;
+	padding: 30px;
 	background: #fff;
 	margin: 0 auto;
-	margin-top: 0px;
 	border-top: 5px solid #283593;
-	position: fixed;
-	bottom: 0;
-	top:100%;
+	position: fixed; 
+	left: 50%;
+	margin-left: -250px;
 	overflowY: scroll;
 	-webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
 	-moz-box-shadow:    0px 0px 15px 0px rgba(0, 0, 0, 0.10);
 	box-shadow:         0px 0px 15px 0px rgba(0, 0, 0, 0.10);
 }
-.reader-ZoomIn {
-	width: 500px;
-	height: 100%;
-	padding: 30px;
-	top:20%;
-	bottom: 0;
-	left: 50%;
-	margin-left: -250px;
-	-webkit-transition: all 10s; /* Safari */
-	transition: all 10s;
-
+.reader-close {
+	width: 100px;
+	height: 100px;
+	background: red;
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 10;
 }
-
 .reader-Title {
 	font-size: 60px;
 	font-weight: 300;
 	margin-bottom: 20px;
 }
 .reader-Content {
-	font-size: 26px;
+	font-size: 20px;
 	font-weight: 300;
 	margin-bottom: 20px;
 }

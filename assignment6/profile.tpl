@@ -1,7 +1,26 @@
 % include ('header.tpl', title='Hola')
 
 <div class="Profile-Header-wrap">
-	<div class="Profile-Header">
+	<div class="Profile-Header">	
+		<%
+			# import code for encoding urls and generating md5 hashes
+			import urllib, hashlib
+			 
+			# Set your variables here
+			email = user['Email'];
+			default = "http://www.datastax.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png"
+			size = 40
+			 
+			# construct the url
+			gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+			gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+
+			print gravatar_url
+		%>
+
+		<div class="Profile-Header-Avatar">
+			<img src="{{gravatar_url}}" />
+		</div>
 		<h1 class="Profile-Header-Name">
 			<strong>{{user['Name']}} {{user['Surname']}}</strong>
 			<span></span>{{user['City']}}
@@ -32,9 +51,36 @@
 			<div class="Profile-User-Notes">
 				<strong>Drafs: notes don't published yet</strong>
 				<ul class="Profile-draft-all">
+					%if len(notes) >= 0:
+						<% totalDrafts = 0;
+						for n in notes:
+							if (n['Published'] == 0):
+								totalDrafts += 1; %>
+								<li class="Profile-draft-entry">
+									<a href="/{{user['Username']}}/{{n['Permalink']}}">
+										{{n['Title']}}
+									</a>
+									-
+									<a href="/{{user['Username']}}/{{n['Permalink']}}/edit">
+										Continue writing
+									</a>
+								</li>
+							%end
+						%end
+					% end
+				</ul>
+
+				% if totalDrafts == 0: 
+					<p>You don't have any draft <a href="/create">Start writing a new note!</a></p>
+				%end
+			</div>
+
+			<div class="Profile-User-Notes" style="margin-top:20px;">
+				<strong>Published notes</strong>
+				<ul class="Profile-draft-all">
 					% print len(notes)
 					%if len(notes) == 0:
-						<p>You don't have any draft <a href="/create">Start writing a new note!</a></p>
+						<p>You don't have any note <a href="/create">Write one!</a></p>
 					%else:
 						% for n in notes:
 							% if (n['Published'] == 0):
@@ -44,7 +90,7 @@
 									</a>
 									-
 									<a href="/{{user['Username']}}/{{n['Permalink']}}/edit">
-										Continue writing
+										Edit note
 									</a>
 								</li>
 							%end

@@ -4,7 +4,7 @@
 	<div class="Profile-Header-wrap">
 		<div class="Profile-Header">
 			<h1 class="Profile-Header-Name">
-				MY
+				my
 				<strong>Notes</strong>
 			</h1>
 		</div>
