@@ -97,9 +97,15 @@ ul, li {
 .Header-options-createNote {
 	height: 40px;
 	padding: 0 15px;
+	background: #3949AB;
 	background: #4CAF50;
-	border-top: 5px solid #283593;
-	border-bottom: 5px solid #283593;
+
+
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-top: 5px; 
+	margin-bottom: 5px; 
 	display: inline-block;
 }
 .Header-options-createNote a {  
@@ -279,8 +285,9 @@ ul, li {
 	text-align: left;
 }
 .Note {
-	min-height: 220px;
+	min-height: 180px;
 	padding: 20px;
+	padding-bottom: 50px;
 	margin-left: 10px;
 	margin-right: 10px;
 	margin-bottom: 20px;
@@ -395,4 +402,14 @@ ul, li {
 	letter-spacing: 0.3px;
 	color: #494949;
 	margin-bottom: 10px;
+}
+.Note-Metada {
+	width: 100%;
+	padding: 10px 0;
+	background: #E8EEF9;
+	text-indent: 20px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 3px;
 }

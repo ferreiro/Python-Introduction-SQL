@@ -56,29 +56,38 @@
 							%>
 							{{data}} 
 						</p>
-						<h3 class="Note-Date">
-							<% 
-								date = note['CreatedAt']
-								date = date.split(' ');
-								date = date[0]
-							%>
-							{{date}}
-						</h3>
 
-						% if (note['Private']):
-							<span class="Note-Private">
-								<b>Private Note</b>
-							</span>
-						% end
+						<div class="Note-Metada">
+							
+							% if (note['Private']):
+								<span class="Note-Private">
+									<b>Private</b>
+								</span>
+							% else:
+								<span class="Note-Private">
+									<b>Public note (?)</b>
+								</span>
+							% end
 
-						<p>
-							<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a>
-						</p>
-						<p><a href="/delete/{{note['NoteID']}}">Delete note</a></p>
+							<span>-</span>
 
+							% if (note['Published']):
+								<span class="Note-Private">
+									<b>Published on:</b>
+									<% 
+										date = note['CreatedAt']
+										date = date.split(' ');
+										date = date[0]
+									%>
+									{{date}}
+								</span>
+							% else:
+								<span class="Note-Private">
+									<b>Draft (?)</b>
+								</span>
+							% end
+						</div>
 
-						<p> {{note['Published']}}</p>
-						<p> {{note['Private']}}</p>
 					</div>
 				</div>
 				

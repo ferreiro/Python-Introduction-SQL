@@ -178,6 +178,45 @@ def getNoteIDFromPermalink(Permalink):
 
 	return noteID;
 
+""" Get all the avaliable colors for our database """
+def getColorsAvailable():
+	availableColors = []; # array of dictionaries
+	cursor = openCursor();
+	try:
+		query = "Select * from Colors";
+		cursor.execute(query); # Check if the email and password exists on our database
+		colors = cursor.fetchall(); # Get the returned object for the database
+		
+		for color in colors:
+			colorDict = {
+				'Name' : color[0],
+				'Color': color[1]
+			}
+			availableColors.append(colorDict);
+
+		closeCursor(cursor);
+	except:
+		availableColors = None
+		print "Can't retrieve all the colors"
+
+	return availableColors;
+
+
+""" Get all the avaliable colors for our database """
+def getColorFromNote(NoteID):
+	color = "";
+	cursor = openCursor();
+	try:
+		query = "Select Name from Colors join Notes where NoteID=" + str(NoteID);
+		cursor.execute(query); # Check if the email and password exists on our database
+		color = cursor.fetchone()[0]; # Get the returned object for the database
+		
+		closeCursor(cursor);
+	except:
+		print "Can't retrieve color for noteID"
+
+	return color;
+
 
 # FetchAll notes for a given user id
 # Add all the notes returned by the query into a list
@@ -504,7 +543,8 @@ def searchOnNotes():
 def createNoteForm():
 	global sessionUser
 	note = {}
-	return template('createNote', note=note, editNote=False, user=sessionUser)
+	colors = getColorsAvailable();
+	return template('createNote', note=note, colors=colors, editNote=False, user=sessionUser)
 
 @route('/create', method="POST")
 def createNote():
@@ -518,6 +558,7 @@ def createNote():
 	content = str(request.forms.get('contentNote'));
 	content = re.sub('[^a-zA-Z0-9 \n\.]', '', str(content)); # content wihtout special characters
 	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
+	color = str(request.forms.get('colorNote'));
 
 	formatedToday = today.replace(" ", "-")
 	formatedToday = formatedToday.replace(":", "-");
@@ -538,7 +579,7 @@ def createNote():
 		"EditedAt" 	: today,
 		"Published" : 1,
 		"Private" 	: 1,
-		"Color" 	: 'red'
+		"Color" 	: color
 	}
 
 	if createNoteDB(newNote):
@@ -547,7 +588,7 @@ def createNote():
 		response.set_header('Location', '/'+ sessionUser['Username']);
 		#return template('singleNote', note=newNote, user=sessionUser)
 	else:
-		return template('createNote', note=newNote, user=sessionUser, editNote=False)
+		return template('createNote', note=newNote, colors=None, user=sessionUser, editNote=False)
 
 @route('/profile')
 def userProfile():
@@ -683,7 +724,8 @@ def updateNote(Username, Permalink):
 	if (NoteID != 0):
 		note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
 		note = notetupleToDictionary(note_tuple);
-		return template('createNote', note=note, user=sessionUser, editNote=True)
+		colors = getColorsAvailable(); # get all the available colors
+		return template('createNote', note=note, colors=colors,user=sessionUser, editNote=True)
 	else:
 		# note no existe
 		return template('loginWindow', user=sessionUser);

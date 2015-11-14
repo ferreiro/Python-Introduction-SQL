@@ -62,15 +62,35 @@
 			</p>
 
 			<p class="signin button"> 
+
+				% if colors != None: 
+					% if editNote == True:
+						Current color: {{note['Color']}} <br />
+						Change to:
+						<select name="colorNote">
+						% for color in colors:
+						  <option value="{{color['Name']}}">{{color['Name']}}</option>
+						% end
+						</select>
+					%else:
+						<select name="colorNote">
+						% for color in colors:
+						  <option value="{{color['Name']}}">{{color['Name']}}</option>
+						% end
+						</select>
+					%end
+				% end
+			</p>
+
+
+			<p class="signin button"> 
 				Private Note <input type="checkbox" name="privateNote" value="1" class="note-publish"/> 
 
 				% if editNote == True:
-					<input type="submit" class="note-publish" value="Update note"/> 
+					<input type="submit" class="inputField" value="Update note"/> 
 				%else:
 					<input type="submit" class="inputField" value="Publish note"/> 
 				%end
-
-				
 			</p>
  
 
