@@ -29,7 +29,7 @@ def stylesheets(filename):
 
 @route('/<filename:re:.*\.(jpg|png|gif|ico)>')
 def images(filename):
-    return static_file(filename, root='static/img')
+    return static_file(filename, root='static/')
 
 @route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
 def fonts(filename):
@@ -629,8 +629,6 @@ def deleteNoteID(NoteID):
 @route('/<Username>/<Permalink>')
 def displayNote(Username, Permalink):
 	global sessionUser
-	if (sessionUser == None):
-		return template('login')
 
 	user = getUserbyUsername(Username);
 	UserID = user['UserID'];
@@ -639,6 +637,10 @@ def displayNote(Username, Permalink):
 	if (NoteID != 0):
 		note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
 		note = notetupleToDictionary(note_tuple);
+
+		if (sessionUser == None and note['Private'] == 1):
+			return template('login')
+
 		return template('singleNote', note=note, user=sessionUser)
 	else:
 		# note no existe
