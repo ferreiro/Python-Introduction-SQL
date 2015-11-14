@@ -351,6 +351,7 @@ def updatedBD(updatedNote):
 	cursor = openCursor();
 	query  = "Update Notes SET "
 	query += "Title ='" + str(updatedNote['Title']) + "',  ";
+	query += "Color ='" + str(updatedNote['Color']) + "', ";
 	query += "Content ='" + str(updatedNote['Content']) + "', ";
 	query += "EditedAt ='" + str(updatedNote['EditedAt']) + "'";
 	query += " where Notes.NoteID=" + str(updatedNote['NoteID']);
@@ -639,7 +640,7 @@ def editSessionUser():
 def saveUpdateDatabase(NoteID):
 	global sessionUser
 	if (sessionUser == None):
-		return template('login')
+		return redirectHome();
 	
 	newTitle 		 = request.forms.get('titleNote');
 	newContent 		 = request.forms.get('contentNote');
@@ -650,6 +651,7 @@ def saveUpdateDatabase(NoteID):
 	note['Title'] 	 = newTitle;
 	note['Content']  = newContent;
 	note['EditedAt'] = updatedTime;
+	note['Color']    = request.forms.get('colorNote');
 
 	user   = getUserbyID(note['UserID']);
 
