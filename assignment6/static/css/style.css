@@ -161,12 +161,72 @@ ul, li {
 	font-weight: 300;
 	font-size: 16px;
 }
+
+
+/*******************************
+	containter-wrapper
+********************************/
+
+.Zero-NotesWrap {
+	width: 100%;
+	height: 530px;
+	display: inline-block;
+	position: relative;
+}
+.Zero-NotesWrap:before {
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 10px;
+	right: 10px;
+	background: rgba(255,255,255,0.7);
+	background: rgba(0,0,0,0.7);
+	content: '';
+	background: url(/images/empty.jpg);
+	background-size:cover;
+}
+.Zero-NotesWrap:after {
+	height: 100%;
+	top: 0;
+	left: 10px;
+	right: 10px;
+	position: absolute;
+	
+	background: rgba(255,255,255,0.7);
+	background: rgba(0,0,0,0.7);
+	content: '';
+}
+.Zero-Notes {
+	width: 300px;
+	height: 200px;
+	z-index: 10;
+	position: absolute;
+	top:50%;
+	left: 50%;
+	margin-left: -150px;
+	margin-top: -100px;
+	text-align: center;
+}
+.Zero-Notes-Title {
+	font-size: 30px;
+	font-weight: 300;
+	color: #fff;
+	margin-bottom: 20px;
+}
+.Zero-Notes-Create {
+	/* background: #03A9F4;*/
+	font-size: 18px;
+	font-weight: 300;
+	color: #fff;
+	text-decoration: underline;
+}
 /*******************************
 	containter-wrapper
 ********************************/
 
 .containter-wrapper {
 	width: 100%;
+	margin-top: 20px;
 }
 .containter {
 	width: 1020px;
@@ -186,6 +246,13 @@ ul, li {
 	margin-right: 10px;
 	background: rgba(255,255,255,0.9);
 	position: relative;
+	-webkit-transition: all 200ms; /* Safari */
+	transition: all 200ms;
+}
+.Note:hover {
+	-webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+	-moz-box-shadow:    0px 0px 15px 0px rgba(0, 0, 0, 0.10);
+	box-shadow:         0px 0px 15px 0px rgba(0, 0, 0, 0.10);
 }
 .Note-link {
 	width: 100%;
@@ -211,6 +278,7 @@ ul, li {
 }
 .Note-Title {
 	color: #222;
+	word-wrap:break-word;
 	margin-bottom: 10px;
 }
 .Note-Title a {

@@ -22,7 +22,7 @@
 	<div class="Header-wrapper">
 		<div class="Header">
 			<div class="Header-logo">
-				<a href="/">SuperNotes</a>
+				<a href="/">SudoNotes</a>
 			</div>
 			<div class="Header-options">
 

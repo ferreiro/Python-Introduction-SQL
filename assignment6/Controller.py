@@ -1,4 +1,6 @@
 import sqlite3
+import re
+import random
 from bottle import request, route, run, template, response, static_file;
 from datetime import datetime
 from passlib.hash import sha256_crypt
@@ -336,8 +338,8 @@ def updateUser(user):
 
 def searchNote(Keyword,UserID):
 
-	print Keyword;
-	print UserID
+	Keyword = str(Keyword).lower();
+	UserID = str(UserID).lower();
 
 	notes_arr = [];
 	return_arr = [];
@@ -353,8 +355,8 @@ def searchNote(Keyword,UserID):
 	return return_arr;
  
 def iscontain(note,Keyword):
-	findKey = (note['Title'].lower()).find(str(Keyword))
-	findContent = (str(note['Content']).lower()).find(str(Keyword))
+	findKey = str(note['Title']).find(str(Keyword))
+	findContent = str(note['Content'].lower()).find(str(Keyword))
 
 	if (note == None):
 		return 	False;
@@ -510,8 +512,13 @@ def createNote():
 	title = request.forms.get('titleNote');
 	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
 	formatedToday = today.replace(" ", "-")
-	formatedToday = formatedToday.replace(":", "-")
-	permalink = str(title) + str(formatedToday);
+	formatedToday = formatedToday.replace(":", "-");
+
+	cleanTitle = re.sub('[^a-zA-Z0-9 \n\.]', '', str(title)); # Title without special characters
+	cleanTitle = cleanTitle.replace(' ', '-');
+	randNumList = random.sample(range(1, 100), 4); #10 digits rand num
+	randomNumber = ''.join(str(e) for e in randNumList);
+	permalink = cleanTitle + '-' + randomNumber;
 
 	newNote = {
 		"NoteID" 	: None,
@@ -631,20 +638,25 @@ def displayNote(Username, Permalink):
 	global sessionUser
 
 	user = getUserbyUsername(Username);
+	
+	if (user == None):
+		return redirectHome();
+
 	UserID = user['UserID'];
 	NoteID = getNoteIDFromPermalink(Permalink);
 
-	if (NoteID != 0):
-		note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
-		note = notetupleToDictionary(note_tuple);
+	if (NoteID == -1):
+		return redirectHome();
 
-		if (sessionUser == None and note['Private'] == 1):
-			return template('login')
+	note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
+	note = notetupleToDictionary(note_tuple);
 
-		return template('singleNote', note=note, user=sessionUser)
-	else:
-		# note no existe
-		return template('loginWindow')
+	if (sessionUser == None and note['Private'] == 1):
+		print "You don't have access"
+		return "You don't have access"
+		#return template('login')
+
+	return template('singleNote', note=note, user=sessionUser)
 
 @route('/<Username>/<Permalink>/edit')
 def updateNote(Username, Permalink):

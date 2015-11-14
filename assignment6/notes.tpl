@@ -2,27 +2,14 @@
 	
 	<div class="containter-wrapper">
 		<div class="containter">
-					
-			<li class="Header-options-menu-button">
-				<a href="/profile">My notes</a>
-			</li>
-			<li class="Header-options-menu-button">
-				<a href="/profile">Profile</a>
-			</li>
-			<li class="Header-options-menu-button">
-				<a href="/profile/edit">Edit profile</a>
-			</li>
-			<li class="Header-options-menu-button">
-				<a href="/logout">Log out</a>
-			</li>
-
-
-			<p>if the user is logged (check the cookies) Show the notes</p>
-
-
-
+				
 			% if len(notes) == 0:
-				<h2>Empty. There's any Note here</h2>
+				<div class="Zero-NotesWrap">
+					<div class="Zero-Notes">
+						<h1 class="Zero-Notes-Title">Hi {{user['Name']}}!,<br /> You haven't written any note yet.</h1>
+						<a class="Zero-Notes-Create" href="/create">Write your first Note now!</a>
+					</div>
+				</div>
 			%else:
 			% for note in notes:
 
@@ -71,11 +58,6 @@
 				</div>
 				
 			% end
-
-			<p>Not logged? Check if the note is private or not</p>
-				<p>Private? Show an error on the screen</p>
-				<p>Not Private? Display the note</p>
-
 
 		</div>
 	</div>
