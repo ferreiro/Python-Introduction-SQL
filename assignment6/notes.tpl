@@ -43,7 +43,7 @@
 								<li><a href="/{{user['Username']}}/{{note['Permalink']}}/edit">
 									Edit Note
 								</a></li>
-								<li><a href="/delete/{{note['NoteID']}}">
+								<li class="Note-Options-delete"><a href="/delete/{{note['NoteID']}}">
 									Delete
 								</a></li>
 							</ul>
@@ -56,7 +56,7 @@
 						</div>
 
 						<h1 class="Note-Title">
-							{{note['Title']}}	
+							{{note['Title'][:60]}}	
 						</h1>
 						<p class="Note-Content">
 							<%

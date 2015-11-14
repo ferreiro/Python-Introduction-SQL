@@ -78,7 +78,7 @@
 						
 						email 	= user['Email'];
 						default = "images/default.png"
-						size 	= 80
+						size 	= 100
  						 
 						# construct the url
 						gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
@@ -124,11 +124,17 @@
 	</div>
 	 
 	<div class="reader-Wrapper">
-		<div class="reader">
-			<div class="reader-close"><span class="icon-close"></span></div>
-			<h1 class="reader-Title">Title</h1>
-			<p  class="reader-Content">Content</p>
+		<div class="singleNote" id="reader">
+			<div class="reader-close" id="reader-close">
+				<span class="icon-close"></span>
+			</div>
+			
+			<div class="reader-loader" id="reader-loader"></div>
 
-			<div id="reader-loader"><img src="/images/loading.gif"></div>
+			<div class="reader-Content">
+				<h1 class="singleNote-Title" id="reader-Title">Title</h1>
+				<p class="singleNote-Content" id="reader-Content">Content</p>
+			</div>
+			
 		</div>
 	</div>

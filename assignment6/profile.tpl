@@ -18,9 +18,6 @@
 			print gravatar_url
 		%>
 
-		<div class="Profile-Header-Avatar">
-			<img src="{{gravatar_url}}" />
-		</div>
 		<h1 class="Profile-Header-Name">
 			<strong>{{user['Name']}} {{user['Surname']}}</strong>
 			<span></span>{{user['City']}}

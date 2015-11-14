@@ -698,14 +698,15 @@ def deleteNoteID(NoteID):
 		return "You're not allowed to be here";
 
 
-@route('/api/delete/<NoteID>', mehod="GET")
+@route('/api/notes/delete/<NoteID>', mehod="GET")
 def deleteNoteID(NoteID):
 	global sessionUser;
 
 	response.content_type = 'application/json';
 	returnedMessage = {
+		"valid" : "false",
 		"deleted": "false",
-		"message" : "You're not allowed to do this action"
+		"status" : "You're not allowed to do this action"
 	}
 
 	if (sessionUser == None):
@@ -715,7 +716,7 @@ def deleteNoteID(NoteID):
 
 	if (note == None): 
 		returnedMessage["deleted"] = "false";
-		returnedMessage["message"] = "This note is not on our System";
+		returnedMessage["status"]  = "This note doesn't exist on our system or has changed location";
 		return json.dumps(returnedMessage); # The note doesn't exist on our database 
 
 	userID_note    = note['UserID'];
@@ -723,11 +724,12 @@ def deleteNoteID(NoteID):
 
 	if (userID_note == userID_session):
 		if (deleteNote(NoteID)):
+			returnedMessage['valid'] = 'true';
 			returnedMessage['deleted'] = "true";
-			returnedMessage['message'] = "We have deleted your note!";
+			returnedMessage['status'] = "We have deleted your note!";
 		else:
 			returnedMessage['deleted'] = "false";
-			returnedMessage['message'] = "You're not allowed to delete this note.";
+			returnedMessage['status'] = "You're not allowed to delete this note.";
 
 	return json.dumps(returnedMessage);
 

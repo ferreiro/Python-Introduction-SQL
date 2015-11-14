@@ -1,8 +1,10 @@
 // notesID 	= []; // All the ID's for notes of a user
 readerWrapper = $('.reader-Wrapper'); // Modal box showed each time user click on a note.
-reader = $('.reader');
-previewClose = $('.reader-close');
- 
+reader 		  = $('#reader');
+readerContent = $('.reader-Content');
+readerLoader  = $('#reader-loader')
+previewClose  = $('.reader-close');
+
 previewClose.click(function() {
 	hidePreviewNote();
 });
@@ -21,15 +23,24 @@ $( ".Note-wrapper" ).each(function( index ) {
 	var NoteOptions = Note.find('.Note-Options');
 	var NoteDropdown = Note.find('.Note-Options-dropDown');
 
-	function displayConfig () {
-		NoteOptions.show('0');
-	}
 	// Show dropdown menu
 	function dropDown () {
 		NoteDropdown.toggleClass('Note-Options-dropDown-display');
 	}
  
 	// Config button that opens the dropdown menu
+	$('.Note-Options-delete', this).click(function(e) {
+		toDelete = confirm("Are you sure you want to delete this note?");
+		if (toDelete) {
+			url = 'api/notes/delete/' + String(NoteID)
+			deleteNote(url);
+			refresh();
+		}
+
+		return false;
+	}); 
+
+	// DELETE ONE NOTE
 	$(".Note-Options-link", this).click(function(e) {
 		dropDown();
 		return false;
@@ -45,7 +56,10 @@ $( ".Note-wrapper" ).each(function( index ) {
 		noteInfo = "";
 
 		url = 'api/notes/' + String(NoteID)
-		$('#reader-loader').fadeIn('200');
+		readerLoader.fadeIn('200');
+
+		readerContent.hide('0');
+		readerLoader.fadeIn('200');
 
 		$.getJSON( url, function( data ) {
 			if (data['valid'] == "false") {
@@ -62,13 +76,42 @@ $( ".Note-wrapper" ).each(function( index ) {
 			alert("Sorry... We couldn't retrieve information for that note... Try later")
 		})
 		.complete(function() { 
-			$('#reader-loader').fadeOut('200');
+			readerLoader.hide(0);
+			readerContent.delay(100).fadeIn('200');
 		});
 
 		return false;
 	});
 
 });
+
+function deleteNote(apiUrl) {
+
+	readerContent.hide('0');
+	readerLoader.fadeIn('200');
+
+	$.getJSON( apiUrl, function( note ) {
+		message = note['status'];
+		valid   = note['valid'];
+		deleted = note['deleted'];
+
+		if (deleted == "false") {
+			alert(message);
+		}
+		else {
+			alert(note['status']);
+			changeURL('#/' + note['Permalink'] + '/' + data['NoteID']);
+		}
+	})
+	.error(function() {
+		alert("Sorry... We couldn't retrieve information for that note... Try later")
+	})
+	.complete(function() { 
+		readerLoader.fadeOut('200');
+		readerContent.delay('200').fadeIn('200');
+	});
+
+}
 
 function displayPreviewNote() {
 	reader.delay('2000').addClass('reader-ZoomIn', 'slow', 'easeInOutElastic');
@@ -89,8 +132,8 @@ function hidePreviewNote() {
 }
 function changePreviewData(note) {
 	// Use the box ide to get the text of title...
-	$('.reader-Title').html(note['Title']);
-	$('.reader-Content').html(note['Content']);
+	$('#reader-Title').html(note['Title']);
+	$('#reader-Content').html(note['Content']);
 }
 
 function changeURL (Permalink) {
