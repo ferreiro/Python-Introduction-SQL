@@ -49,7 +49,7 @@
 							</ul>
 						</div>
 						
-						<div class="Note-line-color" style="background-color:#{{note['ColorHEX']}};"></div>
+						<div class="Note-line-color" style="border-color:#{{note['ColorHEX']}};"></div>
 
 						<div class="Note-link">
 							<a href="/{{user['Username']}}/{{note['Permalink']}}">
@@ -67,35 +67,40 @@
 							{{data}} 
 						</p>
 
-						<div class="Note-Metada">
-							
-							% if (note['Private']):
-								<span class="Note-Private">
-									<b>Private</b>
-								</span>
-							% else:
-								<span class="Note-Private">
-									<b>Public note (?)</b>
-								</span>
-							% end
+						<div class="Note-Metada-Wrapper">
+							<div class="Note-Metada">
 
-							<span>-</span>
 
-							% if (note['Published']):
-								<span class="Note-Private">
-									<b>Published on:</b>
-									<% 
-										date = note['CreatedAt']
-										date = date.split(' ');
-										date = date[0]
-									%>
-									{{date}}
-								</span>
-							% else:
-								<span class="Note-Private">
-									<b>Draft (?)</b>
-								</span>
-							% end
+								% if (note['Published']):
+									<span class="Note-Private">
+										<b>Published </b>
+										<% 
+											date = note['CreatedAt']
+											date = date.split(' ');
+											date = date[0]
+										%>
+										{{date}}
+									</span>
+								% else:
+									<span class="Note-Private">
+										<b>Draft (?)</b>
+									</span>
+								% end
+
+
+								% if (note['Private']):
+									<span class="Note-Private">
+										<b>Private</b>
+									</span>
+								% else:
+									<span class="Note-Private">
+										<b>Public (?)</b>
+									</span>
+								% end
+
+								<span>-</span>
+
+							</div>
 						</div>
 
 					</div>

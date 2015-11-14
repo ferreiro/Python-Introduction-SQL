@@ -263,10 +263,10 @@ ul, li {
 .Header-logo a p{
 	width: 100%;
 	text-align: center;
-	padding-top: 10px; 
+	padding-top: 12px; 
 	color: #fff;
 	font-weight: 500;
-	font-size: 22px;
+	font-size: 24px;
 }
 .Header-logo:hover {
 	background: #3F51B5;
@@ -279,23 +279,59 @@ ul, li {
 } 
 .Header-options-search {
 	width: 400px;
-	height: 50px;
+	height: 40px;
+	margin: 5px 0;
 	display: block; 
 	float: left; 
-}
-.Header-options-search:hover {
 	background: #303F9F;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-right: 5px;
 }
 .Header-options-search input {
+	color: rgba(255,255,255,0.8);
 	width: 100%;
-	height: 50px;
-	display: inline-block;
+	height: 40px;
+	display: block;
 	background: transparent;
 	outline: 0;
 	padding: 0;
 	margin: 0; 
 	border:0;
 	font-size: 14px;
+	text-indent: 15px; 
+}
+.Header-options-button {
+	height: 40px;
+	margin: 5px 0; 
+	margin-right: 0;
+	padding: 0 10px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	display: inline-block;
+	float: left;
+	vertical-align: middle;
+}
+.button-login {
+	/*background: #3949AB;*/
+}
+.button-register {
+	background: #4CAF50;
+	background: #3949AB;
+}
+.Header-options-button-icon {
+	display: inline-block;
+	margin-right: 5px;
+	height: 30px;
+	color: #DEE2FF;
+}
+.Header-options-button-title {
+	display: inline-block;
+	height: 30px; 
+	margin-top: 10px;
+	color: #DEE2FF;
 }
 .Header-options-createNote {
 	height: 40px;
@@ -402,6 +438,7 @@ ul, li {
 	padding: 100px 0;
 	background: url(../images/apps.jpg);
 	background: url('../images/apps.jpg');
+	background: url('../images/desk.jpg');
 	background-size: cover;
 	position: relative;
 }
@@ -549,13 +586,15 @@ ul, li {
 	box-shadow:         0px 0px 15px 0px rgba(0, 0, 0, 0.10);
 }
 .reader-close {
-	width: 100px;
-	height: 100px;
-	background: red;
+	height: 80px; 
 	position: fixed;
 	top: 20px;
 	right: 20px;
 	z-index: 10;
+}
+.reader-close span {
+	font-size: 80px;
+	font-weight: 300;
 }
 .reader-Title {
 	font-size: 60px;
@@ -669,11 +708,12 @@ ul, li {
 }
 .Note-line-color {
 	width: 100%;
-	height: 3px;
-	background: #fff;
+	border-bottom: 3px solid #cecece;
 	position: absolute;
 	bottom: 0;
 	left: 0;
+	z-index: 10; 
+	opacity: 0.1;
 }
 .Note-link {
 	width: 100%;
@@ -713,7 +753,7 @@ ul, li {
 	color: #494949;
 	margin-bottom: 10px;
 }
-.Note-Metada {
+.Note-Metada-Wrapper {
 	width: 100%;
 	padding: 10px 0;
 	background: #E8EEF9;
@@ -722,4 +762,22 @@ ul, li {
 	left: 0;
 	right: 0;
 	bottom: 3px;
+}
+.Note-Metada-Wrapper:before {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgba(255,255,255,0.92);
+	content: '';
+	z-index: 0;
+}
+.Note-Metada {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	z-index: 2;
+	font-weight: 300;
+	color: rgba(0,0,0,.4);
 }

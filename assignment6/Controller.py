@@ -697,6 +697,42 @@ def deleteNoteID(NoteID):
 		redirectHome();
 		return "You're not allowed to be here";
 
+
+@route('/api/delete/<NoteID>', mehod="GET")
+def deleteNoteID(NoteID):
+	global sessionUser;
+
+	response.content_type = 'application/json';
+	returnedMessage = {
+		"deleted": "false",
+		"message" : "You're not allowed to do this action"
+	}
+
+	if (sessionUser == None):
+		return json.dumps(returnedMessage);
+
+	note = getNotebyNoteID(NoteID);
+
+	if (note == None): 
+		returnedMessage["deleted"] = "false";
+		returnedMessage["message"] = "This note is not on our System";
+		return json.dumps(returnedMessage); # The note doesn't exist on our database 
+
+	userID_note    = note['UserID'];
+	userID_session = sessionUser['UserID'];
+
+	if (userID_note == userID_session):
+		if (deleteNote(NoteID)):
+			returnedMessage['deleted'] = "true";
+			returnedMessage['message'] = "We have deleted your note!";
+		else:
+			returnedMessage['deleted'] = "false";
+			returnedMessage['message'] = "You're not allowed to delete this note.";
+
+	return json.dumps(returnedMessage);
+
+	
+
 #####Show a single 
 
 @route('/<Username>#/<Permalink>')

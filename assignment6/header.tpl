@@ -35,19 +35,34 @@
 						</p>
 					</form>
 				</div>
-				% end
 
 				<div class="Header-options-createNote">
 					<a href="/create"><p>Create note</p></a>
 				</div>
+				% end
 
 				% if user == None:
 
-				<div class="Header-options-createNote">
-					<a href="/create"><p>Login</p></a>
+				<div class="Header-options-button button-login">
+					<a href="/login">
+						<div class="Header-options-button-icon">
+							<span class="icon-locked"></span>
+						</div>
+						<p class="Header-options-button-title">
+							Login
+						</p>
+					</a>
 				</div>
-				<div class="Header-options-createNote">
-					<a href="/register"><p>Register</p></a>
+
+				<div class="Header-options-button button-register">
+					<a href="/register">
+						<div class="Header-options-button-icon">
+							<span class="icon-enter"></span>
+						</div>
+						<p class="Header-options-button-title">
+							Register
+						</p>
+					</a>
 				</div>
 				
 				% end
@@ -110,7 +125,7 @@
 	 
 	<div class="reader-Wrapper">
 		<div class="reader">
-			<div class="reader-close">Close</div>
+			<div class="reader-close"><span class="icon-close"></span></div>
 			<h1 class="reader-Title">Title</h1>
 			<p  class="reader-Content">Content</p>
 
