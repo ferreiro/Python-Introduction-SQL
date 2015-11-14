@@ -19,7 +19,7 @@ def closeCursor(cursor):
 # Change for cookies
 sessionUser = None; # Empty Dictionary. Updated when login and erased when logout. 
 
-	
+
 # Static Routes
 @route('/static/<filename:re:.*\.js>')
 def javascripts(filename):

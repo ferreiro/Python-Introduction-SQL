@@ -132,6 +132,8 @@ ul, li {
 .login {
 	height: 600px;
 	background: url(../images/apps.jpg);
+	background: url('../images/apps.jpg');
+	background-size: cover;
 	position: relative;
 }
 .login:before {
@@ -144,22 +146,25 @@ ul, li {
 	background: rgba(0,0,0,.7);
 }
 .login-form {
-	width: 300px;
-	height: 300px;
+	width: 260px;
+	min-height: 260px;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	margin: -150px;
 	background: #fff;
 	border-radius: 3px;
+	padding: 20px;
 }
 .login-form h1 {
 	font-weight: 500;
 	font-size: 30px;
+	margin-bottom: 15px;
 }
 .login-form h2 {
 	font-weight: 300;
 	font-size: 16px;
+	margin-bottom: 15px;
 }
 
 
@@ -182,7 +187,7 @@ ul, li {
 	background: rgba(255,255,255,0.7);
 	background: rgba(0,0,0,0.7);
 	content: '';
-	background: url(/images/empty.jpg);
+	background: url(/images/supernotes2.jpg);
 	background-size:cover;
 }
 .Zero-NotesWrap:after {
