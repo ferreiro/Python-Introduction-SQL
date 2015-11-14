@@ -3,7 +3,8 @@
 % if editUser == True:
 <!-- <div class="containter-wrapper">
 	<div class="containter">-->
-<div class="login">
+
+<div class="login" style="background-image: url(../images/profile.jpg);">
     <div class="login-form" style="width:400px;">
 		<h1>Edit your user information</h1>
 		<form action="/profile/edit" method="POST">

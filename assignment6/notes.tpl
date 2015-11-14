@@ -1,5 +1,17 @@
 % include ('header.tpl', title='Hola')
 	
+	
+	<div class="Profile-Header-wrap" style="background-image: url(../images/supernotes.jpg);">
+		<div class="Profile-Header">
+			<h1 class="Profile-Header-Name">
+				MY
+				<strong>Notes</strong>
+			</h1>
+		</div>
+	</div>
+
+	
+
 	<div class="containter-wrapper">
 		<div class="containter">
 				

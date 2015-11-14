@@ -262,7 +262,7 @@ def notetupleToDictionary(_tuple):
 
 	return note;
 
-def getUserNotes(UserID):
+def getNotesByUser(UserID):
 	notes_arr = []; # Array of dictionary (with notes)
 	cursor = openCursor();
 	try:
@@ -391,7 +391,7 @@ def searchNote(Keyword,UserID):
 
 	notes_arr = [];
 	return_arr = [];
-	notes_arr=getUserNotes(UserID); 
+	notes_arr=getNotesByUser(UserID); 
 
 	for n in notes_arr:
 		print n
@@ -594,12 +594,13 @@ def createNote():
 def userProfile():
 	global sessionUser
 	if (sessionUser == None):
-		return template('login')
+		return template('login', user=None)
 
 	user = getUserbyID(sessionUser['UserID']);
+	notes = getNotesByUser(sessionUser['UserID']);
  
 	if user != None:
-		return template("profile", user=user);
+		return template("profile", user=user, notes=notes);
 	else:
 		return template("login", user=sessionUser);
 
@@ -743,7 +744,7 @@ def profile(username):
 	user = getUserbyUsername(username);
 
 	if user != None and user['UserID'] == sessionUser['UserID']: # if user and session is the same as the query user
-		notes = getUserNotes(user['UserID']);
+		notes = getNotesByUser(user['UserID']);
 		return template('notes', notes=notes, user=user); # Show the notes for that user!
 	else:
 		return template('prohibited_place', user=sessionUser)
