@@ -2,22 +2,6 @@
 
 <div class="Profile-Header-wrap">
 	<div class="Profile-Header">	
-		<%
-			# import code for encoding urls and generating md5 hashes
-			import urllib, hashlib
-			 
-			# Set your variables here
-			email = user['Email'];
-			default = "http://www.datastax.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png"
-			size = 40
-			 
-			# construct the url
-			gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-			gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
-
-			print gravatar_url
-		%>
-
 		<h1 class="Profile-Header-Name">
 			<strong>{{user['Name']}} {{user['Surname']}}</strong>
 			<span></span>{{user['City']}}

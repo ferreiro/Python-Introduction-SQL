@@ -269,7 +269,7 @@ def notetupleToDictionary(_tuple):
 
 	return note;
 
-def getNotesByUser(UserID):
+def getNotesByUserID(UserID):
 	notes_arr = []; # Array of dictionary (with notes)
 	cursor = openCursor();
 	try:
@@ -402,7 +402,7 @@ def searchNote(Keyword,UserID):
 
 	notes_arr  	= [];
 	return_arr 	= [];
-	notes_arr	=getNotesByUser(UserID); 
+	notes_arr	=getNotesByUserID(UserID); 
 
 	for n in notes_arr:
 		#print n
@@ -481,9 +481,6 @@ def login():
 		print "user is None"
 		return template('login-fail', user=None);
 
-	print "Password is " + password
-	print "Hash is " + user['Password']
-
 	if verifyPassword(password, user['Password']):
 		setSessionUser(user); # set User session object
 	else:
@@ -541,9 +538,9 @@ def searchOnNotes():
 		Keyword = request.forms.get('query');
 		notes = searchNote(Keyword, sessionUser['UserID']);
 		#print notes
-		return template('notes', notes=notes, user=user);
+		return template('notes', searchTemplate=True,  notes=notes, user=user);
 	else:
-		return template('notes', notes=notes, user=sessionUser);
+		return template('notes', searchTemplate=True,  notes=notes, user=sessionUser);
 
 #####Create a note
 
@@ -610,7 +607,7 @@ def userProfile():
 		return template('login', user=None)
 
 	user = getUserbyID(sessionUser['UserID']);
-	notes = getNotesByUser(sessionUser['UserID']);
+	notes = getNotesByUserID(sessionUser['UserID']);
  
 	if user != None:
 		return template("profile", user=user, notes=notes);
@@ -625,10 +622,10 @@ def showFormToEditUser():
 
 	user = getUserbyID(sessionUser['UserID']);
 
-	if updateUser(user):
+	if (user != None):
 		return template("signup", user=user, editUser=True);
 	else:
-		return template("profile", notes=None, user=sessionUser);
+		return redirectHome();
 
 @route('/profile/edit', method="POST")
 def editSessionUser():
@@ -644,7 +641,8 @@ def editSessionUser():
 	user['City'] = request.forms.get('citysignup'); 
  
 	if updateUser(user):
-		return template("profile", user=user);
+		notes = getNotesByUserID(user['UserID']);
+		return template("profile", notes=notes, user=user);
 	else:
 		return template("profile", user=sessionUser);
 
@@ -839,8 +837,8 @@ def profile(username):
 	user = getUserbyUsername(username);
 
 	if user != None and user['UserID'] == sessionUser['UserID']: # if user and session is the same as the query user
-		notes = getNotesByUser(user['UserID']);
-		return template('notes', notes=notes, user=user); # Show the notes for that user!
+		notes = getNotesByUserID(user['UserID']);
+		return template('notes', searchTemplate=False, notes=notes, user=user); # Show the notes for that user!
 	else:
 		return template('prohibited_place', user=sessionUser)
 	

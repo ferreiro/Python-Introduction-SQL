@@ -498,6 +498,7 @@ ul, li {
 	background: rgba(0,0,0,0.7);
 	content: '';
 	background: url(/images/supernotes2.jpg);
+	background: url(/images/desk.jpg);
 	background-size:cover;
 }
 .Zero-NotesWrap:after {
