@@ -355,6 +355,7 @@ def createNoteDB(newNote):
 
 def updatedBD(updatedNote):
 	cursor = openCursor();
+
 	query  = "Update Notes SET "
 	query += "Title ='" + str(updatedNote['Title']) + "',  ";
 	query += "Color ='" + str(updatedNote['Color']) + "', ";
@@ -384,14 +385,22 @@ def deleteNote(NoteID):
 	return True; # We delete a note succesfully
 
 def updateUser(user):
-	try:
-		cursor = openCursor();
-		query  = "Update User SET Name='"+str(user['Name'])+"', Surname='"+str(user['Surname'])+"', Birthday='"+str(user['Birthday'])+"', City='"+str(user['City'])+"'"
-		cursor.execute(query);
-		conn.commit();
-		closeCursor(cursor);
-	except:
-		return False;
+#try:
+	cursor = openCursor();
+
+	query  = "Update User SET "
+	query += "Name ='" + str(user['Name']) + "',  ";
+	query += "Surname ='" + str(user['Surname']) + "', ";
+	query += "Birthday ='" + str(user['Birthday']) + "', ";
+	query += "City ='" + str(user['City']) + "'";
+	query += " where User.UserID=" + str(user['UserID']);
+	print query
+
+	cursor.execute(query);
+	conn.commit();
+	closeCursor(cursor);
+#except:
+#	return False;
 
 	return True;
 
