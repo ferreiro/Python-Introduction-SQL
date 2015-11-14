@@ -36,7 +36,7 @@ def images(filename):
 
 @route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
 def fonts(filename):
-    return static_file(filename, root='static/fonts')
+    return static_file(filename, root='static/')
 
 
 #################################

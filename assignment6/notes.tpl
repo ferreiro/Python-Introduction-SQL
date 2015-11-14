@@ -37,7 +37,7 @@
 
 						<div class="Note-Options">
 							<span class="Note-Options-link">
-								+
+								<div class="icon-cog"></div>
 							</span>
 							<ul class="Note-Options-dropDown">
 								<li><a href="/{{user['Username']}}/{{note['Permalink']}}/edit">

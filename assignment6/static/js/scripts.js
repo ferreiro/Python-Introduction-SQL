@@ -14,9 +14,29 @@ $(document).keyup(function(e) {
 });
 
 $( ".Note-wrapper" ).each(function( index ) {
+	
+	var Note = $(this)
+	var NoteInfo = undefined;
+	var NoteID = $(this).find('.Note').attr('id');
+	var NoteOptions = Note.find('.Note-Options');
+	var NoteDropdown = Note.find('.Note-Options-dropDown');
+
+	function displayConfig () {
+		NoteOptions.show('0');
+	}
+	// Show dropdown menu
+	function dropDown () {
+		NoteDropdown.toggleClass('Note-Options-dropDown-display');
+	}
+ 
+	// Config button that opens the dropdown menu
+	$(".Note-Options-link", this).click(function(e) {
+		dropDown();
+		return false;
+	}); 
 
 	// When clicked on "Note-link" open the Note in current window
-	$(this).find('.Note-link').click(function(e) {
+	$(".Note-link", this).click(function(e) {
 		
 		note = $(this).parent();
 		NoteID = note.attr('id');
