@@ -208,6 +208,7 @@ def usertupleToDictionary(_tuple):
 def notetupleToDictionary(_tuple):
 	if (type(_tuple) != tuple):
 		return None;
+	print _tuple
 	note = {}
 	note['NoteID'] 		= _tuple[0]
 	note['UserID'] 		= _tuple[1]
@@ -218,6 +219,7 @@ def notetupleToDictionary(_tuple):
 	note['EditedAt'] 	= _tuple[6]
 	note['Published']	= _tuple[7]
 	note['Private'] 	= _tuple[8]
+	note['Color'] 		= _tuple[9]
 
 	return note;
 
@@ -226,12 +228,18 @@ def getUserNotes(UserID):
 	cursor = openCursor();
 	try:
 		query = "Select * from Notes where Notes.UserID=" + str(UserID) + " ORDER BY EditedAt DESC";
+		print query
 		cursor.execute(query); # Check if the email and password exists on our database
 		notes_tuples = cursor.fetchall(); # Get tuples returned by database
 		
 		# notes are tuples. So convert to dict and add to Notes array
 		for n in notes_tuples:
 			convertedNote = notetupleToDictionary(n); # tuple to dictionary
+
+			query = "Select * from Colors where Colors.Name='"+convertedNote['Color']+"'";
+			print query
+			cursor.execute(query);
+			convertedNote['ColorHEX'] = cursor.fetchone()[1]
 			notes_arr.append(convertedNote); # Append dictionary
 
 		closeCursor(cursor);
@@ -247,7 +255,7 @@ def createUserDB(newUser):
 	cursor = openCursor();
 
 	encriptedPassword = encriptpassword(newUser['password']);
-
+	print encriptpassword
 	try:
 		userString  = ("NULL,");
 		userString += ("'" + str(newUser['email']) + "',");
@@ -286,7 +294,8 @@ def createNoteDB(newNote):
 		userString += ("'" + str(newNote['CreatedAt']) + "',");
 		userString += ("'" + str(newNote['EditedAt']) + "',");
 		userString += (str(newNote['Published']) + ",");
-		userString += str(newNote['Private']);
+		userString += (str(newNote['Private']) + ",");
+		userString += ("'" + str(newNote['Color']) + "'");
 
 		query = "Insert into Notes values(" + userString + ')';
 		print query
@@ -422,7 +431,7 @@ def login():
 	
 	if (user == None):
 		print "user is None"
-		return template('login-fail');
+		return template('login-fail', user=None);
 
 	print "Password is " + password
 	print "Hash is " + user['Password']
@@ -459,23 +468,14 @@ def registerUserDatabase():
 		"city": request.forms.get('citysignup'),
 		"premium": 0
 	}
-	if createUserDB(newUser): # user created successfully
 
-		newNote = {
-			"Title": "Welcome to ______",
-			"Content": "Welcome to our awesome project! You are on board!",
-			"Published": 1
-		}
-		if (createNoteDB(newNote)):
-			print "Default note created"
-		else:
-			print "Default note NOT created"
-		return template('signup-success');
+	if createUserDB(newUser): # user created successfully
+		global sessionUser
+		return template('signup-success', user=sessionUser);
 	else:
 		return "Problems creating user"
-
-	print "Problems inserting a user on the database. Sorry..."
-	return "Problems on the database"
+		print "Problems inserting a user on the database. Sorry..."
+		return "Problems on the database"
 
 #####SEARCH
 
@@ -511,10 +511,14 @@ def createNote():
 	global sessionUser
 
 	if (sessionUser == None):
-		return template('login')
+		return template('login', user=None)
 
-	title = request.forms.get('titleNote');
+	# Basic information
+	title = str(request.forms.get('titleNote'));
+	content = str(request.forms.get('contentNote'));
+	content = re.sub('[^a-zA-Z0-9 \n\.]', '', str(content)); # content wihtout special characters
 	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
+
 	formatedToday = today.replace(" ", "-")
 	formatedToday = formatedToday.replace(":", "-");
 
@@ -527,13 +531,14 @@ def createNote():
 	newNote = {
 		"NoteID" 	: None,
 		"UserID" 	: sessionUser['UserID'],
-		"Title" 	: str(title),
+		"Title" 	: title,
 		"Permalink" : str(permalink),
-		"Content" 	: str(request.forms.get('contentNote')),
+		"Content" 	: content,
 		"CreatedAt" : today,
 		"EditedAt" 	: today,
 		"Published" : 1,
-		"Private" 	: 1
+		"Private" 	: 1,
+		"Color" 	: 'red'
 	}
 
 	if createNoteDB(newNote):

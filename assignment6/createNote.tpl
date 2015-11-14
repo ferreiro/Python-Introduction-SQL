@@ -8,6 +8,7 @@
 				font-family: arial;
 				border:0;
 				outline: 0;
+				background: transparent;
 			}
 			.note-Content {
 				width: 100%;
@@ -16,6 +17,7 @@
 				font-family: arial;
 				border:0;
 				outline: 0;
+				background: transparent;
 			}
 			.note-save {
 				padding: 10px 20px;
@@ -24,17 +26,10 @@
 				color: #000;
 				border:0;
 			}
-			.note-publish {
-				padding: 10px 20px;
-				font-size: 20px;
-				background: #c0c0c0;
-				color: #000;
-				border:0;
-			}
 		</style>
 
 <div class="containter-wrapper">
-	<div class="containter" style="padding-left:100px; padding-right:100px;">			
+	<div class="containter">			
 
 		% if editNote == True:
 		<form action="/update/{{note['NoteID']}}" method="POST"> 
@@ -72,14 +67,12 @@
 				% if editNote == True:
 					<input type="submit" class="note-publish" value="Update note"/> 
 				%else:
-					<input type="submit" class="note-publish" value="Publish note"/> 
+					<input type="submit" class="inputField" value="Publish note"/> 
 				%end
 
 				
 			</p>
-
-
-
+ 
 
 			<p class="change_link">  
 				Already a member ?

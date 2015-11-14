@@ -21,10 +21,12 @@
 				</div>
 			%else:
 			% for note in notes:
-
+			
 				<div class="Note-wrapper" id="{{note['NoteID']}}">
 					<div class="Note">
 						
+						<div class="Note-line-color" style="background-color:#{{note['ColorHEX']}};"></div>
+
 						<div class="Note-link">
 							<a href="/{{user['Username']}}/{{note['Permalink']}}">
 						</div>

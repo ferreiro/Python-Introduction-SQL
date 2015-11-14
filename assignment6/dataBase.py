@@ -23,6 +23,14 @@ def createTableList(cursor):
 	"""
 	SQLtables.append(UserTable);
 
+	colorsTable = """
+		create table Colors(
+			Name text primary key,
+			Color text default "white"
+		)
+	"""
+	SQLtables.append(colorsTable);
+
 	notesTable = """
 		create table Notes(
 			NoteID integer PRIMARY KEY AUTOINCREMENT,
@@ -30,12 +38,14 @@ def createTableList(cursor):
 			Title text,
 			Permalink text UNIQUE,
 			Content text,
-			CreatedAt date,
-			EditedAt date,
-			Published boolean,
-			Private boolean,
+			CreatedAt date DEFAULT CURRENT_TIMESTAMP,
+			EditedAt date DEFAULT CURRENT_TIMESTAMP,
+			Published boolean DEFAULT 0,
+			Private boolean DEFAULT 1,
+			Color text DEFAULT white,
 
-			foreign key (UserID) references User ON DELETE CASCADE
+			foreign key (UserID) references User ON DELETE CASCADE,
+			foreign key (Color) references Colors
 		)
 	"""
 	SQLtables.append(notesTable);
@@ -60,8 +70,9 @@ def createTableList(cursor):
 	#cursor.execute("CREATE TABLE University(Nombre_Univ TEXT, Comunidad TEXT, Plazas INTEGER, PRIMARY KEY(Nombre_Univ))")
 
 def deleteDatabase(cursor):
-	cursor.execute("DROP TABLE IF EXISTS User ");
+	cursor.execute("DROP TABLE IF EXISTS User");
 	cursor.execute("DROP TABLE IF EXISTS Tag");
+	cursor.execute("DROP TABLE IF EXISTS Colors");
 	cursor.execute("DROP TABLE IF EXISTS Notes");
 
 def createDatabase(cursor, tables):
@@ -72,6 +83,10 @@ def createDatabase(cursor, tables):
 		
 tables = createTableList(cursor);
 createDatabase(cursor, tables);
+
+cursor.execute("insert into Colors values ('white', 'FFFFFF')");
+cursor.execute("insert into Colors values ('red', 'FF0000')");
+cursor.execute("insert into Colors values ('blue', '00359E')");
 
 #cursor.execute("insert into User values (NULL,'jorge@ferreiro.com', '123', 'ferreiro', 'Jorge', 'Garcia', '16/03/1995', 'Madrid', 0)");
 #cursor.execute("insert into Notes values (NULL, 1, 'How to make pizza', 'how-make-pizza','So. We have to call Luigi.', '16/03/1995', '16/03/1995', 1, 0)");
