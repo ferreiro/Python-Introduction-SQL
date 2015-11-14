@@ -10,7 +10,14 @@
 		</div>
 	</div>
 
-	
+	<div class="previewNote-Wrapper">
+		<div class="previewNote">
+			<div class="previewNote-close">Close</div>
+			<h1 class="previewNote-Title">Title</h1>
+			<p  class="previewNote-Content">Content</p>
+
+		</div>
+	</div>
 
 	<div class="containter-wrapper">
 		<div class="containter">

@@ -21,9 +21,9 @@ sessionUser = None; # Empty Dictionary. Updated when login and erased when logou
 
 
 # Static Routes
-@route('/static/<filename:re:.*\.js>')
+@route('/<filename:re:.*\.js>')
 def javascripts(filename):
-    return static_file(filename, root='static/js')
+    return static_file(filename, root='static/')
 
 @route('/<filename:re:.*\.css>')
 def stylesheets(filename):

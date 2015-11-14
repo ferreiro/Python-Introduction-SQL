@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -11,9 +11,7 @@
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,500,700|Open+Sans:400,700,600|Roboto:400,300,500,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/profile.css">
-
-  <script src="/static/js/scripts.js"></script>
-
+ 
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
