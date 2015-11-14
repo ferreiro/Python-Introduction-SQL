@@ -276,6 +276,7 @@ ul, li {
 	margin-right: -4px;
 	display: inline-block;
 	vertical-align: top;
+	text-align: left;
 }
 .Note {
 	min-height: 220px;

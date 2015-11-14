@@ -3,7 +3,7 @@
 
 
 <div class="containter-wrapper">
-	<div class="containter" style="padding-left:100px; padding-right:100px;">			
+	<div class="containter">			
 		% #for i in user:
 		<p> </p>
 		% #end

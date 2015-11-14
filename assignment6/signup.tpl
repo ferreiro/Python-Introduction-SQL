@@ -1,31 +1,33 @@
 % include ('header.tpl', title='Hola')
 
 % if editUser == True:
-<h1>Edit your user information</h1>
+<!-- <div class="containter-wrapper">
+	<div class="containter">-->
+<div class="login">
+    <div class="login-form" style="width:400px;">
+		<h1>Edit your user information</h1>
+		<form action="/profile/edit" method="POST">
 %else:
-<h1>Sign up our awesome webpage</h1>
-%end
-
-% if editUser == True:
-<form action="/profile/edit" method="POST"> 
-%else:
-<form action="/register" method="POST"> 
-%end  
+<div class="login">
+    <div class="login-form" style="width:400px;">
+		<h1>Sign up on our awesome webpage</h1>
+		<form action="/register" method="POST">
+%end 
 	<p> 
 		<label for="namesignup" class="uname" data-icon="u">Your name</label>
 
 		% if editUser == True:
-			<input id="namesignup" name="namesignup" required="required" type="text" placeholder="mysuperusername690" value="{{user['Name']}}" />
+			<input  class="inputField" id="namesignup" name="namesignup" required="required" type="text" placeholder="mysuperusername690" % if editUser == True: value="{{user['Name']}}" %end />
 		%else:
-			<input id="namesignup" name="namesignup" required="required" type="text" placeholder="mysuperusername690" />
+			<input  class="inputField" id="namesignup" name="namesignup" required="required" type="text" placeholder="mysuperusername690" />
 		%end
 	</p>
 	<p> 
 		<label for="surnamesignup" data-icon="u">Your surname</label>
 		% if editUser == True:
-			<input id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="mysuperusername690" value="{{user['Surname']}}" />
+			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="mysuperusername690" value="{{user['Surname']}}" />
 		%else:
-			<input id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="mysuperusername690" />
+			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="mysuperusername690" />
 		%end 
 	</p>
 	<p> 
@@ -34,25 +36,25 @@
 		% if editUser == True:
 			<p>Username can't be changed</p>
 		%else:
-			<input id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="mysuperusername690" />
+			<input  class="inputField" id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="mysuperusername690" />
 		%end  
 	</p>
 	<p> 
 		<label for="birthdaysignup" class="ubirthday" data-icon="u">Your birthday</label>
 		
 		% if editUser == True:
-			<input id="birthdaysignup" name="birthdaysignup" required="required" type="date" value="{{user['Birthday']}}" />
+			<input  class="inputField" id="birthdaysignup" name="birthdaysignup" required="required" type="date" value="{{user['Birthday']}}" />
 		%else:
-			<input id="birthdaysignup" name="birthdaysignup" required="required" type="date"/>
+			<input  class="inputField" id="birthdaysignup" name="birthdaysignup" required="required" type="date"/>
 		%end  
 	</p>
 	<p> 
 		<label for="citysignup" class="ucity" data-icon="u">Your city</label>
 		
 		% if editUser == True:
-			<input id="citysignup" name="citysignup" required="required" type="name" value="{{user['City']}}"/>
+			<input  class="inputField" id="citysignup" name="citysignup" required="required" type="name" value="{{user['City']}}"/>
 		%else:
-			<input id="citysignup" name="citysignup" required="required" type="name"/>
+			<input  class="inputField" id="citysignup" name="citysignup" required="required" type="name"/>
 		%end  
 	</p>
 	<p> 
@@ -61,7 +63,7 @@
 		% if editUser == True:
 			<p>Email can't be changed (for now).</p>
 		%else:
-			<input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="mysupermail@mail.com"/> 
+			<input  class="inputField" id="emailsignup" name="emailsignup" required="required" type="email" placeholder="mysupermail@mail.com"/> 
 		%end  
 	</p>
 	<p> 
@@ -70,18 +72,22 @@
 		% if editUser == True:
 			<p>Passwords can't be changed (for now).</p>
 		%else:
-			<input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="eg. X8df!90EO"/>
+			<input  class="inputField" id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="eg. X8df!90EO"/>
 		%end 
 	</p>
 	<p class="signin button"> 
 		% if editUser == True:
-			<input type="submit" value="Update data"/> 
+			<input  class="submitField" type="submit" value="Update data"/> 
 		%else:
-			<input type="submit" value="Sign up"/> 
+			<input  class="submitField" type="submit" value="Sign up"/>
+			<p class="change_link">  
+				Already a member ?
+				<a href="/login" class="to_register"> Go and log in </a>
+			</p>
 		%end 
 	</p>
-	<p class="change_link">  
-		Already a member ?
-		<a href="/login" class="to_register"> Go and log in </a>
-	</p>
+	
 </form>
+
+	</div>
+</div>

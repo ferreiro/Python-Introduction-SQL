@@ -441,7 +441,7 @@ def login():
 def register():
 	global sessionUser
 	if (sessionUser == None):
-		return template('signup', editUser=False); #Show login screen
+		return template('signup', editUser=False, user=sessionUser); #Show login screen
 	else:
 		return loginSuccessRedirect();
 
@@ -669,7 +669,7 @@ def updateNote(Username, Permalink):
 	note = {}
 
 	if (sessionUser == None):
-		return template('login')
+		return template('login', user=sessionUser)
 
 	user   = getUserbyUsername(Username);
 	UserID = user['UserID'];
@@ -681,7 +681,7 @@ def updateNote(Username, Permalink):
 		return template('createNote', note=note, user=sessionUser, editNote=True)
 	else:
 		# note no existe
-		return template('loginWindow');
+		return template('loginWindow', user=sessionUser);
 
 #Show the profile for a given user. 
 #Dashboard with the Published notes, draft and more stuff... """
@@ -691,7 +691,7 @@ def updateNote(Username, Permalink):
 def profile(username):
 	global sessionUser
 	if (sessionUser == None):
-		return template('login')
+		return template('login', user=None)
 
 	user = getUserbyUsername(username);
 
