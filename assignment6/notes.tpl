@@ -1,15 +1,19 @@
 % include ('header.tpl', title='Hola')
 	
-	% if len(notes) > 0:
 	<div class="Profile-Header-wrap">
 		<div class="Profile-Header">
 			<h1 class="Profile-Header-Name">
-				my
-				<strong>Notes</strong>
+				% if searchTemplate == True:
+					Notes containing
+					<strong>{{Keyword}}</strong>
+				% else:
+					my
+					<strong>Notes</strong>
+				%end
 			</h1>
 		</div>
 	</div>
-	%end
+
 	<div class="containter-wrapper">
 		<div class="containter">
 

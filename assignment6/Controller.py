@@ -411,19 +411,22 @@ def searchNote(Keyword,UserID):
 
 	notes_arr  	= [];
 	return_arr 	= [];
-	notes_arr	=getNotesByUserID(UserID); 
+	notes_arr	= getNotesByUserID(UserID); 
+
+	print Keyword
+	print UserID
 
 	for n in notes_arr:
-		#print n
+		print n
 		if(iscontain(n, Keyword)):
-			# print "is contain"
+			print "is contain"
 			return_arr.append(n);
 
-	#print return_arr
+	print return_arr
 	return return_arr;
  
 def iscontain(note,Keyword):
-	findKey 	= str(note['Title']).find(str(Keyword))
+	findKey 	= str(note['Title'].lower()).find(str(Keyword))
 	findContent = str(note['Content'].lower()).find(str(Keyword))
 
 	if (note != None) and (int(findKey)>=0 or int(findContent)>=0): 
@@ -547,9 +550,9 @@ def searchOnNotes():
 		Keyword = request.forms.get('query');
 		notes = searchNote(Keyword, sessionUser['UserID']);
 		#print notes
-		return template('notes', searchTemplate=True,  notes=notes, user=user);
+		return template('notes', Keyword=Keyword, searchTemplate=True,  notes=notes, user=user);
 	else:
-		return template('notes', searchTemplate=True,  notes=notes, user=sessionUser);
+		return redirectHome();
 
 #####Create a note
 

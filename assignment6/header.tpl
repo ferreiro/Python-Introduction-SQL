@@ -84,12 +84,11 @@
 						gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
 						#gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
 					%>
-
 					
 					<div class="Header-options-myprofile" id="dropdownMenu">
 						<a href="/profile" class="Header-options-myprofile-resume" >
 							<span class="Header-options-myprofile-resume-avatar">
-								<img src="{{gravatar_url}}"/>
+								<img src="{{gravatar_url}}" />
 							</span>
 							<p class="Header-options-myprofile-resume-name">
 								{{user['Name']}} {{user['Surname']}}

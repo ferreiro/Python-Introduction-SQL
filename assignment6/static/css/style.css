@@ -682,7 +682,7 @@ ul, li {
 	opacity: 0;
 	bottom: 7.5px;
 	right: 7.5px;
-	z-index: 14;
+	z-index: 30;
 	-webkit-transition: all 300ms; /* Safari */
 	transition: all 300ms;
 	z-index: 10;
