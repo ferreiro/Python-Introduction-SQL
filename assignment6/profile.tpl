@@ -1,5 +1,44 @@
 % include ('header.tpl', title='Hola')
 
+<style type="text/css">
+	body {
+		
+	}
+	/*
+	.containter-wrapper {
+		position: relative;
+	}
+	body:after {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index: -1;
+		content: '';
+		top: 0;
+		bottom: 0;
+		left: 0;
+		background: rgba(0,0,0,.6);
+	}
+	body:before {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index: -2;
+		content: '';
+		top: 0;
+		bottom: 0;
+		left: 0;
+		background: rgba(0,0,0,.5);
+		background:#000 url(/images/profile.jpg);
+		-webkit-filter: blur(10px);
+		-moz-filter: blur(10px);
+		-o-filter: blur(10px);
+		-ms-filter: blur(10px);
+		filter: blur(10px);
+ 
+	}*/
+</style>
+
 <div class="Profile-Header-wrap">
 	<div class="Profile-Header">	
 		<h1 class="Profile-Header-Name">
@@ -64,7 +103,7 @@
 						<p>You don't have any note <a href="/create">Write one!</a></p>
 					%else:
 						% for n in notes:
-							% if (n['Published'] == 0):
+							% if (n['Published'] == 1):
 								<li class="Profile-draft-entry">
 									<a href="/{{user['Username']}}/{{n['Permalink']}}">
 										{{n['Title']}}

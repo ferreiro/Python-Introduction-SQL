@@ -50,6 +50,19 @@ def encriptpassword(Password):
 def verifyPassword(Password, hash):
 	return sha256_crypt.verify(Password,hash);
 
+
+def makeEmptySessionUser():
+	emptyUser = {
+		"UserID" : '',
+		"Email" : '',
+		"Username" : '',
+		"Name" : '',
+		"Surname" : '',
+		"Birthday" : '',
+		"City" : '',
+		"Premium" : ''
+	}
+	return emptyUser;
 def setSessionUser(user):
 	global sessionUser
 
@@ -78,6 +91,11 @@ def setSessionUser(user):
 def validUser(user):
 	return (user != None);
 
+
+#####
+####GETTING USER OBJECTS
+#####
+
 def getUserbyEmailPassword(email, password):
 	user   = None;
 	cursor = openCursor();
@@ -90,35 +108,6 @@ def getUserbyEmailPassword(email, password):
 		print "Can't retrieve a user"
 
 	return user;
-
-def getNotebyUserID_NoteID(UserID, NoteID):
-	note   = None;
-	cursor = openCursor();
-	try:
-		query = "Select * from Notes join User where User.UserID="+str(UserID)+" And Notes.NoteID="+str(NoteID);
-		cursor.execute(query); # Check if the email and password exists on our database
-		note = cursor.fetchone(); # Get the returned object for the database
-		closeCursor(cursor);
-	except:
-		print "Can't get notes given a userID and NoteID"
-
-	return note;
-
-
-def getNotebyNoteID(NoteID):
-	note   = None;
-	cursor = openCursor();
-	try:
-		query = "Select * from Notes where Notes.NoteID="+str(NoteID);
-		cursor.execute(query); # Check if the email and password exists on our database
-		noteTuple = cursor.fetchone(); # Get the returned object for the database
-		note = notetupleToDictionary(noteTuple);
-		#print note;
-		closeCursor(cursor);
-	except:
-		print "Can't get notes given a userID and NoteID"
-
-	return note;
 
 def getUserbyUsername(username):
 	user   = None;
@@ -164,20 +153,59 @@ def getUserbyID(id):
 
 	return user;
 
-def getNoteIDFromPermalink(Permalink):
-	noteID = -1;
+
+#####
+####GETTING NOTES OBJECTS
+#####
+
+def getNotebyNoteID(NoteID):
+	note   = None;
 	cursor = openCursor();
 	try:
-		query = "Select NoteID from Notes where Notes.Permalink='"+str(Permalink)+"'";
+		query = "Select * from Notes where Notes.NoteID="+str(NoteID);
+		cursor.execute(query); # Check if the email and password exists on our database
+		noteTuple = cursor.fetchone(); # Get the returned object for the database
+		note = notetupleToDictionary(noteTuple);
+		#print note;
+		closeCursor(cursor);
+	except:
+		print "Can't get notes given a userID and NoteID"
+
+	return note;
+
+def getNotebyPermalink(Permalink):
+	note   = None;
+	cursor = openCursor();
+	try:
+		query = "Select * from Notes where Notes.Permalink='"+str(Permalink)+"'";
 		#print query
 		cursor.execute(query); # Check if the email and password exists on our database
-		noteID = cursor.fetchone()[0]; # Get the returned object for the database
+		noteTuple = cursor.fetchone(); # Get the returned object for the database
+		note = notetupleToDictionary(noteTuple);
 		closeCursor(cursor);
 	except:
 		print "Can't retrieve a user"
 
-	return noteID;
+	return note;
 
+def getNoteby_Username_Permalink(Username, Permalink):
+	note   = None;
+	cursor = openCursor();
+#try:
+	query = "Select * from Notes join User where User.Username='"+str(Username)+"' And Notes.Permalink='"+str(Permalink)+"'";
+	print query
+	cursor.execute(query); # Check if the email and password exists on our database
+	noteTuple = cursor.fetchone(); # Get the returned object for the database
+	note = notetupleToDictionary(noteTuple);
+	closeCursor(cursor);
+#except:
+	print "Can't get notes by this UserID and Permalink"
+
+	return note;
+
+#####
+####GETTING COLORS OBJECTS
+#####
 """ Get all the avaliable colors for our database """
 def getColorsAvailable():
 	availableColors = []; # array of dictionaries
@@ -752,51 +780,34 @@ def deleteNoteID(NoteID):
 def displayNote(Username, Permalink):
 	global sessionUser
 
-	print Username
-	print Permalink
-	print "Is asking for #/"
+	note = getNoteby_Username_Permalink(Username, Permalink);
 
-	user = getUserbyUsername(Username);
-	
-	if (user == None):
-		return redirectHome();
+	if (note == None):
+		return "The note you're trying to read dont exist";
+		return redirectHome(); # the note doesn't exist
 
-	UserID = user['UserID'];
-	NoteID = getNoteIDFromPermalink(Permalink);
-
-	if (NoteID == -1):
-		return redirectHome();
-
-	note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
-	note = notetupleToDictionary(note_tuple);
-
-	if (sessionUser == None and note['Private'] == 1):
-		print "You don't have access"
-		return "You don't have access"
-		#return template('login')
-
-	return template('singleNote', note=note, user=sessionUser)
+	if sessionUser != None:	
+		if int(note['Private']) == 0 or sessionUser['UserID'] == note['UserID']: #la NOTa es publica o el usuario esta conectado
+			return template('singleNote', note=note, user=sessionUser);
+		
+	return template('privateZone', user=sessionUser); # Private note. Guest can't read this note
 
 @route('/<Username>/<Permalink>/edit')
 def updateNote(Username, Permalink):
 	global sessionUser
-	note = {}
-
-	if (sessionUser == None):
+	if sessionUser == None:
 		return template('login', user=sessionUser)
 
-	user   = getUserbyUsername(Username);
-	UserID = user['UserID'];
-	NoteID = getNoteIDFromPermalink(Permalink);
+	note = getNoteby_Username_Permalink(Username, Permalink);
 
-	if (NoteID != 0):
-		note_tuple = getNotebyUserID_NoteID(UserID, NoteID);
-		note = notetupleToDictionary(note_tuple);
+	if note == None:
+		return redirectHome();
+
+	if sessionUser['UserID'] == note['UserID']:
 		colors = getColorsAvailable(); # get all the available colors
 		return template('createNote', note=note, colors=colors,user=sessionUser, editNote=True)
-	else:
-		# note no existe
-		return template('loginWindow', user=sessionUser);
+	
+	return template('privateZone', user=sessionUser); # Private note. Guest can't read this note
 
 @route('/api/notes/<NoteID:int>', method='GET')
 @route('/api/notes/<NoteID:int>', method='POST')
