@@ -35,32 +35,36 @@
 				</div>
 
 				<div class="Header-options-createNote">
-					<a href="/create"><p>Create new note</p></a>
+					<a href="/create"><p>Create note</p></a>
 				</div>
 
-				<div class="Header-options-profileLink" style="display:none;">
-					<a href="/"><p>Jorge Ferreiro</p></a>
-				</div>
-				<ul class="Header-options-menu" style="display:none;">
+				% if user != None:
+					<div class="Header-options-profileLink" id="dropdownMenu">
+						<a href="/"><p>{{user['Name']}} {{user['Surname']}} ▾</p></a>
+					
+						<ul class="Header-options-menu">
 
-					% #if sessionUser != None:
-					<li class="Header-options-menu-button">
-						<a href="/profile">My notes</a>
-					</li>
-					<li class="Header-options-menu-button">
-						<a href="/profile">Profile</a>
-					</li>
-					<li class="Header-options-menu-button">
-						<a href="/profile/edit">Edit profile</a>
-					</li>
-					<li class="Header-options-menu-button">
-						<a href="/logout">Log out</a>
-					</li>
-					% #else:	
-						Create an account | Login
-					% #end
+							% if user != None:
+								<li class="Header-options-menu-button">
+									<a href="/{{user['Username']}}">My notes</a>
+								</li>
+								<li class="Header-options-menu-button">
+									<a href="/profile">Profile</a>
+								</li>
+								<li class="Header-options-menu-button">
+									<a href="/profile/edit">Edit profile</a>
+								</li>
+								<li class="Header-options-menu-button">
+									<a href="/logout">Log out</a>
+								</li>
+							% else:	
+								Create an account | Login
+							% end
 
-				</ul>
+						</ul>
+					</div>
+				%end
+
 			</div>
 		</div>
 	</div>

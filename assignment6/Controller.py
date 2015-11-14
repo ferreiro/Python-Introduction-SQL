@@ -370,9 +370,10 @@ def iscontain(note,Keyword):
 #################################
 
 def redirectHome():
+	global sessionUser
 	response.status = 303
 	response.set_header('Location', '/');
-	return template('login'); #Show login screen
+	return template('login', user=sessionUser); #Show login screen
 
 def redirect(url):
 	response.status = 303
@@ -405,7 +406,7 @@ def logout():
 def loginWindow():
 	global sessionUser
 	if (sessionUser == None):
-		return template('login'); #Show login screen
+		return template('login', user=sessionUser); #Show login screen
 	else:
 		return loginSuccessRedirect();
 
@@ -488,19 +489,22 @@ def searchOnNotes():
 
 	user = getUserbyID(sessionUser['UserID'])
 
-	Keyword = request.forms.get('query');
-	notes = searchNote(Keyword, sessionUser['UserID']);
-	print notes
-
-	return template('notes', notes=notes, user=user);
+	if (user != None):
+		Keyword = request.forms.get('query');
+		notes = searchNote(Keyword, sessionUser['UserID']);
+		print notes
+		return template('notes', notes=notes, user=user);
+	else:
+		return template('notes', notes=notes, user=sessionUser);
 
 #####Create a note
 
 @route('/create')
 @route('/create/')
 def createNoteForm():
+	global sessionUser
 	note = {}
-	return template('createNote', note=note, editNote=False)
+	return template('createNote', note=note, editNote=False, user=sessionUser)
 
 @route('/create', method="POST")
 def createNote():
@@ -535,7 +539,7 @@ def createNote():
 	if createNoteDB(newNote):
 		print "Note created!";
 		response.status = 303
-		response.set_header('Location', '/'+ sessionUser['Username'] + '/' + newNote['Permalink']);
+		response.set_header('Location', '/'+ sessionUser['Username']);
 		#return template('singleNote', note=newNote, user=sessionUser)
 	else:
 		return template('createNote', note=newNote, user=sessionUser, editNote=False)
@@ -551,7 +555,7 @@ def userProfile():
 	if user != None:
 		return template("profile", user=user);
 	else:
-		return template("login");
+		return template("login", user=sessionUser);
 
 @route('/profile/edit')
 def showFormToEditUser():
@@ -564,13 +568,13 @@ def showFormToEditUser():
 	if updateUser(user):
 		return template("signup", user=user, editUser=True);
 	else:
-		return template("profile");
+		return template("profile", user=sessionUser);
 
 @route('/profile/edit', method="POST")
 def editSessionUser():
 	global sessionUser
 	if (sessionUser == None):
-		return template('login')
+		return template('login', user=sessionUser)
 
 	user = getUserbyID(sessionUser['UserID']);
 
@@ -582,10 +586,11 @@ def editSessionUser():
 	if updateUser(user):
 		return template("profile", user=user);
 	else:
-		return template("profile");
+		return template("profile", user=sessionUser);
 
 @route('/update/<NoteID>', method="POST")
 def saveUpdateDatabase(NoteID):
+	global sessionUser
 	if (sessionUser == None):
 		return template('login')
 	
@@ -605,7 +610,7 @@ def saveUpdateDatabase(NoteID):
 		return template('singleNote', note=note, user=user);
 	else:
 		#problems updating note.
-		return template('error')
+		return template('error', user=sessionUser)
 
 @route('/delete/<NoteID>')
 def deleteNoteID(NoteID):
@@ -694,6 +699,6 @@ def profile(username):
 		notes = getUserNotes(user['UserID']);
 		return template('notes', notes=notes, user=user); # Show the notes for that user!
 	else:
-		return template('prohibited_place')
+		return template('prohibited_place', user=sessionUser)
 	
 run(host='127.0.0.1', port=3000);

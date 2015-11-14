@@ -16,17 +16,17 @@
                     <label for="mail">
                         E-mail:
                     </label>
-                    <input name="email" type="email" id="mail" placeholder="Your email" />
+                    <input class="inputField" name="email" type="email" id="mail" placeholder="Your email" />
                 </div>
                 <div>
                     <label for="password">
                         Password:
                     </label>
-                    <input name="password" type="password" />
+                    <input class="inputField" name="password" placeholder="Password" type="password" />
                 </div>
                 
                 <div class="button">
-                    <button type="submit">Send your message</button>
+                    <button class="submitField" type="submit">Access account</button>
                 </div>
 
                 <p>

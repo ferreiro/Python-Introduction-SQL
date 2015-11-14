@@ -10,6 +10,15 @@
 						<a class="Zero-Notes-Create" href="/create">Write your first Note now!</a>
 					</div>
 				</div>
+				<div class="Note-wrapper">
+					<div class="Note">
+
+						<div class="Note-link">
+							<a href="/create">
+						</div>
+						<a href="/create">+ Write your first Note now!</a>
+					</div>
+				</div>
 			%else:
 			% for note in notes:
 

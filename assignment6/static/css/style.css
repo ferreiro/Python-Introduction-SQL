@@ -19,6 +19,27 @@ ul, li {
 	list-style: none;
 }
 
+.inputField {
+	width: 100%;
+	border:1px solid #cecece;
+	padding: 12px 0;
+	font-size: 16px;
+	text-indent: 16px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.submitField {
+	font-size: 16px;
+	padding: 12px 16px;
+	color: #fff;
+	border:0;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background: #283593;
+}
+
 .Header-wrapper {
 	width: 100%;
 	height: 50px;
@@ -54,7 +75,7 @@ ul, li {
 	vertical-align: top;
 } 
 .Header-options-search {
-	width: 600px;
+	width: 400px;
 	height: 50px;
 	display: block; 
 	float: left; 
@@ -63,7 +84,7 @@ ul, li {
 	background: #303F9F;
 }
 .Header-options-search input {
-	width: 600px;
+	width: 100%;
 	height: 50px;
 	display: inline-block;
 	background: transparent;
@@ -74,8 +95,8 @@ ul, li {
 	font-size: 14px;
 }
 .Header-options-createNote {
-	width: 160px;
 	height: 40px;
+	padding: 0 15px;
 	background: #4CAF50;
 	border-top: 5px solid #283593;
 	border-bottom: 5px solid #283593;
@@ -97,32 +118,39 @@ ul, li {
 .Header-options-profileLink {
 	width: 160px;
 	height: 50px;
-	background: red;
 	display: inline-block;
+	text-align: center;
 }
 .Header-options-profileLink a {  
-	display: inline-block;
-	background: blue;
+	display: inline-block; 
+	color: #fff;
 } 
+#dropdownMenu:hover:hover .Header-options-menu {
+	display: inline-block !important;
+}
 .Header-options-menu {
 	width: 160px;
+	display: inline-block; 
+	display: none;
 	position: absolute;
 	top: 100%;
 	right: 0; 
 	list-style: none;
-	display: inline-block; 
 	background: #fff;
+	z-index: 100;
 }
-.Header-options-menu-button{
+.Header-options-menu-button {
+	width: 100%;
 	display: inline-block;
-	height: 50px;
-	background: red;
+	text-align: right;
 }
 .Header-options-menu-button a{
+	width: 100%;
 	display: inline-block;
-	height: 25px;
-	background: red;
-	padding-top: 17px;
+	padding: 10px 0;
+	color: #222;
+	direction:rtl;
+	text-indent: 20px;
 }
 
 /*******************************
@@ -130,7 +158,7 @@ ul, li {
 ********************************/
 
 .login {
-	height: 600px;
+	padding: 100px 0;
 	background: url(../images/apps.jpg);
 	background: url('../images/apps.jpg');
 	background-size: cover;
@@ -148,13 +176,12 @@ ul, li {
 .login-form {
 	width: 260px;
 	min-height: 260px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: -150px;
+	margin:0 auto;
 	background: #fff;
 	border-radius: 3px;
 	padding: 20px;
+	position: relative;
+	z-index: 10;
 }
 .login-form h1 {
 	font-weight: 500;
@@ -162,6 +189,11 @@ ul, li {
 	margin-bottom: 15px;
 }
 .login-form h2 {
+	font-weight: 300;
+	font-size: 16px;
+	margin-bottom: 15px;
+}
+.login-form p {
 	font-weight: 300;
 	font-size: 16px;
 	margin-bottom: 15px;
@@ -236,6 +268,7 @@ ul, li {
 .containter {
 	width: 1020px;
 	margin: 0 auto;
+	text-align: center;
 }
 
 .Note-wrapper {
@@ -249,6 +282,7 @@ ul, li {
 	padding: 20px;
 	margin-left: 10px;
 	margin-right: 10px;
+	margin-bottom: 20px;
 	background: rgba(255,255,255,0.9);
 	position: relative;
 	-webkit-transition: all 200ms; /* Safari */
