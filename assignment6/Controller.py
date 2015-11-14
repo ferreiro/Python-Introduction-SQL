@@ -227,7 +227,7 @@ def getUserNotes(UserID):
 	notes_arr = []; # Array of dictionary (with notes)
 	cursor = openCursor();
 	try:
-		query = "Select * from Notes where Notes.UserID=" + str(UserID) + " ORDER BY EditedAt DESC";
+		query = "Select * from Notes where Notes.UserID=" + str(UserID) + " ORDER BY CreatedAt DESC";
 		print query
 		cursor.execute(query); # Check if the email and password exists on our database
 		notes_tuples = cursor.fetchall(); # Get tuples returned by database

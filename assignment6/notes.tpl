@@ -21,9 +21,23 @@
 				</div>
 			%else:
 			% for note in notes:
-			
+
 				<div class="Note-wrapper" id="{{note['NoteID']}}">
 					<div class="Note">
+
+						<div class="Note-Options">
+							<span class="Note-Options-link">
+								+
+							</span>
+							<ul class="Note-Options-dropDown">
+								<li><a href="/{{user['Username']}}/{{note['Permalink']}}/edit">
+									Edit Note
+								</a></li>
+								<li><a href="/delete/{{note['NoteID']}}">
+									Delete
+								</a></li>
+							</ul>
+						</div>
 						
 						<div class="Note-line-color" style="background-color:#{{note['ColorHEX']}};"></div>
 
