@@ -9,6 +9,7 @@
 					% else:
 						Write
 					%end
+				</strong>
 				note
 			</h1>
 		</div>
@@ -67,13 +68,14 @@
 				<div class="writeNote-form-options-select">
 				% if colors != None: 
 					% if editNote == True:
-						Current color: {{note['Color']}} <br />
-						Change to:
 						<select name="colorNote">
+							<option value="white">Change color</option>
 						% for color in colors:
 						  <option value="{{color['Name']}}">{{color['Name']}}</option>
 						% end
 						</select>
+
+						Current color: {{note['Color']}} <br />
 					%else:
 						<select name="colorNote">
 						% for color in colors:

@@ -1,6 +1,18 @@
 % include ('header.tpl', title='Hola')
 
 
+<div class="Profile-Header-wrap">
+	<div class="Profile-Header">
+		<h1 class="Profile-Header-Name">
+			<a href="/" style="color:#fff;">
+			<strong>
+			< See all 
+			</strong>
+			my notes 
+			</a>
+		</h1>
+	</div>
+</div>
 
 <div class="containter-wrapper">
 	<div class="containter">			
@@ -13,28 +25,31 @@
 		%else:
 			<div class="Note" id="{{note['NoteID']}}">
 
-				% if user['UserID'] == note['UserID']:
-					<p><a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a></p>
-					<p><a href="/delete/{{note['NoteID']}}">Delete note</a></p>
-				% end
-
-				% if (note['Private']):
-					<span class="Note-Private">
-						<b>Private Note</b>
-					</span>
-				% end
-				<h3 class="Note-Title">
-					{{note['CreatedAt']}}
-				</h3>
-				<h1 class="Note-Title">
+				<h1 class="singleNote-Title">
 					{{note['Title']}}
+					
 				</h1>
-				<p class="Note-Content">
+				<p class="singleNote-Content">
 					{{note['Content']}}
 				</p>
-				<p> {{note['EditedAt']}}</p>
-				<p> {{note['Published']}}</p>
-				<p> {{note['Private']}}</p>
+				<p class="singleNote-Content">
+					<b>Published</b> on {{note['CreatedAt']}}
+					% if (note['Private']):
+						<span class="Note-Private">
+							- Private Note
+						</span>
+					% end
+				</p>
+
+				
+				% if user['UserID'] == note['UserID']:
+					<p class="singleNote-Content">
+						<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a>
+						|
+						<a href="/delete/{{note['NoteID']}}">Delete note</a>
+					</p>
+				% end
+
 			</div>
 			
 		% end

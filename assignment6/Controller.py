@@ -388,6 +388,7 @@ def updatedBD(updatedNote):
 	query += "Title ='" + str(updatedNote['Title']) + "',  ";
 	query += "Color ='" + str(updatedNote['Color']) + "', ";
 	query += "Content ='" + str(updatedNote['Content']) + "', ";
+	query += "Private =" + str(updatedNote['Private']) + ", ";
 	query += "EditedAt ='" + str(updatedNote['EditedAt']) + "'";
 	query += " where Notes.NoteID=" + str(updatedNote['NoteID']);
 	query += " and Notes.UserID=" + str(updatedNote['UserID']);
@@ -619,11 +620,21 @@ def getToday():
 	formatedToday = formatedToday.replace(":", "-");
 	return formatedToday
 
-@route('/create', method="POST")
-def createNote():
+def createnewNote(api):
 	global sessionUser
+
+	errorNote = {
+		# only for the api...
+		"error"     : True,
+		"message"   : "You're not allowed to do this...",
+	}
+
 	if (sessionUser == None):
-		return template('login', user=None)
+		if (api):
+			response.content_type = 'application/json';
+			return json.dumps(errorNote);
+		else:
+			return template('login', user=None)
 
 	title 	= cleanTitle(request.forms.get('titleNote'));
 	content = cleanContent(request.forms.get('contentNote'));
@@ -633,6 +644,10 @@ def createNote():
 	private = int(request.forms.get('privateNote'));
 
 	newNote = {
+		# only for the api...
+		"error"     : True,
+		"message"   : "Note was not created successfully",
+
 		"NoteID" 	: None,
 		"UserID" 	: sessionUser['UserID'],
 		"Title" 	: title,
@@ -646,18 +661,32 @@ def createNote():
 	}
 
 	if createNoteDB(newNote):
-		print "Note created!";
-		response.status = 303
-		response.set_header('Location', '/'+ sessionUser['Username']);
-		#return template('singleNote', note=newNote, user=sessionUser)
+		if api:
+			newNote['error'] = False;
+			newNote['message'] = "Note created successfully"
+			response.content_type = 'application/json';
+
+			return json.dumps(newNote);
+		else:
+			return template('note-created', user=sessionUser);
+			response.status = 303
+			response.set_header('Location', '/'+ sessionUser['Username']);
 	else:
-		return template('createNote', note=newNote, colors=None, user=sessionUser, editNote=False)
+		if api:
+			response.content_type = 'application/json';
+			return json.dumps(newNote);
+		else:
+			return template('createNote', note=newNote, colors=None, user=sessionUser, editNote=False)
 
 @route('/api/notes/create', method="POST")
 def getApiNotes():
-	global sessionUser
-	if sessionUser == None:
-		return template('login', user=None)
+	api = True;
+	return createnewNote(api);
+
+@route('/create', method="POST")
+def createnewNoteAux():
+	api = False;
+	return createnewNote(api);
 
 @route('/profile')
 def userProfile():
@@ -721,10 +750,16 @@ def saveUpdateDatabase(NoteID):
 	note['Content']  = newContent;
 	note['EditedAt'] = updatedTime;
 	note['Color']    = request.forms.get('colorNote');
-
-	user   = getUserbyID(note['UserID']);
+	note['Private']    = request.forms.get('privateNote');
 
 	if updatedBD(note): #update the note into the database.
+
+		response.status = 303
+
+		user = getUserbyID(note['UserID'])
+
+		response.set_header('Location', '/'+user['Username']+'/'+note['Permalink']);
+		return template('singleNote', note=note, user=user); #Show login screen
 		return template('singleNote', note=note, user=user);
 	else:
 		#problems updating note.
@@ -746,14 +781,12 @@ def deleteNoteID(NoteID):
 
 	if (userID_note == userID_session):
 		if (deleteNote(NoteID)):
-			return template('notes-deleted');
+			return template('notes-deleted', user=sessionUser);
 		else:
-			return "Problems deleting that note"
+			return "Problems deleting that note<a href='/'>Go to your profile</a>"
 			return template('error')
 	else:
-		redirectHome();
-		return "You're not allowed to be here";
-
+		return template('privateZone', user=sessionUser); # Private note. Guest can't read this note
 
 @route('/api/notes/delete/<NoteID>', mehod="GET")
 def deleteNoteID(NoteID):
