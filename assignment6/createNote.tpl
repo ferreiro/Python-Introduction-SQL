@@ -87,9 +87,9 @@
 				Private Note <input type="checkbox" name="privateNote" value="1" class="note-publish"/> 
 
 				% if editNote == True:
-					<input type="submit" class="inputField" value="Update note"/> 
+					<input type="submit" class="submitField" value="Update note"/> 
 				%else:
-					<input type="submit" class="inputField" value="Publish note"/> 
+					<input type="submit" class="submitField" value="Publish note"/> 
 				%end
 			</p>
  

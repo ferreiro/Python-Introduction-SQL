@@ -69,11 +69,12 @@
 	width: 49%;
 	display: inline-block;
 	margin-right: 2%;
-	background: #fff;
 	text-align: left;
 }
 .Profile-User-Description {
 	padding: 15px;
+	background: #fff;
+	margin-bottom: 15px;
 }
 .Profile-Description-list {
 	width: 100%;
@@ -85,7 +86,16 @@
 	margin: 0;
 	padding: 0; 
 }
-
+.Profile-Description-metadata {
+	width: 100%;
+	margin-top: 15px;
+}
+.Profile-Description-metadata-list {
+	width: 49%;
+	display: inline-block;
+	font-size: 16px; 
+	vertical-align: top;
+}
 .Profile-User-Notes-Wrap {
 	width: 48%;
 	margin-right: -4px;

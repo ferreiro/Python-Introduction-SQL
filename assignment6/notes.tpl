@@ -1,5 +1,6 @@
 % include ('header.tpl', title='Hola')
 	
+	% if len(notes) > 0 or searchTemplate == True:
 	<div class="Profile-Header-wrap">
 		<div class="Profile-Header">
 			<h1 class="Profile-Header-Name">
@@ -8,11 +9,12 @@
 					<strong>{{Keyword}}</strong>
 				% else:
 					my
-					<strong>Notes</strong>
+					<strong>notes</strong>
 				%end
 			</h1>
 		</div>
 	</div>
+	% end
 
 	<div class="containter-wrapper">
 		<div class="containter">
@@ -52,19 +54,23 @@
 									<div class="icon-cog"></div>
 								</span>
 								<ul class="Note-Options-dropDown">
-									<li><a href="/{{user['Username']}}/{{note['Permalink']}}/edit">
-										Edit Note
-									</a></li>
-									<li class="Note-Options-delete"><a href="/delete/{{note['NoteID']}}">
-										Delete
-									</a></li>
+									<li>
+										<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">
+											Edit Note
+										</a>
+									</li>
+									<li class="Note-Options-delete">
+										<a href="/delete/{{note['NoteID']}}">
+											Delete
+										</a>
+									</li>
 								</ul>
 							</div>
 							
 							<div class="Note-line-color" style="border-color:#{{note['ColorHEX']}};"></div>
 
 							<div class="Note-link">
-								<a href="/{{user['Username']}}/{{note['Permalink']}}">
+								<a href="/{{user['Username']}}/{{note['Permalink']}}"></a>
 							</div>
 
 							<h1 class="Note-Title">
