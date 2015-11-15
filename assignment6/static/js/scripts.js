@@ -40,6 +40,7 @@ function updateReader(note) {
 writeNoteBtn.click(function() {
 	displayWriter();
 });
+
 writeNoteHeaderBtn.click(function() {
 	displayWriter();
 });
@@ -48,9 +49,9 @@ function displayWriter() {
 
 	body.css({ overflow:'hidden' }); // Scroll not available
 	
-	writer.css({ top: (scrollY + 100) }); // Move modal box from top
-	writerWrapper.fadeIn('slow', 'easeInOutElastic'); // Show the modal
-	
+	//writer.css({ top: (scrollY + 70) }); // Move modal box from top
+	writerWrapper.slideDown('slow', 'easeInOutQuint'); // Show the modal
+ 	
 	return false;
 }
 
@@ -74,13 +75,13 @@ closeModalsKeyboardPressed();
 
 function hideWriter() {
 	changeURL('#/');
-	writerWrapper.fadeOut('slow', 'easeInOutElastic'); // Hide the modal
+	writerWrapper.slideUp('slow', 'easeInOutQuint'); // Hide the modal
 	body.css({ overflow:'auto' }); // Scroll available again
 }
 
 function hideReader() {
 	changeURL('#/');
-	readerWrapper.fadeOut('slow', 'easeInOutElastic'); // Hide the modal
+	readerWrapper.slideUp('slow', 'easeInOutElastic'); // Hide the modal
 	body.css({ overflow:'auto' }); // Scroll available again
 }
 
@@ -180,10 +181,9 @@ function getNoteAndUpdate(apiUrl) {
 			updateReader(note); // Update reader data with the returned object
 			changeURL(newUrl);
 			displayReader(); // Show specific reader for this object
-
 		}
 		else {
-			alert('couldn\' load the Note');
+			alert(note['status']);
 		}
 	})
 	.error(function() {
@@ -204,12 +204,11 @@ function deleteNote(apiUrl) {
 		var message = note['status']
 		  , deleted = note['deleted'];
 
+		alert(message);
+
 		if (deleted == "true") { 
 			changeURL('#/' + note['Permalink'] + '/' + data['NoteID']);
 		}
-		
-		alert(message);
-
 	})
 	.error(function() {
 		alert("Sorry... We couldn't delete that note... Try later")

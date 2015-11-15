@@ -596,39 +596,52 @@ def createNoteForm():
 	colors = getColorsAvailable();
 	return template('createNote', note=note, colors=colors, editNote=False, user=sessionUser)
 
+""" Eliminate sql injection and other things like ' """
+def cleanContent(content):
+	content = str(request.forms.get('contentNote'));
+	content = re.sub('[^a-zA-Z0-9 \n\.]', '', str(content)); # content wihtout special characters
+	return content
+
+def cleanTitle(title):
+	cleanTitle = re.sub('[^a-zA-Z0-9 \n\.]', '', str(title)); # Title without special characters
+	cleanTitle = cleanTitle.replace(' ', '-');
+	return cleanTitle
+
+def generatePermalink(title):
+	randNumList = random.sample(range(1, 100), 4); #10 digits rand num
+	randomNumber = ''.join(str(e) for e in randNumList);
+	permalink = title + '-' + randomNumber;
+	return permalink;
+
+def getToday():
+	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	formatedToday = today.replace(" ", "-")
+	formatedToday = formatedToday.replace(":", "-");
+	return formatedToday
+
 @route('/create', method="POST")
 def createNote():
 	global sessionUser
-
 	if (sessionUser == None):
 		return template('login', user=None)
 
-	# Basic information
-	title = str(request.forms.get('titleNote'));
-	content = str(request.forms.get('contentNote'));
-	content = re.sub('[^a-zA-Z0-9 \n\.]', '', str(content)); # content wihtout special characters
-	today = datetime.now().strftime('%Y-%m-%d %H:%M:%S');
-	color = str(request.forms.get('colorNote'));
-
-	formatedToday = today.replace(" ", "-")
-	formatedToday = formatedToday.replace(":", "-");
-
-	cleanTitle = re.sub('[^a-zA-Z0-9 \n\.]', '', str(title)); # Title without special characters
-	cleanTitle = cleanTitle.replace(' ', '-');
-	randNumList = random.sample(range(1, 100), 4); #10 digits rand num
-	randomNumber = ''.join(str(e) for e in randNumList);
-	permalink = cleanTitle + '-' + randomNumber;
+	title 	= cleanTitle(request.forms.get('titleNote'));
+	content = cleanContent(request.forms.get('contentNote'));
+	permalink = generatePermalink(title);
+	today 	= getToday();
+	color 	= request.forms.get('colorNote');
+	private = int(request.forms.get('privateNote'));
 
 	newNote = {
 		"NoteID" 	: None,
 		"UserID" 	: sessionUser['UserID'],
 		"Title" 	: title,
-		"Permalink" : str(permalink),
+		"Permalink" : permalink,
 		"Content" 	: content,
 		"CreatedAt" : today,
 		"EditedAt" 	: today,
 		"Published" : 1,
-		"Private" 	: 1,
+		"Private" 	: private,
 		"Color" 	: color
 	}
 
@@ -639,6 +652,12 @@ def createNote():
 		#return template('singleNote', note=newNote, user=sessionUser)
 	else:
 		return template('createNote', note=newNote, colors=None, user=sessionUser, editNote=False)
+
+@route('/api/notes/create', method="POST")
+def getApiNotes():
+	global sessionUser
+	if sessionUser == None:
+		return template('login', user=None)
 
 @route('/profile')
 def userProfile():

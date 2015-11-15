@@ -1,6 +1,24 @@
 % include ('header.tpl', title='Hola')
+	
+	<div class="Profile-Header-wrap">
+		<div class="Profile-Header">
+			<h1 class="Profile-Header-Name">
+				<strong>
+					% if editNote == True:
+						Edit
+					% else:
+						Write
+					%end
+				note
+			</h1>
+		</div>
+	</div>
 
 		<style type="text/css">
+			form {
+				width: 500px;
+				margin: 0 auto;
+			}
 			.note-Title {
 				width: 100%;
 				min-height: 100px;
@@ -35,34 +53,18 @@
 		<form action="/update/{{note['NoteID']}}" method="POST"> 
 		%else:
 		<form action="/create" method="POST"> 
-		%end
-			
-			% if editNote == True:
-			<h1>Edit your note</h1>
-			%else:
-			<h1>Create your note</h1>
-			%end
+		%end 
 
-			<div>
-				%print note
-				% if editNote == True:
-					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title of the note" value="{{note['Title']}}" />
-				%else:
-					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title of the note" value="" />
-				%end
-			</h1>
-			<p>
+			<div class="writeNote-form-options">
 
-				% if editNote == True:
-					<textarea id="noteContent" class="note-Content" name="contentNote" required="required" type="text" placeholder="Start writing your note..." value="{{note['Content']}}">{{note['Content']}}</textarea>
-				%else:
-					<textarea id="noteContent" class="note-Content" name="contentNote" required="required" type="text" placeholder="Start writing your note..."></textarea>
-				%end
-				
-			</p>
+				<div class="writeNote-form-options-select">
+					<select name="privateNote">
+					  <option value="1">Private</option>
+					  <option value="0">Public</option>
+					</select>
+				</div>
 
-			<p class="signin button"> 
-
+				<div class="writeNote-form-options-select">
 				% if colors != None: 
 					% if editNote == True:
 						Current color: {{note['Color']}} <br />
@@ -80,24 +82,31 @@
 						</select>
 					%end
 				% end
-			</p>
+				</div>					
+			</div>
 
-
-			<p class="signin button"> 
-				Private Note <input type="checkbox" name="privateNote" value="1" class="note-publish"/> 
+			<div>
+				%print note
+				% if editNote == True:
+					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title of the note" value="{{note['Title']}}" />
+				%else:
+					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title of the note" value="" />
+				%end
+			</div>
+			<p>
 
 				% if editNote == True:
-					<input type="submit" class="submitField" value="Update note"/> 
+					<textarea id="noteContent" class="note-Content" name="contentNote" required="required" type="text" placeholder="Start writing your note..." value="{{note['Content']}}">{{note['Content']}}</textarea>
 				%else:
-					<input type="submit" class="submitField" value="Publish note"/> 
+					<textarea id="noteContent" class="note-Content" name="contentNote" required="required" type="text" placeholder="Start writing your note..."></textarea>
 				%end
+				
 			</p>
- 
 
-			<p class="change_link">  
-				Already a member ?
-				<a href="/login" class="to_register"> Go and log in </a>
-			</p>
+			<div class="writeNote-form-sent">
+				<input type="submit" class="writeNote-form-Sent submitField" value="Publish note"/> 
+			</div>
+
 		</form>
 
 		

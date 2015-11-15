@@ -11,6 +11,7 @@
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,500,700|Open+Sans:400,700,600|Roboto:400,300,500,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="/css/nice-select.css">
  
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -36,8 +37,8 @@
 					</form>
 				</div>
 
-				<div class="Header-options-createNote" id="writeNoteHeaderButton">
-					<a href="/create"><p>Create note</p></a>
+				<div class="Header-options-createNote">
+					<a href="/create" id="writeNoteHeaderButton"><p>Create note</p></a>
 				</div>
 				% end
 
@@ -152,8 +153,45 @@
 				<div class="modal-loader" id="writer-loader"></div>
 
 				<div class="modal-Content" id="writer-Content">
-					<h1 class="singleNote-Title" id="writer-Title">Title</h1>
-					<p class="singleNote-Content" id="writer-Text">Content</p>
+
+
+					<form action="/api/notes/create" method="POST"> 
+						
+						<!--<h1 class="writeNote-form-title">Write a note</h1>
+						-->
+
+						<div class="writeNote-form">
+
+							<div class="writeNote-form-options">
+								<div class="writeNote-form-options-select">
+									<select name="privateNote">
+									  <option value="1">Private</option>
+									  <option value="0">Public</option>
+									</select>
+								</div>
+
+								<div class="writeNote-form-options-select">
+									<select name="colorNote">
+									  <option value="white">white</option>
+									  <option value="red">red</option>
+									  <option value="blue">blue</option>
+									  <option value="purple">purple</option>
+									</select>
+								</div>							
+							</div>
+
+							<textarea class=" writeNote-form-title singleNote-Title" id="noteTitle" name="titleNote" type="text" placeholder="Title of your note" required></textarea> 
+	 						
+	 						<textarea id="noteContent" class="writeNote-form-Content singleNote-Content" name="contentNote" type="text" placeholder="Start writing your note..."></textarea>
+							
+							<div class="writeNote-form-sent">
+								<input type="submit" class="writeNote-form-Sent submitField" value="Publish note"/> 
+							</div>
+
+						</div>
+					</form>
+
+
 				</div>
 				
 			</div>

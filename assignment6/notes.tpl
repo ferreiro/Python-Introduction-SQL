@@ -7,6 +7,7 @@
 				% if searchTemplate == True:
 					Notes containing
 					<strong>{{Keyword}}</strong>
+					<a href="/">Close</a>
 				% else:
 					my
 					<strong>notes</strong>
