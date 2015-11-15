@@ -11,7 +11,7 @@ def createTableList(cursor):
 	UserTable = """
 		create table User(
 			UserID integer PRIMARY KEY AUTOINCREMENT,
-			Email text UNIQUE,
+			Email text UNIQUE varchar(40),
 			Password text,
 			Username text UNIQUE,
 			Name text,

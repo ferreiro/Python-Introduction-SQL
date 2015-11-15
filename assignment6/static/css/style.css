@@ -392,13 +392,14 @@ ul, li {
 	background: #3F51B5;
 }
 .Header-options-myprofile {
-	width: 180px;
+	width: 190px;
 	height: 50px;
 	display: inline-block;
 	text-align: center;
 	vertical-align: middle;
 	position: relative;
 	float: right;
+	border-left: 1px solid #3F51B5;
 }
 .Header-options-myprofile-resume { 
 	width: 100%;
@@ -406,35 +407,69 @@ ul, li {
 	display: block; 
 	color: #fff;
 	vertical-align: middle;
+	float: right;
 } 
 .Header-options-myprofile-resume-avatar {  
-	width: 30px;
-	height: 30px;
+	width: 28px;
+	height: 28px;
 	overflow: hidden;
 	display: inline-block;
 	vertical-align: middle;
-	margin-top: 7px;
 	-webkit-border-radius: 100%;
 	-moz-border-radius: 100%;
 	border-radius: 100%;
+	float: left;
+	margin-top: 11.5px;
+	margin-left: 15px;
+	background:#3F51B5 url(../images/default.png);
+	background-size: cover;
 }  
 .Header-options-myprofile-resume-avatar img {
-	width: 30px;
+	width: 28px;
 }
 .Header-options-myprofile-resume-name {
 	width: 100px;
 	overflow: hidden;
-	margin-top: 12px; 
-	display: inline-block;
+	margin-top: 16px;  
 	vertical-align: middle;
 	white-space: nowrap;
-} 
+	float: left;
+	margin-left: 10px;
+	position: relative;
+}
+.Header-options-myprofile:hover .Header-options-myprofile-resume-name:before {
+	/* PERMALINK al gradiante: http://www.colorzilla.com/gradient-editor/#3f51b5+0,3f51b5+100&0+0,1+100 */
+	background: -moz-linear-gradient(45deg,  rgba(63,81,181,0) 0%, rgba(63,81,181,1) 100%);
+	background: -webkit-linear-gradient(45deg,  rgba(63,81,181,0) 0%,rgba(63,81,181,1) 100%);
+	background: linear-gradient(45deg,  rgba(63,81,181,0) 0%,rgba(63,81,181,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#003f51b5', endColorstr='#3f51b5',GradientType=1 );
+}
+.Header-options-myprofile-resume-name:before {
+	width: 20px;
+	height: 100%;
+	position: absolute;
+	top:0;
+	right: 0;
+	content: '';
+	background: -moz-linear-gradient(45deg,  rgba(40,53,147,0) 0%, rgba(40,53,147,1) 100%);
+	background: -webkit-linear-gradient(45deg,  rgba(40,53,147,0) 0%,rgba(40,53,147,1) 100%);
+	background: linear-gradient(45deg,  rgba(40,53,147,0) 0%,rgba(40,53,147,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00283593', endColorstr='#283593',GradientType=1 );
+
+}
+.Header-options-myprofile-dropdown {
+	width: 10px;
+	height: 10px;
+	margin-top: 15px;
+	float: right;
+	margin-right: 10px;
+}
 #dropdownMenu:hover .Header-options-myprofile-menu {
 	display: block !important;
 	margin-top: -1px;
 }
 .Header-options-myprofile-menu {
-	width: 180px;
+	width: 190px;
 	display: none;
 	position: absolute;
 	top: 50px;

@@ -99,7 +99,7 @@
 							<p class="Header-options-myprofile-resume-name">
 								{{user['Name']}} {{user['Surname']}}
 							</p>
-							<span>▾</span>
+							<span class="Header-options-myprofile-dropdown">▾</span>
 						</a>
 					
 						<ul class="Header-options-myprofile-menu">

@@ -42,7 +42,7 @@
 				</p>
 
 				
-				% if user['UserID'] == note['UserID']:
+				% if user != None and user['UserID'] == note['UserID']:
 					<p class="singleNote-Content">
 						<a href="/{{user['Username']}}/{{note['Permalink']}}/edit">Edit note</a>
 						|
