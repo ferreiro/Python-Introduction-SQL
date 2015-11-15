@@ -312,7 +312,7 @@ def getNotesByUserID(UserID):
 			query = "Select * from Colors where Colors.Name='"+convertedNote['Color']+"'";
 			#print query
 			cursor.execute(query);
-			convertedNote['ColorHEX'] = cursor.fetchone()[1]
+			convertedNote['Color'] = cursor.fetchone()[1]
 			notes_arr.append(convertedNote); # Append dictionary
 
 		closeCursor(cursor);
@@ -433,35 +433,28 @@ def updateUser(user):
 
 	return True;
 
-def searchNote(Keyword,UserID):
+def searchNotesFromUser(Keyword,UserID):
+	if (Keyword == None or UserID == None):
+		return [];
 
-	Keyword = str(Keyword).lower();
-	UserID 	= str(UserID).lower();
+	MatchedNotes = []
+	
+	cursor = openCursor();
+	query  = "select * from Notes where "
+	query += "Notes.Title like '%"+ str(Keyword) +"%' ";
+	query += "or Notes.Content like '%"+ str(Keyword) +"%' ";
+	
 
-	notes_arr  	= [];
-	return_arr 	= [];
-	notes_arr	= getNotesByUserID(UserID); 
+	cursor.execute(query);
+	#print query
 
-	print Keyword
-	print UserID
+	for _tuple in cursor.fetchall():
+		convertedNote = notetupleToDictionary(_tuple); # tuple to dictionary
+		MatchedNotes.append(convertedNote)
+		#print convertedNote
 
-	for n in notes_arr:
-		print n
-		if(iscontain(n, Keyword)):
-			print "is contain"
-			return_arr.append(n);
-
-	print return_arr
-	return return_arr;
- 
-def iscontain(note,Keyword):
-	findKey 	= str(note['Title'].lower()).find(str(Keyword))
-	findContent = str(note['Content'].lower()).find(str(Keyword))
-
-	if (note != None) and (int(findKey)>=0 or int(findContent)>=0): 
-		return True;
-	else:
-		return False; 
+	closeCursor(cursor);
+	return MatchedNotes
 
 #################################
 ############ROUTES #############
@@ -577,8 +570,7 @@ def searchOnNotes():
 
 	if (user != None):
 		Keyword = request.forms.get('query');
-		notes = searchNote(Keyword, sessionUser['UserID']);
-		#print notes
+		notes = searchNotesFromUser(Keyword, sessionUser['UserID']);
 		return template('notes', Keyword=Keyword, searchTemplate=True,  notes=notes, user=user);
 	else:
 		return redirectHome();

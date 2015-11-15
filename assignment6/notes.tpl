@@ -68,7 +68,7 @@
 								</ul>
 							</div>
 							
-							<div class="Note-line-color" style="border-color:#{{note['ColorHEX']}};"></div>
+							<div class="Note-line-color" style="border-color:#{{note['Color']}};"></div>
 
 							<div class="Note-link">
 								<a href="/{{user['Username']}}/{{note['Permalink']}}"></a>
