@@ -36,9 +36,8 @@
 				% if user != None:
 				<div class="Header-options-search">
 					<form action="/search" method="POST">
-						<p> 
-							<input id="searchText" name="query" required="required" type="text" placeholder="Search by title or content..." /> 
-						</p>
+						<span class="icon-search"></span>
+						<input id="searchText" name="query" required="required" type="text" placeholder="Search by title or content..." />
 					</form>
 				</div>
 
@@ -168,6 +167,14 @@
 						<div class="writeNote-form">
 
 							<div class="writeNote-form-options">
+								
+								<div class="writeNote-form-options-select">
+									<select name="publishedNote">
+									  <option value="1">Published</option>
+									  <option value="0">Save as draft</option>
+									</select>
+								</div>	
+
 								<div class="writeNote-form-options-select">
 									<select name="privateNote">
 									  <option value="1">Private</option>
@@ -182,7 +189,8 @@
 									  <option value="blue">blue</option>
 									  <option value="purple">purple</option>
 									</select>
-								</div>							
+								</div>	
+						
 							</div>
 
 							<textarea class=" writeNote-form-title singleNote-Title" id="noteTitle" name="titleNote" type="text" placeholder="Title of your note" required></textarea> 

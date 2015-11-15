@@ -4,12 +4,22 @@
 <div class="Profile-Header-wrap">
 	<div class="Profile-Header">
 		<h1 class="Profile-Header-Name">
-			<a href="/" style="color:#fff;">
-			<strong>
-			< See all 
-			</strong>
-			my notes 
-			</a>
+			% if user != None and user['UserID'] == note['UserID']:
+				<a href="/" style="color:#fff;">
+				<strong>
+				< See all 
+				</strong>
+				my notes 
+				</a>
+			% else:
+				Public note<br />
+				<span style="font-size:20px;color:rgb(255,255,255,0.6);">
+					<a href="/login" style="color:#fff;">Login</a>
+					or
+					<a href="/register" style="font-size:20px; color:#fff;">Create account</a>
+				</span>
+				
+			% end
 		</h1>
 	</div>
 </div>

@@ -23,3 +23,5 @@
         Don't you have an ccount? <a href="/register">Register!</a>
     </p>
 </form>
+
+% include ('footer.tpl')

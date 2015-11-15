@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sqlite3
 
 dbfile = "./database/notes.sqlite3";
@@ -358,8 +361,11 @@ def searchNotesFromUser(Keyword,UserID):
 	
 	cursor = openCursor();
 	query  = "select * from Notes where "
+	query += "Notes.UserID="+str(UserID) + " ";
+	query += " and ("
 	query += "Notes.Title like '%"+ str(Keyword) +"%' ";
-	query += "or Notes.Content like '%"+ str(Keyword) +"%' ";
+	query += " or Notes.Content like '%"+ str(Keyword) +"%' ";
+	query += ")"
 
 	cursor.execute(query);
 	#print query

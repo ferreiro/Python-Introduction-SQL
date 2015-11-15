@@ -1,33 +1,18 @@
-import re
-import json
-import random
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import database_API as db
 from bottle import request, route, run, template, response, static_file;
 from datetime import datetime
 from passlib.hash import sha256_crypt
 
+import database_API as db # Module for database connection
+import random
+import json
+import re
 
-
-def getUserbyCookie():
-	user = {
-		"UserID" : '',
-		"Email" : '',
-		"Username" : '',
-		"Name" : '',
-		"Surname" : '',
-		"Birthday" : '',
-		"City" : 0,
-		"Premium" : 0
-	}
-	return user;
-
-def getUserIDbyCookie():
-	return -1;
-
-# Change for cookies
-sessionUser = None; # Empty Dictionary. Updated when login and erased when logout. 
-
+@route('/views/<filepath:path>')
+def file_stac(filepath):
+    return static_file(filepath, root="./views")
 
 # Static Routes
 @route('/<filename:re:.*\.js>')
@@ -145,7 +130,7 @@ def cleanTitle(title):
 def generatePermalink(title):
 	randNumList = random.sample(range(1, 100), 4); #10 digits rand num
 	randomNumber = ''.join(str(e) for e in randNumList);
-	permalink = title + '-' + randomNumber;
+	permalink = str(title[:30]) + '-' + str(randomNumber);
 	return permalink;
 
 def getToday():
@@ -368,25 +353,6 @@ def profile(username):
 # DISPLAY BY USERNAME/PERMALINK:
 # Show a single note given a username and the permalink
 
-@route('/<Username>#/<Permalink>')
-@route('/<Username>/<Permalink>')
-def displayNote(Username, Permalink):
-	sessionUser = checkCookiesSessionUser();
-
-	note = db.getNoteby_Username_Permalink(Username, Permalink);
-
-	if (note == None):
-		return redirectHome(); #return "The note you're trying to read dont exist";
-
-	if sessionUser == None: 
-		if int(note['Private']) == 0: #Gues user. Only shows the note if is public
-			return template('singleNote', note=note, user=sessionUser);
-	if sessionUser != None: # For logged in users. They can read "Public" notes and those notes owned by them
-		if int(note['Private']) == 0 or sessionUser['UserID'] == note['UserID']: #la NOTa es publica o el usuario esta conectado
-			return template('singleNote', note=note, user=sessionUser);
-	
-	return redirectPrivateZone(); # Not allowd to see this content
-
 def createnewNote(api):
 	sessionUser = checkCookiesSessionUser();
 
@@ -417,9 +383,9 @@ def createnewNote(api):
 
 		"NoteID" 	: None,
 		"UserID" 	: sessionUser['UserID'],
-		"Title" 	: title,
+		"Title" 	: title[:150], # Truncate title to 200 words
 		"Permalink" : permalink,
-		"Content" 	: content,
+		"Content" 	: content[:3000], # Truncate title to 200 words
 		"CreatedAt" : today,
 		"EditedAt" 	: today,
 		"Published" : 1,
@@ -528,6 +494,25 @@ def deleteNoteID(NoteID):
 			return template('error')
 	else:
 		return redirectPrivateZone(); # Private note. Guest can't read this note
+
+@route('/<Username>#/<Permalink>')
+@route('/<Username>/<Permalink>')
+def displayNote(Username, Permalink):
+	sessionUser = checkCookiesSessionUser();
+
+	note = db.getNoteby_Username_Permalink(Username, Permalink);
+
+	if (note == None):
+		return redirectHome(); #return "The note you're trying to read dont exist";
+
+	if sessionUser == None: 
+		if int(note['Private']) == 0: #Gues user. Only shows the note if is public
+			return template('singleNote', note=note, user=sessionUser);
+	if sessionUser != None: # For logged in users. They can read "Public" notes and those notes owned by them
+		if int(note['Private']) == 0 or sessionUser['UserID'] == note['UserID']: #la NOTa es publica o el usuario esta conectado
+			return template('singleNote', note=note, user=sessionUser);
+	
+	return redirectPrivateZone(); # Not allowd to see this content
 
 ### Search notes by title and content
 

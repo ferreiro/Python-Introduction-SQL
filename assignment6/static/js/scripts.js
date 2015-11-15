@@ -55,7 +55,7 @@ function displayWriter() {
 	body.css({ overflow:'hidden' }); // Scroll not available
 	
 	//writer.css({ top: (scrollY + 70) }); // Move modal box from top
-	writerWrapper.slideDown('slow', 'easeInOutQuint'); // Show the modal
+	writerWrapper.slideDown('medium', 'easeInOutQuint'); // Show the modal
  	
 	return false;
 }
@@ -211,7 +211,7 @@ function createNoteViaAPI(note, url) {
         if (!response['error']) {
         	hideWriter(0)
         	setTimeout(function(){
-        	   location.reload();
+        	   location.replace('/');
         	}, 2000);
         }
     
