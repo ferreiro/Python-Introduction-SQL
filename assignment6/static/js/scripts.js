@@ -1,164 +1,221 @@
-// notesID 	= []; // All the ID's for notes of a user
-readerWrapper = $('.reader-Wrapper'); // Modal box showed each time user click on a note.
+
+/////////////////////
+// MODAL VARIABLES
+/////////////////////
+
+body = $('body');
+
+readerWrapper = $('#reader-Wrapper'); // Modal box showed each time user click on a note.
 reader 		  = $('#reader');
-readerContent = $('.reader-Content');
+readerContent = $('#reader-Content');
+readerContent_Title= $('#reader-Title');
+readerContent_Text = $('#reader-Text');
 readerLoader  = $('#reader-loader')
-previewClose  = $('.reader-close');
+readerClose   = $('#reader-close');
 
-previewClose.click(function() {
-	hidePreviewNote();
+writerWrapper = $('#writer-Wrapper'); // Modal box showed each time user click on a note.
+writer 		  = $('#writer');
+writerContent = $('#writer-Content');
+writerContent_Form= $('#writer-Title');
+writerLoader  = $('#writer-loader')
+writerClose   = $('#writer-close');
+
+writeNoteBtn  = $('#writeNote')
+writeNoteHeaderBtn = $('#writeNoteHeaderButton')
+
+/////////////////////////
+// UPDATE MODAL CONTENT
+/////////////////////////
+
+function updateReader(note) {
+	// Use the box ide to get the text of title...
+	readerContent_Title.html(note['Title']);
+	readerContent_Text.html(note['Content']);
+}
+
+/////////////////////
+// OPEN MODALS
+/////////////////////
+
+writeNoteBtn.click(function() {
+	displayWriter();
+});
+writeNoteHeaderBtn.click(function() {
+	displayWriter();
 });
 
-$(document).keyup(function(e) {
-     if (e.keyCode == 27) { // escape key maps to keycode `27`
-        hidePreviewNote();
-    }
-});
+function displayWriter() {
+
+	body.css({ overflow:'hidden' }); // Scroll not available
+	
+	writer.css({ top: (scrollY + 100) }); // Move modal box from top
+	writerWrapper.fadeIn('slow', 'easeInOutElastic'); // Show the modal
+	
+	return false;
+}
+
+function displayReader() {
+
+	body.css({ overflow:'hidden' }); // Scroll not available
+	
+	reader.css({ top: (scrollY + 100) }); // Move modal box from top
+	readerWrapper.fadeIn('slow', 'easeInOutElastic'); // Show the modal
+	
+	return false;
+}
+
+/////////////////////
+// CLOSE MODAL
+/////////////////////
+
+writerClose.click(function() { hideWriter(); });
+readerClose.click(function() { hideReader(); });
+closeModalsKeyboardPressed();
+
+function hideWriter() {
+	changeURL('#/');
+	writerWrapper.fadeOut('slow', 'easeInOutElastic'); // Hide the modal
+	body.css({ overflow:'auto' }); // Scroll available again
+}
+
+function hideReader() {
+	changeURL('#/');
+	readerWrapper.fadeOut('slow', 'easeInOutElastic'); // Hide the modal
+	body.css({ overflow:'auto' }); // Scroll available again
+}
+
+// Close the modals when ESC key is pressed
+
+function closeModalsKeyboardPressed() {
+	$(document).keyup(function(e) {
+	    if (e.keyCode == 27) { // escape key maps to keycode `27`
+	        hideWriter();
+	        hideReader();
+	    }
+	});
+}
+
+////////////////////////
+// AUXILIAR FUNCTIONS
+////////////////////////
+
+function changeURL (Permalink) {
+	window.location = String(Permalink);
+} 
+
+////////////////////////////////////////
+// ARRAYS OF OBJECTS TO INTERACT WITH //
+// Adding click actions and more
+////////////////////////////////////////
 
 $( ".Note-wrapper" ).each(function( index ) {
 	
-	var Note = $(this)
-	var NoteInfo = undefined;
-	var NoteID = $(this).find('.Note').attr('id');
-	var NoteOptions = Note.find('.Note-Options');
-	var NoteDropdown = Note.find('.Note-Options-dropDown');
+	var Note 	= $(this) // Local variable get from the ARRAY
+	  , NoteID 	= $(this).find('.Note').attr('id')
+	  , NoteOptions  = Note.find('.Note-Options')
+	  , dropdownMenu = Note.find('.Note-Options-dropDown')
+	  , dropdownMenuClass = 'Note-Options-dropDown-display'
 
-	// Show dropdown menu
-	function dropDown () {
-		NoteDropdown.toggleClass('Note-Options-dropDown-display');
-	}
- 
-	// Config button that opens the dropdown menu
-	$('.Note-Options-delete', this).click(function(e) {
-		toDelete = confirm("Are you sure you want to delete this note?");
-		if (toDelete) {
-			url = 'api/notes/delete/' + String(NoteID)
-			deleteNote(url);
-			refresh();
-		}
+	/////////////////////////////////////////////////////////
+	// ADD actions when click on some layers for the object /
+	/////////////////////////////////////////////////////////
 
-		return false;
-	}); 
+	// Open Object: When user clicks on this layer,
+	// Opens a modal box with the updated data retrieved
+	// from the API.
 
-	// DELETE ONE NOTE
-	$(".Note-Options-link", this).click(function(e) {
-		dropDown();
-		return false;
-	}); 
-
-	// When clicked on "Note-link" open the Note in current window
 	$(".Note-link", this).click(function(e) {
 		
-		note = $(this).parent();
-		NoteID = note.attr('id');
-		noteTitle = note.find('.Note-Title').html()
-		noteContent = note.find('.Note-Content').html()
-		noteInfo = "";
+		API_URL 	= 'api/notes/' + String(NoteID)
+		noteTitle 	= Note.find('.Note-Title').html()
+		noteContent = Note.find('.Note-Content').html()
 
-		url = 'api/notes/' + String(NoteID)
-		readerLoader.fadeIn('200');
+		getNoteAndUpdate(API_URL); // Get note from API and update content
 
-		readerContent.hide('0');
-		readerLoader.fadeIn('200');
+		return false;
+	});
 
-		$.getJSON( url, function( data ) {
-			if (data['valid'] == "false") {
-				message = data['status'];
-				alert(message);
-			}
-			else {
-				changePreviewData(data); // Set note data on reader
-				displayPreviewNote(); // Show the reader
-				changeURL('#/' + data['Permalink'] + '/' + data['NoteID']);
-			}
-		})
-		.error(function() {
-			alert("Sorry... We couldn't retrieve information for that note... Try later")
-		})
-		.complete(function() { 
-			readerLoader.hide(0);
-			readerContent.delay(100).fadeIn('200');
-		});
+	// Delete Button: When user clicks this object,
+	// A modal box will be opened. If the user acceps
+	// it deletes an object.
 
+	$('.Note-Options-delete', this).click(function(e) {
+		API_URL = 'api/notes/delete/' + String(NoteID);
+		if (confirm("Are you sure you want to delete this note?")) {
+			deleteNote(API_URL); // Delete the note given by the url
+			refresh(); // Refresh the page. In future, make ajax autoload...
+		}
+		return false;
+	}); 
+
+	// Show DropdownMenu: when clicks on this layer
+	// Opens/Closes a dropdown menu with different options.
+
+	$(".Note-Options-link", this).click(function(e) {
+		dropdownMenu.toggleClass(dropdownMenuClass);
 		return false;
 	});
 
 });
 
-function deleteNote(apiUrl) {
+/////////////////////
+// API QUERIES
+/////////////////////
 
-	readerContent.hide('0');
-	readerLoader.fadeIn('200');
+// Get the note via api
+
+function getNoteAndUpdate(apiUrl) {
+
+	readerContent.hide(0);
+	readerLoader.fadeIn(200);
 
 	$.getJSON( apiUrl, function( note ) {
-		message = note['status'];
-		valid   = note['valid'];
-		deleted = note['deleted'];
+		if (note['valid'] == "true") {	
 
-		if (deleted == "false") {
-			alert(message);
+			newUrl  = "#/";
+			newUrl += note['Permalink'];
+			newUrl += "/";
+			newUrl += note['NoteID'];
+
+			updateReader(note); // Update reader data with the returned object
+			changeURL(newUrl);
+			displayReader(); // Show specific reader for this object
+
 		}
 		else {
-			alert(note['status']);
-			changeURL('#/' + note['Permalink'] + '/' + data['NoteID']);
+			alert('couldn\' load the Note');
 		}
 	})
 	.error(function() {
 		alert("Sorry... We couldn't retrieve information for that note... Try later")
 	})
 	.complete(function() { 
-		readerLoader.fadeOut('200');
-		readerContent.delay('200').fadeIn('200');
+		readerLoader.fadeOut(0);
+		readerContent.fadeIn(200);
 	});
-
 }
 
-function displayPreviewNote() {
-	reader.delay('2000').addClass('reader-ZoomIn', 'slow', 'easeInOutElastic');
+function deleteNote(apiUrl) {
 
-	topHeight = scrollY + 100;
-	reader.css({
-	    position:'absolute',
-	    top: topHeight
-	    // left:700 + 60 + (($(window).width()-940) / 2), 
+	readerContent.hide(0);
+	readerLoader.fadeIn(200);
+
+	$.getJSON( apiUrl, function( note ) {
+		var message = note['status']
+		  , deleted = note['deleted'];
+
+		if (deleted == "true") { 
+			changeURL('#/' + note['Permalink'] + '/' + data['NoteID']);
+		}
+		
+		alert(message);
+
+	})
+	.error(function() {
+		alert("Sorry... We couldn't delete that note... Try later")
+	})
+	.complete(function() { 
+		readerLoader.fadeOut(200);
+		readerContent.fadeIn(200);
 	});
-
-	readerWrapper.fadeIn('slow', 'easeInOutElastic');
 }
-function hidePreviewNote() {
-	changeURL('#/');
-	reader.removeClass('reader-ZoomIn', 'slow', 'easeInOutElastic');
-	readerWrapper.fadeOut('slow', 'easeInOutElastic');
-}
-function changePreviewData(note) {
-	// Use the box ide to get the text of title...
-	$('#reader-Title').html(note['Title']);
-	$('#reader-Content').html(note['Content']);
-}
-
-function changeURL (Permalink) {
-	window.location = String(Permalink);
-} 
-
-
-window.ColorLuminance = function(hex, lum) {
-
-	// validate hex string
-	hex = String(hex).replace(/[^0-9a-f]/gi, '');
-	if (hex.length < 6) {
-		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
-	}
-	lum = lum || 0;
-
-	// convert to decimal and change luminosity
-	var rgb = "#", c, i;
-	for (i = 0; i < 3; i++) {
-		c = parseInt(hex.substr(i*2,2), 16);
-		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-		rgb += ("00"+c).substr(c.length);
-	}
-
-	return rgb;
-}
-
-
