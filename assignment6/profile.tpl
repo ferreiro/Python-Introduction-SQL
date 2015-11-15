@@ -42,8 +42,8 @@
 <div class="Profile-Header-wrap">
 	<div class="Profile-Header">	
 		<h1 class="Profile-Header-Name">
-			<strong>{{user['Name']}} {{user['Surname']}}</strong>
-			<span></span>{{user['City']}}
+			<strong>{{user['Name']}} {{user['Surname']}}</strong><br />
+			<i style="font-size:22px;">@{{user['Username']}}</i>
 		</h1>
 
 		<div class="Profile-edit-button">
@@ -58,12 +58,36 @@
 		<div class="Profile-User-Description-Wrap">
 			<div class="Profile-User-Description">
 				<strong>User information</strong>
-				<ul>
-				<li class="Profile-Description-list">User: {{user['Username']}}</li>
-				<li class="Profile-Description-list">Email: {{user['Email']}}</li>
-				<li class="Profile-Description-list">Birthday: {{user['Birthday']}}</li>
-				<li class="Profile-Description-list">Premium: {{user['Premium']}}</li>
+				<ul class="Profile-Description-metadata">
+					<li class="Profile-Description-metadata-list">
+						<b>City:</b> {{user['City']}}</li>
+					<li class="Profile-Description-metadata-list">
+						<b>Email:</b> {{user['Email']}}
+					</li>
+					<li class="Profile-Description-metadata-list">
+						<b>Birthday:</b> {{user['Birthday']}}
+					</li>
+					<li class="Profile-Description-metadata-list">
+						<b>Premium:</b> {{user['Premium']}}
+					</li>
 				</ul>
+			</div>
+
+			<div class="Profile-User-Description">
+				<strong>Location</strong>
+				<%
+					map = "https://maps.googleapis.com/maps/api/staticmap?center="
+					map += str(user['City']);
+					#map += "Brooklyn+Bridge,New+York,NY";
+					map += "&zoom=13";
+					map += "&size=600x300";
+					map += "&maptype=roadmap";
+					map += "&markers=color:blue%7Clabel:S%7C40.702147,-74.015794"
+					map += "&markers=color:green%7Clabel:G%7C40.711614,-74.012318"
+					map += "&markers=color:red%7Clabel:C%7C40.718217,-73.998284"
+					map += "&key=AIzaSyAuT5YTvhsLCfbLsu2TUxIQ7c7u8ga7ot8"
+				%>
+				<img src="{{map}}" width="100%"/>
 			</div>
 		</div>
 

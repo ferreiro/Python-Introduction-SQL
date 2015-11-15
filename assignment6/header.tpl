@@ -36,7 +36,7 @@
 					</form>
 				</div>
 
-				<div class="Header-options-createNote">
+				<div class="Header-options-createNote" id="writeNoteHeaderButton">
 					<a href="/create"><p>Create note</p></a>
 				</div>
 				% end
@@ -118,19 +118,44 @@
 			</div>
 		</div>
 	</div>
-	 
-	<div class="reader-Wrapper">
-		<div class="singleNote" id="reader">
-			<div class="reader-close" id="reader-close">
-				<span class="icon-close"></span>
-			</div>
-			
-			<div class="reader-loader" id="reader-loader"></div>
+	
+	% if user != None:
 
-			<div class="reader-Content">
-				<h1 class="singleNote-Title" id="reader-Title">Title</h1>
-				<p class="singleNote-Content" id="reader-Content">Content</p>
+		<div class="modal-Wrapper" id="reader-Wrapper">
+			<div class="singleNote" id="reader">
+
+				<div class="modal-close" id="reader-close">
+					<span class="icon-close"></span>
+				</div>
+				
+				<div class="modal-loader" id="reader-loader"></div>
+
+				<div class="modal-Content" id="reader-Content">
+					<h1 class="singleNote-Title" id="reader-Title">Title</h1>
+					<p class="singleNote-Content" id="reader-Text">Content</p>
+				</div>
+				
 			</div>
-			
 		</div>
-	</div>
+
+		<div class="writeNote-button" id="writeNote">
+			<span class="icon-mode_edit"></span>
+		</div>
+		
+		<div class="modal-Wrapper" id="writer-Wrapper">
+			<div class="singleNote" id="writer">
+
+				<div class="modal-close" id="writer-close">
+					<span class="icon-close"></span>
+				</div>
+				
+				<div class="modal-loader" id="writer-loader"></div>
+
+				<div class="modal-Content" id="writer-Content">
+					<h1 class="singleNote-Title" id="writer-Title">Title</h1>
+					<p class="singleNote-Content" id="writer-Text">Content</p>
+				</div>
+				
+			</div>
+		</div>
+	%end
