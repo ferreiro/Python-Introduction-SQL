@@ -155,7 +155,7 @@
 				<div class="modal-Content" id="writer-Content">
 
 
-					<form action="/api/notes/create" method="POST"> 
+					<form action="/api/notes/create" id="createNewNote" method="POST"> 
 						
 						<!--<h1 class="writeNote-form-title">Write a note</h1>
 						-->

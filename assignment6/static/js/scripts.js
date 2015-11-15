@@ -164,6 +164,46 @@ $( ".Note-wrapper" ).each(function( index ) {
 /////////////////////
 
 // Get the note via api
+// process the form
+$('form#createNewNote').submit(function(event) {
+	event.preventDefault();
+	note = $("#createNewNote").serialize();
+	createNoteViaAPI(note,'/api/notes/create');
+	return false;
+});
+
+
+function createNoteViaAPI(note, url) {
+
+	writerLoader.fadeIn(100);
+
+    // We pass a POST petition to /contacta
+    // with the data "dataForm"
+    $.ajax({
+        type        : 'POST',       // define the type of HTTP verb we want to use (POST for our form)
+        url         : url, // the url where we want to POST
+        data        : note,     // our data object
+        dataType    : 'json',       // what type of data do we expect back from the server
+        encode      : true
+    })
+    .done(function(response) {  
+        // Done means the page could connect to the url to make the query.    
+        if (!response['error']) {
+        	writerWrapper.hide(0)
+        };
+        alert(response['message']);
+     })
+    .fail(function(response) {
+        alert("Problems creating your note... Try later")
+    })
+    .always(function(response) {
+       writerLoader.fadeOut(200);
+    });
+   
+}
+
+
+// Get the note via api
 
 function getNoteAndUpdate(apiUrl) {
 
@@ -194,6 +234,7 @@ function getNoteAndUpdate(apiUrl) {
 		readerContent.fadeIn(200);
 	});
 }
+
 
 function deleteNote(apiUrl) {
 
