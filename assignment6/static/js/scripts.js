@@ -27,6 +27,11 @@ writeNoteHeaderBtn = $('#writeNoteHeaderButton')
 // UPDATE MODAL CONTENT
 /////////////////////////
 
+function deleteSingleNote(NoteID) {
+	body.find($('#'+NoteID)).unwrap()
+	delete $('#'+NoteID)
+	console.log($('#'+NoteID).detach())
+}
 function updateReader(note) {
 	// Use the box ide to get the text of title...
 	readerContent_Title.html(note['Title']);
@@ -69,11 +74,11 @@ function displayReader() {
 // CLOSE MODAL
 /////////////////////
 
-writerClose.click(function() { hideWriter(); });
+writerClose.click(function() { hideWriter('0'); });
 readerClose.click(function() { hideReader(); });
 closeModalsKeyboardPressed();
 
-function hideWriter() {
+function hideWriter(time) {
 	changeURL('#/');
 	writerWrapper.slideUp('slow', 'easeInOutQuint'); // Hide the modal
 	body.css({ overflow:'auto' }); // Scroll available again
@@ -90,7 +95,7 @@ function hideReader() {
 function closeModalsKeyboardPressed() {
 	$(document).keyup(function(e) {
 	    if (e.keyCode == 27) { // escape key maps to keycode `27`
-	        hideWriter();
+	        hideWriter('slow');
 	        hideReader();
 	    }
 	});
@@ -144,7 +149,6 @@ $( ".Note-wrapper" ).each(function( index ) {
 		API_URL = 'api/notes/delete/' + String(NoteID);
 		if (confirm("Are you sure you want to delete this note?")) {
 			deleteNote(API_URL); // Delete the note given by the url
-			refresh(); // Refresh the page. In future, make ajax autoload...
 		}
 		return false;
 	}); 
@@ -187,11 +191,30 @@ function createNoteViaAPI(note, url) {
         encode      : true
     })
     .done(function(response) {  
-        // Done means the page could connect to the url to make the query.    
+
+    	message = '<p>'+ response['message'] +'</p>';
+
+    	// create the notification
+    	notification = new NotificationFx({
+    		message : message,
+    		layout : 'growl',
+    		effect : 'genie',
+    		type : 'notice', // notice, warning or error
+    		onClose : function() {
+    			//bttn.disabled = false;
+    		}
+    	});
+
+    	notification.show();
+
+    	        // Done means the page could connect to the url to make the query.    
         if (!response['error']) {
-        	writerWrapper.hide(0)
-        };
-        alert(response['message']);
+        	hideWriter(0)
+        	setTimeout(function(){
+        	   location.reload();
+        	}, 2000);
+        }
+    
      })
     .fail(function(response) {
         alert("Problems creating your note... Try later")
@@ -222,12 +245,40 @@ function getNoteAndUpdate(apiUrl) {
 			changeURL(newUrl);
 			displayReader(); // Show specific reader for this object
 		}
-		else {
-			alert(note['status']);
+		else{
+			message = '<p>'+ note['status'] +'</p>';
+
+			// create the notification
+			notification = new NotificationFx({
+				message : message,
+				layout : 'growl',
+				effect : 'genie',
+				type : 'notice', // notice, warning or error
+				onClose : function() {
+					//bttn.disabled = false;
+				}
+			});
+
+			notification.show();
 		}
+		
+
 	})
 	.error(function() {
-		alert("Sorry... We couldn't retrieve information for that note... Try later")
+		message = '<p>Sorry... We couldn\'t retrieve information for that note... Try later</p>';
+
+		// create the notification
+		notification = new NotificationFx({
+			message : message,
+			layout : 'growl',
+			effect : 'genie',
+			type : 'notice', // notice, warning or error
+			onClose : function() {
+				//bttn.disabled = false;
+			}
+		});
+
+		notification.show(); 
 	})
 	.complete(function() { 
 		readerLoader.fadeOut(0);
@@ -241,18 +292,35 @@ function deleteNote(apiUrl) {
 	readerContent.hide(0);
 	readerLoader.fadeIn(200);
 
+	console.log(apiUrl)
+
 	$.getJSON( apiUrl, function( note ) {
 		var message = note['status']
 		  , deleted = note['deleted'];
 
-		alert(message);
+		 console.log(note)
+		message = '<p>'+ note['status'] +'</p>';
+
+		// create the notification
+		notification = new NotificationFx({
+			message : message,
+			layout : 'growl',
+			effect : 'genie',
+			type : 'notice', // notice, warning or error
+			onClose : function() {
+				//bttn.disabled = false;
+			}
+		});
+		notification.show();
 
 		if (deleted == "true") { 
-			changeURL('#/' + note['Permalink'] + '/' + data['NoteID']);
+			deleteSingleNote(note['NoteID']);
 		}
+		
+
 	})
 	.error(function() {
-		alert("Sorry... We couldn't delete that note... Try later")
+		//alert("Sorry... We couldn't delete that note... Try later")
 	})
 	.complete(function() { 
 		readerLoader.fadeOut(200);

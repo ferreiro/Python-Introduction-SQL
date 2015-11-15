@@ -849,6 +849,10 @@ ul, li {
 #writer-Wrapper {
 	bottom: 0;
 	left: 0;
+	background: transparent !important;
+}
+#writer-Wrapper:before {
+	background: transparent !important;
 }
 #writer {
 	left: initial !important;
@@ -856,9 +860,14 @@ ul, li {
 	bottom: 20px;
 	right: 20px;
 	margin: 0;
+	position: fixed;
 }
 #writer {
 	height: 270px;
+}
+#writer-close {
+position: absolute;
+	top: 0;
 }
 .writeNote-form {
 	width: 100%; 

@@ -794,6 +794,7 @@ def deleteNoteID(NoteID):
 
 	response.content_type = 'application/json';
 	returnedMessage = {
+		"NoteID" : NoteID,
 		"valid" : "false",
 		"deleted": "false",
 		"status" : "You're not allowed to do this action"
