@@ -49,6 +49,8 @@
 				</div>
 				%end
 				
+				%print notes
+
 				% if len(notes) > 0:
 
 					% for note in notes:
@@ -79,7 +81,7 @@
 								<a href="/{{user['Username']}}/{{note['Permalink']}}"></a>
 							</div>
 
-							<h1 class="Note-Title">
+							<h1 class="Note-Title" style="color:#{{note['Color']}};">
 								{{note['Title'][:60]}}	
 							</h1>
 							<p class="Note-Content">

@@ -2,7 +2,7 @@
 // MODAL VARIABLES
 /////////////////////
 
-body = $('body');
+body = $('.FullPageWrapper');
 
 readerWrapper = $('#reader-Wrapper'); // Modal box showed each time user click on a note.
 reader 		  = $('#reader');
@@ -37,6 +37,7 @@ function updateReader(note) {
 	readerContent_Text.html(note['Content']);
 }
 
+
 /////////////////////
 // OPEN MODALS
 /////////////////////
@@ -51,7 +52,11 @@ writeNoteHeaderBtn.click(function() {
 
 function displayWriter() {
 
+	body.addClass('blurredElement');
 	body.css({ overflow:'hidden' }); // Scroll not available
+
+	displayAvailableColors('/api/colors'); // Get avaiable colors from the database
+	// alert(window.availableColors)
 	writerWrapper.slideDown('medium', 'easeInOutQuint'); // Show the modal	
 	
 	$('#noteTitle').focus(); // Focus on the title to start writing
@@ -61,6 +66,7 @@ function displayWriter() {
 
 function displayReader() {
 
+	body.addClass('blurredElement'); // Blurred effect
 	body.css({ overflow:'hidden' }); // Scroll not available
 	
 	reader.css({ top: (scrollY + 100) }); // Move modal box from top
@@ -82,6 +88,50 @@ note = {
 	'Color'		: '_tuple[9]'
 }
 
+/////////////////////
+// CLOSE MODAL
+/////////////////////
+
+writerClose.click(function() { hideWriter('0'); });
+readerClose.click(function() { hideReader(); });
+closeModalsKeyboardPressed();
+
+function hideWriter(time) {
+	changeURL('#/');
+	writerWrapper.slideUp('medium', 'easeInOutQuint'); // Hide the modal
+	body.css({ overflow:'auto' }); // Scroll available again
+	body.removeClass('blurredElement'); // Blurred effect
+}
+
+function hideReader() {
+	changeURL('#/');
+	readerWrapper.hide(0); // Hide the modal
+	body.css({ overflow:'auto' }); // Scroll available again
+	body.removeClass('blurredElement'); // Blurred effect
+}
+
+// Close the modals when ESC key is pressed
+
+function closeModalsKeyboardPressed() {
+	$(document).keyup(function(e) {
+	    if (e.keyCode == 27) { // escape key maps to keycode `27`
+	        hideWriter('slow');
+	        hideReader();
+	    }
+	});
+}
+
+////////////////////////
+// AUXILIAR FUNCTIONS
+////////////////////////
+
+function changeURL (Permalink) {
+	window.location = String(Permalink);
+} 
+
+
+
+
 function createSingleNote(note, user) {
 	
 	console.log(note)
@@ -100,13 +150,16 @@ function createSingleNote(note, user) {
 
 	NoteID 		= note['NoteID'];
 	NoteColor 	= note['Color'];
+	NoteColorHEX = note['ColorHexadecimal']
 	NoteTitle 	= note['Title'];
 	NoteContent = note['Content'];
 	NoteDate 	= note['CreatedAt'];
 	// NoteDate = NoteDate.split(' ')[0];
 	Username 	= user['Username'];
 	Permalink 	= note['Permalink'];
-	
+		
+	console.log(NoteColorHEX)
+
 	try {
 	    var html  = '<div class="Note-wrapper">';
     		html +=		'<div class="Note" id="' + NoteID +  '">';
@@ -123,11 +176,11 @@ function createSingleNote(note, user) {
     		html +=					'</a></li>';
     		html +=				'</ul>';
     		html +=			 '</div>';
-    		html +=			 '<div class="Note-line-color" style="border-color:#' + NoteColor + '"></div>'
+    		html +=			 '<div class="Note-line-color" style="border-color:#' + NoteColorHEX + '"></div>'
     		html += 		 	'<div class="Note-link">';
     		html +=					'<a href="/' + Username + '/' + Permalink + '"></a>';
     		html +=				'</div>';
-    		html +=			 '<h1 class="Note-Title">'  + NoteTitle.substring(0, 60) + '</h1>';
+    		html +=			 '<h1 class="Note-Title" style="color:#' + NoteColorHEX + '">'  + NoteTitle.substring(0, 60) + '</h1>';
     		html +=			 '<p class="Note-Content">' + (NoteContent.substring(0, 120) + '...' + '</p>');
     		html +=			 '<div class="Note-Metada-Wrapper">';
     		html +=			 	'<div class="Note-Metada">';
@@ -157,51 +210,13 @@ function createSingleNote(note, user) {
 	return html;
 }	
 
-/////////////////////
-// CLOSE MODAL
-/////////////////////
-
-writerClose.click(function() { hideWriter('0'); });
-readerClose.click(function() { hideReader(); });
-closeModalsKeyboardPressed();
-
-function hideWriter(time) {
-	changeURL('#/');
-	writerWrapper.slideUp('medium', 'easeInOutQuint'); // Hide the modal
-	body.css({ overflow:'auto' }); // Scroll available again
-}
-
-function hideReader() {
-	changeURL('#/');
-	readerWrapper.hide(0); // Hide the modal
-	body.css({ overflow:'auto' }); // Scroll available again
-}
-
-// Close the modals when ESC key is pressed
-
-function closeModalsKeyboardPressed() {
-	$(document).keyup(function(e) {
-	    if (e.keyCode == 27) { // escape key maps to keycode `27`
-	        hideWriter('slow');
-	        hideReader();
-	    }
-	});
-}
-
-////////////////////////
-// AUXILIAR FUNCTIONS
-////////////////////////
-
-function changeURL (Permalink) {
-	window.location = String(Permalink);
-} 
 
 ////////////////////////////////////////
 // ARRAYS OF OBJECTS TO INTERACT WITH //
 // Adding click actions and more
 ////////////////////////////////////////
 
-$( ".Note-wrapper" ).each(function( index ) {
+$( ".Note-wrapper" ).each(function clickableNote( index ) {
 	
 	var Note 	= $(this) // Local variable get from the ARRAY
 	  , NoteID 	= $(this).find('.Note').attr('id')
@@ -299,6 +314,7 @@ function createNoteViaAPI(note, url) {
     	    console.log(err);
     	}
     	
+
     	// Done means the page could connect to the url to make the query.    
         if (!note['error']) {
 
@@ -330,6 +346,25 @@ function createNoteViaAPI(note, url) {
    
 }
 
+
+// Get all the colors available in our system
+
+function displayAvailableColors(apiURL) {
+	try {
+		$.getJSON( apiURL, function( json ) {
+			window.availableColors = json;
+		})
+		.error(function() {
+			console.log("No available colors")
+		})
+		.complete(function() { 
+			
+		});
+	}
+	catch (err) {
+		console.log(err)
+	}
+}
 
 // Get the note via api
 
@@ -443,3 +478,11 @@ function deleteNote(apiUrl) {
 		readerContent.fadeIn(200);
 	});
 }
+
+
+
+
+
+
+
+

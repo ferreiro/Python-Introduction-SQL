@@ -84,9 +84,11 @@ def createDatabase(cursor, tables):
 tables = createTableList(cursor);
 createDatabase(cursor, tables);
 
-cursor.execute("insert into Colors values ('white', 'FFFFFF')");
-cursor.execute("insert into Colors values ('red', 'FF0000')");
-cursor.execute("insert into Colors values ('blue', '00359E')");
+cursor.execute("insert into Colors values ('black', '000000')");
+cursor.execute("insert into Colors values ('red', '960009')");
+cursor.execute("insert into Colors values ('blue', '001F96')");
+cursor.execute("insert into Colors values ('green', '009688')");
+cursor.execute("insert into Colors values ('purple', '8F0096')");
 
 #cursor.execute("insert into User values (NULL,'jorge@ferreiro.com', '123', 'ferreiro', 'Jorge', 'Garcia', '16/03/1995', 'Madrid', 0)");
 #cursor.execute("insert into Tag values ('Hello', 1, 1, '000000')");

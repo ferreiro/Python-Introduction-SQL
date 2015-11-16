@@ -6,7 +6,7 @@
        // Move to a new location or you can do something else
        window.location.href = "/";
 
-   }, 2000);
+   }, 1200);
 </script>
 
 <div class="SubHeader-Wrap">

@@ -153,6 +153,20 @@ def getColorsAvailable():
 
 	return availableColors;
 
+""" Passing a color name, it returns the hexadecimal representation on our database """
+def colorToHexadecimal(colorName):
+	hexadecimalColor = "222222"; # default color
+	try :
+		colors = [] # array of dicionaries
+		colors = getColorsAvailable();
+
+		for c in colors:
+			if c['Name'] == colorName:
+				return c['Color']; # Color in hexadecimal
+	except:
+		print "Color not found"
+	
+	return hexadecimalColor;
 
 """ Get all the avaliable colors for our database """
 def getColorFromNote(NoteID):
@@ -229,21 +243,30 @@ def getNotesByUserID(UserID):
 		#print query
 		cursor.execute(query); # Check if the email and password exists on our database
 		notes_tuples = cursor.fetchall(); # Get tuples returned by database
-		
+	
+	except:
+		print "Can't retrieve notes for a userID"
+
+	try:
 		# notes are tuples. So convert to dict and add to Notes array
 		for n in notes_tuples:
 			convertedNote = notetupleToDictionary(n); # tuple to dictionary
-			query = "Select * from Colors where Colors.Name='"+convertedNote['Color']+"'";
-			#print query
-			cursor.execute(query);
-			convertedNote['Color'] = cursor.fetchone()[1]
+			#print convertedNote
+			
+			try:
+				query = "Select * from Colors where Colors.Name='"+convertedNote['Color']+"'";
+				cursor.execute(query);
+				color = cursor.fetchone()
+				convertedNote['ColorName'] = color[0]
+				convertedNote['Color'] 	   = color[1]
+			except:
+				print "Color for a note doesn't match with the database"
+			
 			notes_arr.append(convertedNote); # Append dictionary
-
-		closeCursor(cursor);
-
 	except:
-		print "Can't retrieve a notes"
+		print "Can't convert from tuple to dictionary"
 
+	closeCursor(cursor);
 	return notes_arr;
 
 """ Create a user in the database if the user doesn't exist """
@@ -295,30 +318,35 @@ def updateUser(userUpdated):
 
 """ Create a user in the database if the user doesn't exist """
 
-def createNote(newNote):
-	cursor = openCursor();
-	#print "Oh tes"
-	try:
-		userString  = ("NULL,");
-		userString += str(newNote['UserID']) + ",";
-		userString += ("'" + str(newNote['Title']) + "',");
-		userString += ("'" + str(newNote['Permalink']) + "',");
-		userString += ("'" + str(newNote['Content']) + "',");
-		userString += ("'" + str(newNote['CreatedAt']) + "',");
-		userString += ("'" + str(newNote['EditedAt']) + "',");
-		userString += (str(newNote['Published']) + ",");
-		userString += (str(newNote['Private']) + ",");
-		userString += ("'" + str(newNote['Color']) + "'");
+def createNote(note):
 
-		query = "Insert into Notes values(" + userString + ')';
-		cursor.execute(query);
+	returnedNote = None;
+	cursor = openCursor();
+
+	try:
+		entry  = ("NULL,");
+		entry += str(note['UserID']) + ",";
+		entry += ("'" + str(note['Title']) + "',");
+		entry += ("'" + str(note['Permalink']) + "',");
+		entry += ("'" + str(note['Content']) + "',");
+		entry += ("'" + str(note['CreatedAt']) + "',");
+		entry += ("'" + str(note['EditedAt']) + "',");
+		entry += (str(note['Published']) + ",");
+		entry += (str(note['Private']) + ",");
+		entry += ("'" + str(note['Color']) + "'");
+
+		cursor.execute("Insert into Notes values(" + entry + ")"); 
+
+		note['NoteID'] = cursor.lastrowid; # IMPORTANT! Set the note id before returning. 
+
 		conn.commit();
 		closeCursor(cursor);
 
-		return True;
+		return note;
 
 	except:
-		return False;
+		print "Problems inserting on the database";
+		return None;
 
 def updateNote(noteUpdated):
 	cursor = openCursor();

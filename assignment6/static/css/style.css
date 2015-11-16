@@ -189,7 +189,20 @@
 	content: "\e90a";
 }
 
+.blurredElement {
 
+     /* Any browser which supports CSS3 */
+    filter: blur(2px);
+
+    /* Firefox */ 
+    filter: url("blur.svg#gaussian_blur");
+
+    /* Webkit */
+    -webkit-filter: blur(2px);
+
+    /* Opera */
+    -o-filter: blur(3px);
+}
 
 
 
@@ -837,7 +850,7 @@ ul, li {
 	left: 0;
 	bottom: 0;
 	right: 0;
-	z-index: 200;
+	z-index: 100000;
 	display: none;
 }
 

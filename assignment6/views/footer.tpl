@@ -1,10 +1,13 @@
-
+	
 	<div class="footer">
 		<p>
 			Project made with ♡ on Madrid<br />
 			<a href="mailto:me@jgferreiro.com;">Contact</a>
 	  	</p>  
 	</div>
+
+</div><!-- FIN del FullPageWrapper -->
+
 
 	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>

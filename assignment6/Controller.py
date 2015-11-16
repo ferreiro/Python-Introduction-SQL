@@ -379,11 +379,19 @@ def createnewNote(api):
 		"Color" 	: color
 	}
 
-	if db.createNote(newNote):
+	createdNote = db.createNote(newNote);
+
+	if createdNote != None:
 		if api:
-			newNote['error'] = False;
-			newNote['message'] = "Note created successfully"
 			response.content_type = 'application/json';
+
+			colorToHEX = db.colorToHexadecimal(createdNote['Color']); 
+			
+			print colorToHEX
+
+			newNote['ColorHexadecimal'] = colorToHEX;
+			newNote['message'] = "Note created successfully"
+			newNote['error'] = False;
 
 			return json.dumps(newNote);
 		else:
@@ -563,7 +571,22 @@ def deleteNoteID(NoteID):
 
 	return json.dumps(returnedMessage);
 
-	
+# Get available colors
+@route('/api/colors', method='GET')
+def getColorsAvailable():
+	colors = [];
+	response.content_type = 'application/json';
+
+	colors = db.getColorsAvailable();
+	print colors;
+
+	return json.dumps(colors);
+
+# Get available colors for a given user
+@route('/api/<user/>colors', method='GET')
+def getAvailableColorsUser():
+	response.content_type = 'application/json';
+	return { "error" : "true" }
 
 @route('/api/notes/<NoteID:int>', method='GET')
 @route('/api/notes/<NoteID:int>', method='POST')
