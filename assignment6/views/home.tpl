@@ -14,7 +14,7 @@
         <div class="home_content">
             <div class="info">
                 <h1>
-                    Welcome to SuperNotes!
+                    Welcome to SudoNotes!
                 </h1>
                 <p>
                     The easiest way to keep all your ideas,<br /> notes and projects in one place.

@@ -1,4 +1,4 @@
-% include ('header.tpl', title='Hola')
+% include ('header.tpl')
 
 	<div class="SubHeader-Wrap">
 		<div class="SubHeader">

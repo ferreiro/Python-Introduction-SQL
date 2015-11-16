@@ -256,7 +256,7 @@ def userProfile():
 	sessionUser = checkCookiesSessionUser();
 
 	if (sessionUser == None):
-		return redirectLogin();
+		return redirectHome();
 
 	user  = db.getUserbyID(sessionUser['UserID']);
 	notes = db.getNotesByUserID(user['UserID']);
@@ -270,7 +270,7 @@ def userProfile():
 def showFormToEditUser():
 	sessionUser = checkCookiesSessionUser();
 	if (sessionUser == None):
-		return template('login', user=None)
+		return redirectHome();
 
 	user = db.getUserbyID(sessionUser['UserID']); # Get a user dictionary
 
@@ -325,7 +325,7 @@ def profile(username):
 	sessionUser = checkCookiesSessionUser();
 	
 	if (sessionUser == None):
-		return redirectLogin();
+		return redirectHome();
 
 	user = db.getUserbyUsername(username);
 
@@ -387,7 +387,7 @@ def createnewNote(api):
 
 			colorToHEX = db.colorToHexadecimal(createdNote['Color']); 
 			
-			print colorToHEX
+			#print colorToHEX
 
 			newNote['ColorHexadecimal'] = colorToHEX;
 			newNote['message'] = "Note created successfully"
@@ -578,7 +578,7 @@ def getColorsAvailable():
 	response.content_type = 'application/json';
 
 	colors = db.getColorsAvailable();
-	print colors;
+	#print colors;
 
 	return json.dumps(colors);
 
