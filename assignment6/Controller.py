@@ -10,11 +10,14 @@ import random
 import json
 import re
 
+#####################################
+########## ASSETS ROUTING ###########
+#####################################
+
 @route('/views/<filepath:path>')
 def file_stac(filepath):
     return static_file(filepath, root="./views")
 
-# Static Routes
 @route('/<filename:re:.*\.js>')
 def javascripts(filename):
     return static_file(filename, root='static/')
@@ -30,53 +33,6 @@ def images(filename):
 @route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
 def fonts(filename):
     return static_file(filename, root='static/')
-
-
-#################################
-############AUXILIAR FUNCTIONS #############
-#################################
-
-
-def makeEmptySessionUser():
-	emptyUser = {
-		"UserID" : '',
-		"Email" : '',
-		"Username" : '',
-		"Name" : '',
-		"Surname" : '',
-		"Birthday" : '',
-		"City" : '',
-		"Premium" : ''
-	}
-	return emptyUser;
-def setSessionUser(user):
-	sessionUser = checkCookiesSessionUser();
-
-	try:
-		if (user != None):
-			#print user
-			sessionUser = {
-				"UserID" : user['UserID'],
-				"Email" : user['Email'],
-				"Username" : user['Username'],
-				"Name" : user['Name'],
-				"Surname" : user['Surname'],
-				"Birthday" : user['Birthday'],
-				"City" : user['City'],
-				"Premium" : user['Premium']
-			}
-			#print user;
-			#print sessionUser;
-	except:
-		#print sessionUser
-		print "Can't set the user session"
-		return False; # Coudln't set a session user
-
-	return True; # set!
-
-def validUser(user):
-	return (user != None);
-
 
 #################################
 ########## ENCRYPTION ###########
@@ -109,28 +65,49 @@ def checkCookiesSessionUser():
 	if (sessionEmail == None or sessionUserID == None):
 		return None; # Cookies doesn't match
 
-	return db.getUserbyID(sessionUserID); # Return identified user
+	identifiedUser = db.getUserbyID(sessionUserID); # Return identified user. If the user was removed from our system, will return null user.
+	return identifiedUser;
 
 #################################
 ######## AUXILIAR FUNC ##########
 #################################
-##Do not move from here
+
+### Do not move from here
 
 """ Eliminate sql injection and other things like ' """
 def cleanContent(content):
-	content = str(request.forms.get('contentNote'));
-	content = re.sub('[^a-zA-Z0-9 \n\.]', '', str(content)); # content wihtout special characters
-	return content
+	truncated = str(content);
+
+	if len(truncated) >= 3002:
+		truncated[:3000];
+
+	#content = str(request.forms.get('contentNote'));
+	#content = re.sub('[^a-zA-Z0-9 \n\.]', '', str(content)); # content wihtout special characters
+	
+	#cleanTitle = content.replace("'", "\'");
+
+	return truncated
 
 def cleanTitle(title):
-	cleanTitle = re.sub('[^a-zA-Z0-9 \n\.]', '', str(title)); # Title without special characters
-	cleanTitle = cleanTitle.replace(' ', '-');
-	return cleanTitle
+	truncated = str(title);
+	
+	if len(title) >= 152:
+		truncated[:150];
+
+	#cleanTitle = re.sub('[^a-zA-Z0-9 \n\.]', '', str(title)); # Title without special characters
+	#cleanTitle = title.replace("'", "\'");
+	#cleanTitle = cleanTitle.replace(' ', '-');
+	return truncated
 
 def generatePermalink(title):
 	randNumList = random.sample(range(1, 100), 4); #10 digits rand num
 	randomNumber = ''.join(str(e) for e in randNumList);
-	permalink = str(title[:30]) + '-' + str(randomNumber);
+	
+	truncated = str(title)
+	if len(truncated) >= 30:
+		truncated = truncated[:30] # Truncate Titles if greater than 30
+
+	permalink = truncated + '-' + str(randomNumber);
 	return permalink;
 
 def getToday():
@@ -170,7 +147,7 @@ def redirectToProfile(username):
 
 def redirectLoginSuccess():
 	sessionUser = checkCookiesSessionUser();
-	print sessionUser
+	#print sessionUser
 	if sessionUser != None:
 		response.status = 303
 		response.set_header('Location', '/'+ str(sessionUser['Username']));
@@ -180,6 +157,14 @@ def redirectLoginSuccess():
 #################################
 
 @route('/')
+def loginWindow():
+	sessionUser = checkCookiesSessionUser();
+
+	if sessionUser != None:
+		return redirectToProfile(sessionUser['Username']);
+
+	return template('home', user=sessionUser); #Show login screen
+
 @route('/login')
 def loginWindow():
 	sessionUser = checkCookiesSessionUser();
@@ -198,14 +183,14 @@ def login():
 	user 	 = db.getUserbyEmail(email);
 	
 	if user == None:
+		return template('login-fail', user=None, failError="There's no user with that information on our Database");
 		return "There's no any user with that email. <p><a href='/login'>Try again </a></p>";
-		return template('login-fail', user=None);
 
 	if verifyPassword(password, user['Password']):
 		setCookiesSessionUser(user); #password verified. Set the cookies for the session
-		#setSessionUser(user); # set User session object
 		return redirectToProfile(user['Username']);
 	else:
+		return template('login-fail', user=None, failError="There's no user with that information on our Database");
 		return "Your password is not correct <p><a href='/login'>Try again </a></p>";
 
 @route('/logout')
@@ -237,7 +222,7 @@ def registerUserDatabase():
 	if (sessionUser != None):
 		return redirectHome();
 
-	#Dictionary with information for new user (following database model)
+	# Dictionary with information for new user (following database model)
 	
 	password = encryptPassword(request.forms.get('passwordsignup'))
 
@@ -375,6 +360,7 @@ def createnewNote(api):
 	today 	= getToday();
 	color 	= request.forms.get('colorNote');
 	private = int(request.forms.get('privateNote'));
+	published = int(request.forms.get('publishedNote'));
 
 	newNote = {
 		# only for the api...
@@ -383,12 +369,12 @@ def createnewNote(api):
 
 		"NoteID" 	: None,
 		"UserID" 	: sessionUser['UserID'],
-		"Title" 	: title[:150], # Truncate title to 200 words
+		"Title" 	: title, # Truncate title to 200 words
 		"Permalink" : permalink,
-		"Content" 	: content[:3000], # Truncate title to 200 words
+		"Content" 	: content, # Truncate title to 200 words
 		"CreatedAt" : today,
 		"EditedAt" 	: today,
-		"Published" : 1,
+		"Published" : published,
 		"Private" 	: private,
 		"Color" 	: color
 	}
@@ -457,12 +443,12 @@ def updateNotebyID(NoteID):
 	note['Content']  = newContent;
 	note['EditedAt'] = updatedTime;
 	note['Color']    = request.forms.get('colorNote');
-	note['Private']    = request.forms.get('privateNote');
+	note['Private']  = request.forms.get('privateNote');
+	note['Published']= int(request.forms.get('publishedNote'));
 
 	if db.updateNote(note): #update the note into the database.
 
 		response.status = 303
-
 		user = db.getUserbyID(note['UserID'])
 
 		response.set_header('Location', '/'+user['Username']+'/'+note['Permalink']);

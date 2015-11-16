@@ -116,7 +116,7 @@ def getNoteby_Username_Permalink(Username, Permalink):
 	cursor = openCursor();
 	try:
 		query = "Select * from Notes join User where User.Username='"+str(Username)+"' And Notes.Permalink='"+str(Permalink)+"'";
-		print query
+		#print query
 		cursor.execute(query); # Check if the email and password exists on our database
 		noteTuple = cursor.fetchone(); # Get the returned object for the database
 		note = notetupleToDictionary(noteTuple);
@@ -311,7 +311,6 @@ def createNote(newNote):
 		userString += ("'" + str(newNote['Color']) + "'");
 
 		query = "Insert into Notes values(" + userString + ')';
-		#print query
 		cursor.execute(query);
 		conn.commit();
 		closeCursor(cursor);
@@ -319,7 +318,7 @@ def createNote(newNote):
 		return True;
 
 	except:
-		return False;nsert
+		return False;
 
 def updateNote(noteUpdated):
 	cursor = openCursor();
@@ -329,6 +328,7 @@ def updateNote(noteUpdated):
 	query += "Color ='" + str(noteUpdated['Color']) + "', ";
 	query += "Content ='" + str(noteUpdated['Content']) + "', ";
 	query += "Private =" + str(noteUpdated['Private']) + ", ";
+	query += "Published =" + str(noteUpdated['Published']) + ", ";
 	query += "EditedAt ='" + str(noteUpdated['EditedAt']) + "'";
 	query += " where Notes.NoteID=" + str(noteUpdated['NoteID']);
 	query += " and Notes.UserID=" + str(noteUpdated['UserID']);

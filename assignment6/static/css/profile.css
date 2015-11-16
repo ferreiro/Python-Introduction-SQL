@@ -3,6 +3,7 @@
 	padding: 40px 0;
 	display: inline-block;
 	background: #cecece url(../images/profile.jpg);
+	/*background: #3342B1;*/
 	background-size: cover;
 	position: relative;
 }
@@ -119,6 +120,7 @@
 	font-size: 16px;
 	color: #222;
 	border-bottom: 1px dashed #cecece;
+	word-wrap: break-word;
 }
 .Profile-draft-entry a {
 	font-size: 16px;

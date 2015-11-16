@@ -1,8 +1,9 @@
 % include ('header.tpl', title='Hola')
 	
-	<div class="Profile-Header-wrap">
-		<div class="Profile-Header">
-			<h1 class="Profile-Header-Name">
+
+	<div class="SubHeader-Wrap">
+		<div class="SubHeader">
+			<h1 class="SubHeader-Name">
 				<strong>
 					% if editNote == True:
 						Edit
@@ -59,6 +60,13 @@
 			<div class="writeNote-form-options">
 
 				<div class="writeNote-form-options-select">
+					<select name="publishedNote">
+					  <option value="1">Published</option>
+					  <option value="0">Save as draft</option>
+					</select>
+				</div>	
+
+				<div class="writeNote-form-options-select">
 					<select name="privateNote">
 					  <option value="1">Private</option>
 					  <option value="0">Public</option>
@@ -90,9 +98,9 @@
 			<div>
 				%print note
 				% if editNote == True:
-					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title of the note" value="{{note['Title']}}" />
+					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title..." value="{{note['Title']}}" />
 				%else:
-					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title of the note" value="" />
+					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Note title" value="" />
 				%end
 			</div>
 			<p>

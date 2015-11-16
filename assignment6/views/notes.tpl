@@ -1,13 +1,10 @@
 % include ('header.tpl', title='Hola')
-	
-	% if len(notes) > 0 or searchTemplate == True:
-	<div class="Profile-Header-wrap">
-		<div class="Profile-Header">
-			<h1 class="Profile-Header-Name">
+
+	<div class="SubHeader-Wrap">
+		<div class="SubHeader">
+			<h1 class="SubHeader-Name">
 				% if searchTemplate == True:
-					Notes containing
-					<strong>{{Keyword}}</strong>
-					<a href="/">Close</a>
+					Search result
 				% else:
 					my
 					<strong>notes</strong>
@@ -15,38 +12,46 @@
 			</h1>
 		</div>
 	</div>
-	% end
 
 	<div class="containter-wrapper">
 		<div class="containter">
 
-			% print searchTemplate
-			% if searchTemplate == True and len(notes) == 0:
-				<style type="text/css">
-					.Zero-NotesWrap:before {
-						background-image:url(images/empty2.jpg);
-					}
-				</style>
+			% if searchTemplate == True:
+				Notes containing
+				<strong>{{Keyword}}</strong>
+				<a href="/">Close</a>
+			% end
+
+			<div class="notes-loader"></div>
+			<div class="notes-container">
+				
+				% print searchTemplate
+				% if searchTemplate == True and len(notes) == 0:
+					<style type="text/css">
+						.Zero-NotesWrap:before {
+							background-image:url(images/empty2.jpg);
+						}
+					</style>
+					<div class="Zero-NotesWrap">
+						<div class="Zero-Notes">
+							<h1 class="Zero-Notes-Title">{{user['Name']}}, We haven't found any note that contains your keyword.</h1>
+						</div>
+					</div>
+
+				%end
+
+				% if searchTemplate == False and len(notes) == 0:
 				<div class="Zero-NotesWrap">
 					<div class="Zero-Notes">
-						<h1 class="Zero-Notes-Title">{{user['Name']}}, We haven't found any note that contains your keyword.</h1>
+						<h1 class="Zero-Notes-Title">Hi {{user['Name']}}!,<br /> You haven't written any note yet.</h1>
+						<a class="Zero-Notes-Create" href="/create">Write your first Note now!</a>
 					</div>
 				</div>
+				%end
+				
+				% if len(notes) > 0:
 
-			%end
-
-			% if searchTemplate == False and len(notes) == 0:
-			<div class="Zero-NotesWrap">
-				<div class="Zero-Notes">
-					<h1 class="Zero-Notes-Title">Hi {{user['Name']}}!,<br /> You haven't written any note yet.</h1>
-					<a class="Zero-Notes-Create" href="/create">Write your first Note now!</a>
-				</div>
-			</div>
-			%end 
-			
-			% if len(notes) > 0:
-				% for note in notes:
-
+					% for note in notes:
 					<div class="Note-wrapper">
 						<div class="Note" id="{{note['NoteID']}}">
 
@@ -118,15 +123,17 @@
 									% end
 
 									<span>-</span>
-
 								</div>
 							</div>
-
 						</div>
 					</div>
-				% end
+					% end
+					<!-- Fin for creating notes -->
+
 			% end
 
+			</div><!-- Fin notes container -->
+			
 		</div>
 	</div>
 

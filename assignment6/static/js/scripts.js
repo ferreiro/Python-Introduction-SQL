@@ -70,6 +70,94 @@ function displayReader() {
 	return false;
 }
 
+note = {
+	'NoteID'	: '3',
+	'UserID'	: '_tuple[1]',
+	'Title'		: '_tuple[2]',
+	'Permalink' : '_tuple[3]',
+	'Content' 	: '_tuple[4]',
+	'CreatedAt' : '_tuple[5]',
+	'EditedAt' 	: '_tuple[6]',
+	'Published'	: '_tuple[7]',
+	'Private' 	: '_tuple[8]',
+	'Color'		: '_tuple[9]'
+}
+
+function createSingleNote(note, user) {
+	
+	console.log(note)
+
+	user = {
+		UserID   : '1',
+		Email  	 : 'Email',
+		Password : 'Password',
+		Username : 'Username',
+		Name 	 : 'Name',
+		Surname  : 'Surname',
+		Birthday : 'Birthday',
+		City 	 : 'City',
+		Premium  : 'Premium'
+	}
+
+	NoteID 		= note['NoteID'];
+	NoteColor 	= note['Color'];
+	NoteTitle 	= note['Title'];
+	NoteContent = note['Content'];
+	NoteDate 	= note['CreatedAt'];
+	// NoteDate = NoteDate.split(' ')[0];
+	Username 	= user['Username'];
+	Permalink 	= note['Permalink'];
+	
+	try {
+	    var html  = '<div class="Note-wrapper">';
+    		html +=		'<div class="Note" id="' + NoteID +  '">';
+    		html += 		'<div class="Note-Options">';
+    		html += 			'<span class="Note-Options-link">';
+    		html += 				'<div class="icon-cog"></div>';
+    		html +=				'</span>';
+    		html +=				'<ul class="Note-Options-dropDown">';
+    		html +=					'<li><a href="/' + Username + '/' + Permalink + '/edit">';
+    		html +=						'Edit Note'
+    		html +=					'</a></li>';		
+    		html +=					'<li class="Note-Options-delete"><a href="/delete/' + NoteID +'">';
+    		html +=						'Delete'
+    		html +=					'</a></li>';
+    		html +=				'</ul>';
+    		html +=			 '</div>';
+    		html +=			 '<div class="Note-line-color" style="border-color:#' + NoteColor + '"></div>'
+    		html += 		 	'<div class="Note-link">';
+    		html +=					'<a href="/' + Username + '/' + Permalink + '"></a>';
+    		html +=				'</div>';
+    		html +=			 '<h1 class="Note-Title">'  + NoteTitle.substring(0, 60) + '</h1>';
+    		html +=			 '<p class="Note-Content">' + (NoteContent.substring(0, 120) + '...' + '</p>');
+    		html +=			 '<div class="Note-Metada-Wrapper">';
+    		html +=			 	'<div class="Note-Metada">';
+    								if (note['Published'] == 1) {
+    									html += '<span class="Note-Private"><b>Published </b>' + NoteDate + '</span>';
+    								}
+    								else {
+    									html += '<span class="Note-Private"><b>Draft (?)</b></span>';
+    								}
+
+    								if (note['Private']){
+    									html += '<span class="Note-Private"><b>Private</b></span>'
+    								}
+    								else {
+    									html += '<span class="Note-Private"><b>Public (?)</b></span>'; 
+    								}										
+    		html +=					'<span>-</span>';
+    		html +=				'</div>';
+    		html +=			'</div>';
+    		html +=		'</div>';
+    		html += '</div>';<!-- Fin de una single note -->
+	}
+	catch(err) {
+		alert(message)
+	}
+	
+	return html;
+}	
+
 /////////////////////
 // CLOSE MODAL
 /////////////////////
@@ -190,29 +278,46 @@ function createNoteViaAPI(note, url) {
         dataType    : 'json',       // what type of data do we expect back from the server
         encode      : true
     })
-    .done(function(response) {  
+    .done(function(note) {  
 
-    	message = '<p>'+ response['message'] +'</p>';
+    	message = '<p>'+ note['message'] +'</p>';
+    	
+    	try {
+    	    // create the notification
+        	notification = new NotificationFx({
+        		message : message,
+        		layout : 'growl',
+        		effect : 'genie',
+        		type : 'notice', // notice, warning or error
+        		onClose : function() {
+        			//bttn.disabled = false;
+        		}
+        	});
+        	notification.show();
+    	}
+    	catch(err) {
+    		alert(message)
+    	    console.log(err);
+    	}
+    	
+    	// Done means the page could connect to the url to make the query.    
+        if (!note['error']) {
 
-    	// create the notification
-    	notification = new NotificationFx({
-    		message : message,
-    		layout : 'growl',
-    		effect : 'genie',
-    		type : 'notice', // notice, warning or error
-    		onClose : function() {
-    			//bttn.disabled = false;
-    		}
-    	});
-
-    	notification.show();
-
-    	        // Done means the page could connect to the url to make the query.    
-        if (!response['error']) {
         	hideWriter(0)
-        	setTimeout(function(){
-        	   location.replace('/');
-        	}, 2000);
+        	writerLoader.fadeOut(200);
+
+        	user = {}
+        	newHTMLNote = createSingleNote(note, user);
+
+        	if ($('.Zero-NotesWrap').length > 0) {
+        		$('.Zero-NotesWrap').hide(0);
+        		$('.Profile-Header-wrap').show(0);
+        	}
+
+			setTimeout(function() {
+				$('.notes-container').prepend(newHTMLNote);
+			}, 1000);
+
         }
     
      })
@@ -248,18 +353,23 @@ function getNoteAndUpdate(apiUrl) {
 		else{
 			message = '<p>'+ note['status'] +'</p>';
 
-			// create the notification
-			notification = new NotificationFx({
-				message : message,
-				layout : 'growl',
-				effect : 'genie',
-				type : 'notice', // notice, warning or error
-				onClose : function() {
-					//bttn.disabled = false;
-				}
-			});
-
-			notification.show();
+			try {
+			    // create the notification
+		    	notification = new NotificationFx({
+		    		message : message,
+		    		layout : 'growl',
+		    		effect : 'genie',
+		    		type : 'notice', // notice, warning or error
+		    		onClose : function() {
+		    			//bttn.disabled = false;
+		    		}
+		    	});
+		    	notification.show();
+			}
+			catch(err) {
+				alert(message)
+			    console.log(err);
+			}
 		}
 		
 
@@ -267,18 +377,24 @@ function getNoteAndUpdate(apiUrl) {
 	.error(function() {
 		message = '<p>Sorry... We couldn\'t retrieve information for that note... Try later</p>';
 
-		// create the notification
-		notification = new NotificationFx({
-			message : message,
-			layout : 'growl',
-			effect : 'genie',
-			type : 'notice', // notice, warning or error
-			onClose : function() {
-				//bttn.disabled = false;
-			}
-		});
+		try {
+		    // create the notification
+	    	notification = new NotificationFx({
+	    		message : message,
+	    		layout : 'growl',
+	    		effect : 'genie',
+	    		type : 'notice', // notice, warning or error
+	    		onClose : function() {
+	    			//bttn.disabled = false;
+	    		}
+	    	});
+	    	notification.show();
+		}
+		catch(err) {
+			alert(message)
+		    console.log(err);
+		}
 
-		notification.show(); 
 	})
 	.complete(function() { 
 		readerLoader.fadeOut(0);

@@ -11,9 +11,8 @@
   	});
   	</script>
 
-  	<script src="js/classie.js"></script>
-  	<script src="js/notificationFx.js"></script>
-  	
+  	<script src="/js/classie.js"></script>
+  	<script src="/js/notificationFx.js"></script>
     
 </body>
 </html>

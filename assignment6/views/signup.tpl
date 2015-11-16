@@ -18,17 +18,17 @@
 		<label for="namesignup" class="uname" data-icon="u">Your name</label>
 
 		% if editUser == True:
-			<input  class="inputField" id="namesignup" name="namesignup" required="required" type="text" placeholder="mysuperusername690" % if editUser == True: value="{{user['Name']}}" %end />
+			<input  class="inputField" id="namesignup" name="namesignup" required="required" type="text" placeholder="Your name" % if editUser == True: value="{{user['Name']}}" %end />
 		%else:
-			<input  class="inputField" id="namesignup" name="namesignup" required="required" type="text" placeholder="mysuperusername690" />
+			<input  class="inputField" id="namesignup" name="namesignup" required="required" type="text" placeholder="Your name" />
 		%end
 	</p>
 	<p> 
 		<label for="surnamesignup" data-icon="u">Your surname</label>
 		% if editUser == True:
-			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="mysuperusername690" value="{{user['Surname']}}" />
+			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="Surname" value="{{user['Surname']}}" />
 		%else:
-			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="mysuperusername690" />
+			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="Name" />
 		%end 
 	</p>
 	<p> 
@@ -37,7 +37,7 @@
 		% if editUser == True:
 			<p>Username can't be changed</p>
 		%else:
-			<input  class="inputField" id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="mysuperusername690" />
+			<input  class="inputField" id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="Username" />
 		%end  
 	</p>
 	<p> 
@@ -55,7 +55,7 @@
 		% if editUser == True:
 			<input  class="inputField" id="citysignup" name="citysignup" required="required" type="name" value="{{user['City']}}"/>
 		%else:
-			<input  class="inputField" id="citysignup" name="citysignup" required="required" type="name"/>
+			<input  class="inputField" id="citysignup" name="citysignup" placeholder="Your city" required="required" type="name"/>
 		%end  
 	</p>
 	<p> 

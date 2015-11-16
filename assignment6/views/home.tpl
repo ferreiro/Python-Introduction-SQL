@@ -1,13 +1,21 @@
     
     % include ('header.tpl', title='Hola')
     
+    <div class="home">
+
+    </div>
+
     <div class="login">
         <div class="login-form">
 
             <h1>
-                Login
+                Welcome to SuperNotes!
             </h1>
+            <h2>
+                The easiest way to save all your ideas, notes and projects in one place.
+            </h2>
 
+            <span><b>Connect to your account</b></span>
             <form action="/login" method="post">
                 <div>
                     <label for="mail">
