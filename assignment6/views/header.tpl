@@ -35,9 +35,9 @@
 
 				% if user != None:
 				<div class="Header-options-search">
-					<form action="/search" method="POST">
-						<span class="icon-search"></span>
-						<input id="searchText" name="query" required="required" type="text" placeholder="Search by title or content..." />
+					<form action="/search" id="SearchForm" method="POST">
+						<span class="Header-options-search-icon icon-search"></span>
+						<input id="searchInput" name="query" required="required" type="text" placeholder="Search by title or content..." />
 					</form>
 				</div>
 

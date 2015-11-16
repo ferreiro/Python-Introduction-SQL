@@ -339,14 +339,16 @@ ul, li {
 	overflow: hidden;
 	position: relative;
 }
-.Header-options-search span {
+.Header-options-search-icon {
 	position: absolute;
 	top: 7px;
 	left: 15px;
 	font-size: 20px;
 	color:    #B6BBDF;
+	z-index: 2;
+	cursor: pointer;
 }
-.Header-options-search input:hover {
+.Header-options-search:hover {
 	background: #2c3a93;
 	background: #313F9C;
 }
@@ -366,8 +368,9 @@ ul, li {
 	border:0;
 	font-size: 16px;
 	text-indent: 45px; 
+	z-index: 0;
+	position: relative;
 }
-
 .Header-options-search input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color:    #B6BBDF;
 }
@@ -628,6 +631,10 @@ ul, li {
 	padding: 20px;
 	position: relative;
 	z-index: 10;
+}
+.login-form-error {
+	background:red; 
+	padding:10px 20px;
 }
 .login-form h1 {
 	font-weight: 500;

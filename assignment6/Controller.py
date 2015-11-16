@@ -183,14 +183,14 @@ def login():
 	user 	 = db.getUserbyEmail(email);
 	
 	if user == None:
-		return template('login-fail', user=None, failError="There's no user with that information on our Database");
+		return template('login-fail', user=None, failError="User not registered on our system. Want a free acount? <a href='/register'>Create yours</a>'");
 		return "There's no any user with that email. <p><a href='/login'>Try again </a></p>";
 
 	if verifyPassword(password, user['Password']):
 		setCookiesSessionUser(user); #password verified. Set the cookies for the session
 		return redirectToProfile(user['Username']);
 	else:
-		return template('login-fail', user=None, failError="There's no user with that information on our Database");
+		return template('login-fail', user=None, failError="Your email/password doesn't match");
 		return "Your password is not correct <p><a href='/login'>Try again </a></p>";
 
 @route('/logout')
@@ -200,7 +200,7 @@ def closeOpenSession():
 	if (sessionUser != None): # Delete if user connected
 		deleteCookiesSessionUser();
 	
-	return redirectLogin();
+	return redirectHome();
 
 #####################################
 ############# REGISTER ##############
@@ -474,7 +474,7 @@ def deleteNoteID(NoteID):
 
 	if (userID_note == userID_session):
 		if (db.deleteNote(NoteID)):
-			return template('notes-deleted', user=sessionUser);
+			return template('note-deleted', user=sessionUser);
 		else:
 			return "Problems deleting that note<a href='/'>Go to your profile</a>"
 			return template('error')

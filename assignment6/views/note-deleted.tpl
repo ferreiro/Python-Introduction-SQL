@@ -1,14 +1,5 @@
 % include ('header.tpl', title='Hola')
 
-<script type="text/javascript">
-   window.setTimeout(function(){
-
-       // Move to a new location or you can do something else
-       window.location.href = "/";
-
-   }, 2000);
-</script>
-
 <div class="SubHeader-Wrap">
 	<div class="SubHeader">
 		<h1 class="SubHeader-Name">

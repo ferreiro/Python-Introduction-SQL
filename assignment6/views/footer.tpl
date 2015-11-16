@@ -3,7 +3,8 @@
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   	<script src="/js/jquery.easing.1.3.js"></script>
   	<script src="/js/jquery.nice-select.min.js"></script>
-  	<script src="/js/scripts.js"></script>
+    <script src="/js/modalBoxes.js"></script>
+    <script src="/js/otherScripts.js"></script>
   	
   	<script type="text/javascript">
   	$(document).ready(function() {

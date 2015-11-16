@@ -40,12 +40,5 @@
             </form>
         </div>
     </div> 
-    
-    Features:
-    - Save all your notes.
-    - Search in all your notes.
-    - Unlimited notes (premium users).
 
-  <script src="js/scripts.js"></script>
-</body>
-</html>
+    % include ('footer.tpl')
