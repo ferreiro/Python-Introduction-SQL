@@ -82,8 +82,6 @@
 						  <option value="{{color['Name']}}">{{color['Name']}}</option>
 						% end
 						</select>
-
-						Current color: {{note['Color']}} <br />
 					%else:
 						<select name="colorNote">
 						% for color in colors:
@@ -92,7 +90,11 @@
 						</select>
 					%end
 				% end
-				</div>					
+				</div>
+
+				% if editNote == True:
+					Current color: {{note['Color']}} <br />
+				% end
 			</div>
 
 			<div>

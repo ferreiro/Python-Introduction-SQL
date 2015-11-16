@@ -229,11 +229,35 @@ ul, li {
 	text-align: center;
 	cursor: pointer;
 }
+.writeNote-button:hover {
+	background: #4BC750;
+}
+.writeNote-button:hover:before {
+	padding: 2px 5px;
+	 white-space: nowrap;
+	position: absolute;
+	right: 100%;
+	top: 12px;
+	margin-right: 10px;
+	background: rgba(0,0,0,.8);
+	content: 'Create note';
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #fff;
+}
 .writeNote-button span {
 	color: #fff;
 	font-size: 30px;
 	margin-top: 9px;
 	display: inline-block;
+	-webkit-transition: width 0.2s, height 0.2s, background-color 0.2s, -webkit-transform 0.2s;
+	transition: width 0.2s, height 0.2s, background-color 0.2s, transform 0.2s;
+}
+.writeNote-button:hover span {
+	-ms-transform: rotate(360deg); /* IE 9 */
+	-webkit-transform: rotate(360deg); /* Safari */
+	transform: rotate(360deg); /* Standard syntax */
 }
 
 
@@ -277,13 +301,12 @@ ul, li {
 	position: absolute;
 	left: 0;
 	top: 0;
-	padding: 0 20px;
 }
 .Header-logo a {
-	width: 100%;
 	text-align: center;
 	height: 50px;
 	display: inline-block; 
+	padding: 0 20px;
 }
 .Header-logo a p{
 	width: 100%;
@@ -424,6 +447,7 @@ ul, li {
 
 
 .Header-options-myprofile:hover {
+	background: #1D2D86;
 	background: #3F51B5;
 }
 .Header-options-myprofile {
@@ -527,6 +551,9 @@ ul, li {
 	color: #222;
 	direction:rtl;
 	text-indent: 20px;
+}
+.Header-options-myprofile-menu-list a:hover {
+	background: #f4f4f4;
 }
 
 /*******************************
@@ -790,6 +817,7 @@ ul, li {
 	font-size: 60px;
 	font-weight: 300;
 	margin-bottom: 20px;
+	word-wrap: break-word;
 }
 .singleNote-Content {
 	font-size: 20px;

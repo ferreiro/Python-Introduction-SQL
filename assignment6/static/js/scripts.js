@@ -316,6 +316,7 @@ function createNoteViaAPI(note, url) {
 
 			setTimeout(function() {
 				$('.notes-container').prepend(newHTMLNote);
+				// $('.notes-container').hide(0).prepend(newHTMLNote).delay(300).fadeIn(1000);
 			}, 1000);
 
         }
