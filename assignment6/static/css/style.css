@@ -288,12 +288,15 @@ ul, li {
 	width: 100%;
 	height: 50px;
 	background: #283593;
+	position: relative;
+	z-index: 1000;
 }
 .Header {
 	width: 1000px;
 	margin: 0 auto;
 	vertical-align: top;
 	position: relative;
+	z-index: 100;
 }
 .Header-logo {
 	height: 50px;
@@ -601,11 +604,88 @@ ul, li {
 	position: relative;
 	text-align: center;
 }
+
+/*******************************
+	HOME
+********************************/
+.home {
+	height: 100vh;
+	background: url(../images/apps.jpg);
+	background: url('../images/apps.jpg');
+	background: url('../images/desk.jpg');
+	background-size: cover;
+	margin-top: -50px;
+}
+.home:after{
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	content: '';
+	position: absolute;
+	background: rgba(0,0,0,.7);
+}
+.home_content {
+	width:1000px;
+	height: 100%;
+	margin: 0 auto;
+	position: relative;
+	z-index: 100;
+}
+.home_content .info{
+	width: 615px;
+	/*height: 263px;*/
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	margin-left: -307px;	
+	margin-top:-131px;
+	padding-top: 30px;
+}
+.home_content .info h1{
+	color: #fff;
+	font-size: 50px;
+	margin-bottom: 15px;
+}
+.home_content .info p {
+	color: #fff;
+	font-size: 30px;
+	margin-bottom: 40px;
+}	
+
+.home_content .info a {
+	padding: 20px 40px;
+	display: inline-block;
+	font-size: 30px;
+	margin-right: 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #fff;
+	background: #fff;
+	border:2px solid #fff;
+	color: #222;
+	font-weight: bold;
+	opacity: 0.9;
+}
+.home_content .info a:hover {
+	opacity: 1;
+}
+.home_content .info a.toRegister {
+	background: #8BC34A;
+	border-color: #8BC34A;
+	color: #fff;
+}
+.home_content .info a.toRegister:hover {
+}
+
 /*******************************
 	Login
 ********************************/
 
 .login {
+	min-height: 420px;
 	padding: 100px 0;
 	background: url(../images/apps.jpg);
 	background: url('../images/apps.jpg');
@@ -633,8 +713,17 @@ ul, li {
 	z-index: 10;
 }
 .login-form-error {
-	background:red; 
-	padding:10px 20px;
+	color: #fff;
+	font-size: 11px;
+	padding: 20px;
+	background:#B93939;  
+}
+.login-form-error a {
+	text-decoration: underline;
+	color: #fff;
+	/*margin-top: 10px;*/
+	display: inline-block;
+
 }
 .login-form h1 {
 	font-weight: 500;
@@ -839,6 +928,7 @@ ul, li {
 .containter-wrapper {
 	width: 100%;
 	margin-top: 20px;
+	padding-bottom: 40px;
 }
 .containter {
 	width: 1020px;
@@ -1080,5 +1170,20 @@ ul, li {
 .writeNote-form-sent {
 	width: 100%;
 	text-align: center;
+}
+
+
+/***** FOOTER *****/
+
+.footer {
+	width: 100%;
+	text-align: center;
+	padding: 20px 0;
+	/*border-top: 1px solid #cecece;*/
+	background: #f0f0f0;
+}
+.footer a {
+	color:#283593;
+	text-decoration: underline;
 }
 

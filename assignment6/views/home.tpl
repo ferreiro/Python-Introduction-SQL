@@ -1,44 +1,34 @@
     
     % include ('header.tpl', title='Hola')
     
+    <style type="text/css">
+    .Header-wrapper {
+        background: transparent;
+    }
+    .Header-options-button {
+        background: transparent !important;
+    }
+    </style>
+    
     <div class="home">
+        <div class="home_content">
+            <div class="info">
+                <h1>
+                    Welcome to SuperNotes!
+                </h1>
+                <p>
+                    The easiest way to keep all your ideas,<br /> notes and projects in one place.
+                </p>
 
+                <a href="/login" class="toLogin">
+                    Login
+                </a>
+                <a href="/register" class="toRegister">
+                    Register
+                </a>
+            </div>
+        </div>
     </div>
 
-    <div class="login">
-        <div class="login-form">
-
-            <h1>
-                Welcome to SuperNotes!
-            </h1>
-            <h2>
-                The easiest way to save all your ideas, notes and projects in one place.
-            </h2>
-
-            <span><b>Connect to your account</b></span>
-            <form action="/login" method="post">
-                <div>
-                    <label for="mail">
-                        E-mail:
-                    </label>
-                    <input class="inputField" name="email" type="email" id="mail" placeholder="Your email" />
-                </div>
-                <div>
-                    <label for="password">
-                        Password:
-                    </label>
-                    <input class="inputField" name="password" placeholder="Password" type="password" />
-                </div>
-                
-                <div class="button">
-                    <button class="submitField" type="submit">Access account</button>
-                </div>
-
-                <p>
-                    Don't you have an ccount? <a href="/register">Register!</a>
-                </p>
-            </form>
-        </div>
-    </div> 
 
     % include ('footer.tpl')

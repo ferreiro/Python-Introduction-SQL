@@ -27,7 +27,7 @@
                 </div>
 
                 <p>
-                    Don't you have an ccount? <a href="/register">Register!</a>
+                    Don't you have an account? <a href="/register">Register!</a>
                 </p>
             </form>
         </div>

@@ -183,7 +183,7 @@ def login():
 	user 	 = db.getUserbyEmail(email);
 	
 	if user == None:
-		return template('login-fail', user=None, failError="User not registered on our system. Want a free acount? <a href='/register'>Create yours</a>'");
+		return template('login-fail', user=None, failError="<span>User not registered on our system.</span><span>Want a free acount? <a href='/register'>Create yours</a></span>");
 		return "There's no any user with that email. <p><a href='/login'>Try again </a></p>";
 
 	if verifyPassword(password, user['Password']):

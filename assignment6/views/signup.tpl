@@ -4,6 +4,12 @@
 <!-- <div class="containter-wrapper">
 	<div class="containter">-->
 
+<style type="text/css">
+	.login:before {
+		/*background: transparent;*/
+	}
+</style>
+
 <div class="login" style="background-image: url(../images/profile.jpg);">
     <div class="login-form" style="width:400px;">
 		<h1>Edit your information</h1>
@@ -26,9 +32,9 @@
 	<p> 
 		<label for="surnamesignup" data-icon="u">Your surname</label>
 		% if editUser == True:
-			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="Surname" value="{{user['Surname']}}" />
+			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="Your surname" value="{{user['Surname']}}" />
 		%else:
-			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="Name" />
+			<input  class="inputField" id="surnamesignup" name="surnamesignup" required="required" type="text" placeholder="Your surname" />
 		%end 
 	</p>
 	<p> 

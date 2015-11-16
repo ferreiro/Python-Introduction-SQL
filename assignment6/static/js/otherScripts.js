@@ -6,3 +6,5 @@ searchInput = $('#searchInput');
 searchIcon.click(function() {
     searchInput.focus()
 });
+
+$('#noteTitleTextarea').focus()

@@ -89,7 +89,6 @@ cursor.execute("insert into Colors values ('red', 'FF0000')");
 cursor.execute("insert into Colors values ('blue', '00359E')");
 
 #cursor.execute("insert into User values (NULL,'jorge@ferreiro.com', '123', 'ferreiro', 'Jorge', 'Garcia', '16/03/1995', 'Madrid', 0)");
-#cursor.execute("insert into Notes values (NULL, 1, 'How to make pizza', 'how-make-pizza','So. We have to call Luigi.', '16/03/1995', '16/03/1995', 1, 0)");
 #cursor.execute("insert into Tag values ('Hello', 1, 1, '000000')");
 
 #cursor.execute("insert into User values (NULL,'test@example.com', '123', 'tomasso', 'Tommaso', 'Innocenti', '30/09/1991', 'Arezzo', 0)");

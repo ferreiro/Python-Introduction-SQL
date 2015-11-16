@@ -100,9 +100,9 @@
 			<div>
 				%print note
 				% if editNote == True:
-					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title..." value="{{note['Title']}}" />
+					<input id="noteTitleTextarea" class="note-Title" name="titleNote" required="required" type="text" placeholder="Title..." value="{{note['Title']}}" />
 				%else:
-					<input id="noteTitle" class="note-Title" name="titleNote" required="required" type="text" placeholder="Note title" value="" />
+					<input id="noteTitleTextarea" class="note-Title" name="titleNote" required="required" type="text" placeholder="Note title" value="" />
 				%end
 			</div>
 			<p>

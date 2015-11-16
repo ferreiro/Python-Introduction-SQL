@@ -1,4 +1,3 @@
-
 /////////////////////
 // MODAL VARIABLES
 /////////////////////
@@ -53,10 +52,10 @@ writeNoteHeaderBtn.click(function() {
 function displayWriter() {
 
 	body.css({ overflow:'hidden' }); // Scroll not available
+	writerWrapper.slideDown('medium', 'easeInOutQuint'); // Show the modal	
 	
-	//writer.css({ top: (scrollY + 70) }); // Move modal box from top
-	writerWrapper.slideDown('medium', 'easeInOutQuint'); // Show the modal
- 	
+	$('#noteTitle').focus(); // Focus on the title to start writing
+
 	return false;
 }
 
@@ -65,7 +64,7 @@ function displayReader() {
 	body.css({ overflow:'hidden' }); // Scroll not available
 	
 	reader.css({ top: (scrollY + 100) }); // Move modal box from top
-	readerWrapper.fadeIn('slow', 'easeInOutElastic'); // Show the modal
+	readerWrapper.fadeIn('medium', 'easeInOutElastic'); // Show the modal
 	
 	return false;
 }
@@ -168,13 +167,13 @@ closeModalsKeyboardPressed();
 
 function hideWriter(time) {
 	changeURL('#/');
-	writerWrapper.slideUp('slow', 'easeInOutQuint'); // Hide the modal
+	writerWrapper.slideUp('medium', 'easeInOutQuint'); // Hide the modal
 	body.css({ overflow:'auto' }); // Scroll available again
 }
 
 function hideReader() {
 	changeURL('#/');
-	readerWrapper.slideUp('slow', 'easeInOutElastic'); // Hide the modal
+	readerWrapper.hide(0); // Hide the modal
 	body.css({ overflow:'auto' }); // Scroll available again
 }
 
@@ -220,7 +219,7 @@ $( ".Note-wrapper" ).each(function( index ) {
 
 	$(".Note-link", this).click(function(e) {
 		
-		API_URL 	= 'api/notes/' + String(NoteID)
+		API_URL 	= '/api/notes/' + String(NoteID)
 		noteTitle 	= Note.find('.Note-Title').html()
 		noteContent = Note.find('.Note-Content').html()
 
