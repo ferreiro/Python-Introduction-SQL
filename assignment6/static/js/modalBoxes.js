@@ -20,7 +20,6 @@ writerLoader  = $('#writer-loader')
 writerClose   = $('#writer-close');
 
 writeNoteBtn  = $('#writeNote')
-writeNoteHeaderBtn = $('#writeNoteHeaderButton')
 
 /////////////////////////
 // UPDATE MODAL CONTENT
@@ -46,9 +45,6 @@ writeNoteBtn.click(function() {
 	displayWriter();
 });
 
-writeNoteHeaderBtn.click(function() {
-	displayWriter();
-});
 
 function displayWriter() {
 
